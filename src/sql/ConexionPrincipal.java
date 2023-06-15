@@ -14,7 +14,7 @@ public class ConexionPrincipal {
 
             if (conector == null || conector.isClosed()) {
 
-			    conector = DriverManager.getConnection("jdbc:sqlite:" + patch + ".db");
+			    conector = DriverManager.getConnection("jdbc:sqlite:" + patch);
 			    resultado = true;
 		    }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -36,5 +36,10 @@ public class ConexionPrincipal {
         } catch (SQLException e) { e.printStackTrace(); }
 
         return resultado;
+    }
+
+    public boolean estaConectado() {
+
+        return conector != null;
     }
 }
