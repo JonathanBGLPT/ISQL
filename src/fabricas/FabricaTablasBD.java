@@ -15,10 +15,12 @@ public class FabricaTablasBD {
     private Dimension pantallaDim;
     private ConexionPrincipal sql;
     private JScrollPane panelTablasBD;
+    private PanelListener listener;
 
     // Constructor
-    public FabricaTablasBD(Dimension dim, ConexionPrincipal con) {
+    public FabricaTablasBD(PanelListener list, Dimension dim, ConexionPrincipal con) {
 
+        listener = list;
         pantallaDim = dim;
         sql = con;
     }
@@ -38,7 +40,7 @@ public class FabricaTablasBD {
         Map<String,String[]> tablas = sql.calcularTablasBD();
         RepresentacionTabla.setPantallaDim(pantallaDim);
 
-        for (Map.Entry<String,String[]> entry : tablas.entrySet()) panelTablasAux.add(new RepresentacionTabla(entry.getKey(), entry.getValue()));
+        for (Map.Entry<String,String[]> entry : tablas.entrySet()) panelTablasAux.add(new RepresentacionTabla(listener, entry.getKey(), entry.getValue()));
 
         panelTablasBD = new JScrollPane(panelTablasAux);
         panelTablasBD.setVerticalScrollBarPolicy(22);
@@ -57,7 +59,7 @@ class RepresentacionTabla extends JPanel {
     private static int contador = 0;
 
 
-    public RepresentacionTabla(String nombre, String[] columnas) {
+    public RepresentacionTabla(PanelListener listener, String nombre, String[] columnas) {
 
 
         Font fuenteTablas = new Font("Arial", Font.BOLD, (int)(pantallaDim.getHeight()*0.015));
@@ -66,7 +68,7 @@ class RepresentacionTabla extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(10, 30, 10, (int)(pantallaDim.getWidth()*0.2)));
         
-        if (contador % 2 != 0) setBackground(new Color(219,219,219));
+        if (contador % 2 != 1) setBackground(new Color(255,255,255));
         contador++;
 
         JLabel tabla = new JLabel(nombre);
@@ -84,7 +86,7 @@ class RepresentacionTabla extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
 
-                // IMPLEMENTAR
+                listener.mensaje(nombre);
             }
         });
     }

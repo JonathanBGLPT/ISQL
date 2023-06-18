@@ -36,10 +36,7 @@ public class FabricaTablas {
 
         if (tabla != null) {
 
-            JLabel label = new JLabel("tabla: " + tabla);
-            Auxiliar.calcularSize(label, pantallaDim, 0.2, 0.1);
-            Auxiliar.calcularLocation(label, pantallaDim, false, 0.1, 0.1);
-            panelTablas.add(label);
+            // IMPLEMENTAR
         }
 
         return panelTablas;

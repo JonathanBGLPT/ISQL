@@ -6,7 +6,7 @@ import fabricas.*;
 import sql.*;
 import java.io.File;
 
-public class VentanaPrincipal extends JFrame implements Runnable {
+public class VentanaPrincipal extends JFrame implements Runnable, PanelListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,11 +20,11 @@ public class VentanaPrincipal extends JFrame implements Runnable {
 
 	private JPanel menuPrincipal;
 	private JPanel tablasBD;
+	private boolean tablasBDMod;
 	private JPanel tablas;
 	private JPanel consultas;
 	
 	private Font fuente;
-
 	// Crea la ventana principal
     public VentanaPrincipal () {
 
@@ -33,7 +33,7 @@ public class VentanaPrincipal extends JFrame implements Runnable {
     	basesDeDatos.mkdirs();
 		sql = new ConexionPrincipal();
 		fuente = new Font("Arial", Font.PLAIN, (int)(pantallaDim.getHeight()*0.025));
-		fabricaTablasBD = new FabricaTablasBD(pantallaDim, sql);
+		fabricaTablasBD = new FabricaTablasBD(this, pantallaDim, sql);
 		fabricaTablas = new FabricaTablas(pantallaDim, sql);
 		fabricaConsultas = new FabricaConsultas(pantallaDim, sql);
 
@@ -108,7 +108,7 @@ public class VentanaPrincipal extends JFrame implements Runnable {
 	private void cargarInterfaz() {
 
 		cargarTablasBD();
-		cargarTablas(0);
+		cargarTablas(0, null);
 		cargarConsultas();
 	}
 
@@ -134,9 +134,10 @@ public class VentanaPrincipal extends JFrame implements Runnable {
 	}
 
 	// Muestra la tabla actual
-	private void cargarTablas(int select) {
+	private void cargarTablas(int select, String tabla) {
 
 		if(tablas != null) menuPrincipal.remove(tablas);
+		tablasBDMod = select != 1 && select != 2;
 		tablas = new JPanel();
 		tablas.setLayout(null);
 		tablas.setBackground(new Color(163, 196, 224));
@@ -147,7 +148,7 @@ public class VentanaPrincipal extends JFrame implements Runnable {
         Auxiliar.calcularSize(botonCrearTabla, pantallaDim, 0.1, 0.05);
 		Auxiliar.calcularLocation(botonCrearTabla, pantallaDim, false, 0.01, 0.01);
 		botonCrearTabla.setFont(fuente);
-    	botonCrearTabla.addActionListener(accion -> cargarTablas(1));
+    	botonCrearTabla.addActionListener(accion -> cargarTablas(1,tabla));
 		tablas.add(botonCrearTabla);
 
 
@@ -155,7 +156,7 @@ public class VentanaPrincipal extends JFrame implements Runnable {
         Auxiliar.calcularSize(botonModificarTabla, pantallaDim, 0.1, 0.05);
 		Auxiliar.calcularLocation(botonModificarTabla, pantallaDim, false, 0.115, 0.01);
 		botonModificarTabla.setFont(fuente);
-    	botonModificarTabla.addActionListener(accion -> cargarTablas(2));
+    	botonModificarTabla.addActionListener(accion -> cargarTablas(2,tabla));
 		tablas.add(botonModificarTabla);
 
 
@@ -169,10 +170,22 @@ public class VentanaPrincipal extends JFrame implements Runnable {
 		});
 		tablas.add(botonBorrarTabla);
 
-		tablas.add((select == 1)? fabricaTablas.setTablasCrear() : (select == 2)? fabricaTablas.setTablasModificar() : fabricaTablas.setTablas(null));
+		JLabel tituloTabla = new JLabel("Tabla: " + ((tabla == null)? "" : tabla));
+		tituloTabla.setFont(fuente);
+		Auxiliar.calcularSize(tituloTabla, pantallaDim, 0.2, 0.06);
+		Auxiliar.calcularLocation(tituloTabla, pantallaDim, false, 0.008, 0.07);
+		tablas.add(tituloTabla);
 
+		tablas.add((select == 1)? fabricaTablas.setTablasCrear() : (select == 2)? fabricaTablas.setTablasModificar() : fabricaTablas.setTablas(tabla));
+		
 		menuPrincipal.add(tablas);
 	}
+
+	@Override
+    public void mensaje(String tabla) {
+
+		if (tablasBDMod) cargarTablas(0, tabla);
+    }
 
 	// Muestra las consultas
 	private void cargarConsultas() {
