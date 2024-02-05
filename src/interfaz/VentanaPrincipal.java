@@ -2,10 +2,11 @@ package interfaz;
 
 import javax.swing.JFrame;
 
-public class VentanaPrincipal extends JFrame {
+class VentanaPrincipal extends JFrame {
     
     // Atributos
     private PanelGestionBBDD panelGestionBBDD;
+    private PanelPrincipal panelPrincipal;
 
     // Constructor
     private VentanaPrincipal () {
@@ -16,10 +17,20 @@ public class VentanaPrincipal extends JFrame {
         Auxiliar.calcularLocation(this, 0.045, 0.045);
         setResizable(false);
 
-        panelGestionBBDD = new PanelGestionBBDD();
+        panelGestionBBDD = new PanelGestionBBDD(this);
         add(panelGestionBBDD);
+
+        panelPrincipal = new PanelPrincipal(this);
+        add(panelPrincipal);
+        
+        setPanelActual(0);
     }
 
+    public void setPanelActual (int opcion) {
+
+        panelGestionBBDD.setVisible(opcion == 0);
+        panelPrincipal.setVisible(opcion == 1);
+    }
 
     public static void main (String[] args) {
 
