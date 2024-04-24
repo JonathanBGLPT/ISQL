@@ -1,27 +1,36 @@
 package interfaz;
 
 import java.io.File;
+import java.awt.Image;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-class PanelGestionBBDD extends JPanel {
+public class PanelGestionBBDD extends JPanel {
 
     private File carpetaBBDD;
     private String nombreBD;
 
-    public PanelGestionBBDD (VentanaPrincipal ventanaPrincipal) {
+    public PanelGestionBBDD (GestorVentanaPrincipal ventanaPrincipal) {
 
         setSize(Auxiliar.dimensionVentana);
-        setBackground(Auxiliar.colorAzulPalido);
+        setBackground(Auxiliar.coloAzulOscuro);
         setLayout(null);
 
         carpetaBBDD = new File(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "ISQL");
         carpetaBBDD.mkdirs();
 
+        // Icono de la aplicacion
+        JLabel iconoISQL = new JLabel();
+        iconoISQL.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/logo.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.4), (int)(Auxiliar.dimensionVentana.getHeight()*0.4), Image.SCALE_SMOOTH)));
+        Auxiliar.calcularSize(getSize(), iconoISQL, 0.4, 0.4);
+        Auxiliar.calcularLocation(getSize(), iconoISQL, 0.385, 0.05);
+        add(iconoISQL);
+
         // Boton para crear una nueva BBDD
-        JButton botonCrearBBDD = new JButton("Crear BBDD");
+        JButton botonCrearBBDD = new JButton("Crear una Base de Datos");
         botonCrearBBDD.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(botonCrearBBDD, 0.3, 0.1);
-        Auxiliar.calcularLocation(botonCrearBBDD, 0.35, 0.5);
+        Auxiliar.calcularSize(getSize(), botonCrearBBDD, 0.3, 0.1);
+        Auxiliar.calcularLocation(getSize(), botonCrearBBDD, 0.35, 0.5);
         botonCrearBBDD.addActionListener(accion -> {
 
 			nombreBD = JOptionPane.showInputDialog(null, "Ingrese el nombre de la nueva base de datos:");
@@ -35,8 +44,7 @@ class PanelGestionBBDD extends JPanel {
 
 					Auxiliar.conexionSQL.cerrarConexion();
 					Auxiliar.conexionSQL.abrirConexion(carpetaBBDD.getAbsolutePath() + File.separator + nombreBD + ".db");
-                    ventanaPrincipal.setTitle(nombreBD);
-                    ventanaPrincipal.setPanelActual(1);
+                    ventanaPrincipal.mostrarPanelPrincipal(nombreBD);
 
 				} else JOptionPane.showMessageDialog(null, "La base de datos introducida ya existe.");
 			}
@@ -44,15 +52,16 @@ class PanelGestionBBDD extends JPanel {
         add(botonCrearBBDD);
 
         // Boton para abrir una BBDD existente
-        JButton botonAbrirBBDD = new JButton("Abrir BBDD");
+        JButton botonAbrirBBDD = new JButton("Abrir una Base de Datos");
         botonAbrirBBDD.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(botonAbrirBBDD, 0.3, 0.1);
-        Auxiliar.calcularLocation(botonAbrirBBDD, 0.35, 0.65);
-        add(botonAbrirBBDD);
+        Auxiliar.calcularSize(getSize(), botonAbrirBBDD, 0.3, 0.1);
+        Auxiliar.calcularLocation(getSize(), botonAbrirBBDD, 0.35, 0.65);
         botonAbrirBBDD.addActionListener(accion -> {
 
 			JFileChooser selectorDeCarpeta = new JFileChooser();
 			selectorDeCarpeta.setCurrentDirectory(carpetaBBDD);
+            selectorDeCarpeta.removeChoosableFileFilter(selectorDeCarpeta.getFileFilter());
+            selectorDeCarpeta.setFileFilter(new FileNameExtensionFilter(".db", "db"));
 
             if (selectorDeCarpeta.showOpenDialog(this) == 0) {
 
@@ -61,30 +70,34 @@ class PanelGestionBBDD extends JPanel {
 
 					Auxiliar.conexionSQL.cerrarConexion();
 					Auxiliar.conexionSQL.abrirConexion(ruta);
-                    ventanaPrincipal.setTitle(ruta.substring(selectorDeCarpeta.getSelectedFile().getParent().length()+1, ruta.length()-3));
-					ventanaPrincipal.setPanelActual(1);
+					ventanaPrincipal.mostrarPanelPrincipal(ruta.substring(selectorDeCarpeta.getSelectedFile().getParent().length()+1, ruta.length()-3));
                     
                 } else JOptionPane.showMessageDialog(null, "El archivo seleccionado no es una base de datos.");
 			} 
 		});
+        add(botonAbrirBBDD);
 
         // Boton para borrar una BBDD existente
-        JButton botonBorrarBBDD = new JButton("Borrar BBDD");
+        JButton botonBorrarBBDD = new JButton("Borrar una Base de Datos");
         botonBorrarBBDD.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(botonBorrarBBDD, 0.3, 0.1);
-        Auxiliar.calcularLocation(botonBorrarBBDD, 0.35, 0.8);
+        Auxiliar.calcularSize(getSize(), botonBorrarBBDD, 0.3, 0.1);
+        Auxiliar.calcularLocation(getSize(), botonBorrarBBDD, 0.35, 0.8);
         botonBorrarBBDD.addActionListener(accion -> {
 
 			JFileChooser selectorDeCarpeta = new JFileChooser();
 			selectorDeCarpeta.setCurrentDirectory(carpetaBBDD);
+            selectorDeCarpeta.removeChoosableFileFilter(selectorDeCarpeta.getFileFilter());
+            selectorDeCarpeta.setFileFilter(new FileNameExtensionFilter(".db", "db"));
 
             if (selectorDeCarpeta.showOpenDialog(this) == 0) {
 
                 String ruta = selectorDeCarpeta.getSelectedFile().getAbsolutePath(); 
 				if (ruta.substring(ruta.length()-3, ruta.length()).equals(".db")) {
 
-					new File(ruta).delete();
-                    
+                    nombreBD = ruta.substring(selectorDeCarpeta.getSelectedFile().getParent().length()+1, ruta.length()-3);
+                    int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar la base de datos: "+ nombreBD +"?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (respuesta == JOptionPane.YES_OPTION) new File(ruta).delete();
+					
                 } else JOptionPane.showMessageDialog(null, "El archivo seleccionado no es una base de datos.");
 			} 
 		});

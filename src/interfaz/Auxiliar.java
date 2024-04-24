@@ -4,32 +4,39 @@ import java.awt.*;
 
 import sql.ConexionPrincipal;
 
-class Auxiliar {
+public class Auxiliar {
     
-    public static ConexionPrincipal conexionSQL;
+  public static ConexionPrincipal conexionSQL;
 
-    public static Color colorAzulPalido = new Color(150, 200, 220);
+  public static Color colorAzulPalido = new Color(150, 200, 220);
+  public static Color coloAzulOscuro = new Color(11, 38, 57);
 
-    public static Dimension dimensionVentana;
-    public static Font fuenteGrande;
-    public static Font fuenteNormal;
+  public static Dimension dimensionVentana;
+  public static Font fuenteGrande;
+  public static Font fuenteNormal;
+  public static Font fuentePequenia;
 
 
-    public static void inicializarAjustes () {
+  public static void inicializarAjustes () {
 
-      conexionSQL = new ConexionPrincipal();
-      dimensionVentana = new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.9), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.9));
-      fuenteGrande = new Font("Arial", Font.PLAIN, (int)(dimensionVentana.getHeight()*0.03));
-      fuenteNormal = new Font("Arial", Font.PLAIN, (int)(dimensionVentana.getHeight()*0.015));
-    }
+    conexionSQL = new ConexionPrincipal();
+    /// CAMBIAR, SOLAMENTE ESTA PARA PROBAR AJUSTES
+    int option = 2;
+    if (option == 1) dimensionVentana = new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.9), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.9));
+    if (option == 2) dimensionVentana = new Dimension((int)(1920*0.9), (int)(1080*0.9)); // FULL HD
 
-    public static void calcularSize(Component componente, double x, double y) {
+    fuenteGrande = new Font("Arial", Font.PLAIN, (int)(dimensionVentana.getHeight()*0.03));
+    fuenteNormal = new Font("Arial", Font.PLAIN, (int)(dimensionVentana.getHeight()*0.025));
+    fuentePequenia = new Font("Arial", Font.PLAIN, (int)(dimensionVentana.getHeight()*0.02));
+  }
 
-		componente.setSize((int)(dimensionVentana.getWidth()*x), (int)(dimensionVentana.getHeight()*y));
-    }
+  public static void calcularSize(Dimension dimensionReferencia, Component componente, double x, double y) {
 
-	public static void calcularLocation(Component componente, double x, double y) {
+    componente.setSize((int)(dimensionReferencia.getWidth()*x), (int)(dimensionReferencia.getHeight()*y));
+  }
 
-		componente.setLocation((int)(dimensionVentana.getWidth()*x), (int)(dimensionVentana.getHeight()*y));
-	}
+  public static void calcularLocation(Dimension dimensionReferencia, Component componente, double x, double y) {
+
+    componente.setLocation((int)(dimensionReferencia.getWidth()*x), (int)(dimensionReferencia.getHeight()*y));
+  }
 }
