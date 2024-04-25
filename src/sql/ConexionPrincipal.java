@@ -5,7 +5,10 @@ import java.util.ArrayList;
 
 public class ConexionPrincipal {
 
-    Connection conector = null;
+    private Connection conector = null;
+    private ConexionGestionTablas gestionTablas;
+    private ConexionGestionDatos gestionDatos;
+    private ConexionGestionConsultas gestionConsultas;
 
     public boolean abrirConexion(String ruta) {
 
@@ -15,6 +18,9 @@ public class ConexionPrincipal {
             if (conector == null || conector.isClosed()) {
 
 			    conector = DriverManager.getConnection("jdbc:sqlite:" + ruta);
+                gestionTablas = new ConexionGestionTablas(conector);
+                gestionDatos = new ConexionGestionDatos(conector);
+                gestionConsultas = new ConexionGestionConsultas(conector);
 			    resultado = true;
 		    }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -31,6 +37,9 @@ public class ConexionPrincipal {
             if (conector != null) {
 
                 conector.close();
+                gestionTablas = null;
+                gestionDatos = null;
+                gestionConsultas = null;
                 resultado = true;
             }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -38,56 +47,35 @@ public class ConexionPrincipal {
         return resultado;
     }
 
+    /******************
+     * GESTION TABLAS *
+     ******************/
     public void crearTabla(String nombreTabla) {
 
-        /// CAMBIAR PARA QUE LA CREE CON TODOS LOS ATRIBUTOS
-        try (Statement sentencia = conector.createStatement()) {
-
-            sentencia.execute("CREATE TABLE " + nombreTabla + " (id INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(32));");
-            sentencia.close();
-
-        } catch (SQLException e) { e.printStackTrace(); }
+        gestionTablas.crearTabla(nombreTabla);
     }
 
     public void eliminarTabla(String nombreTabla) {
 
-        try (Statement sentencia = conector.createStatement()) {
-
-            sentencia.execute("DROP TABLE " + nombreTabla + ";");
-            sentencia.close();
-
-        } catch (SQLException e) { e.printStackTrace(); }
+        gestionTablas.eliminarTabla(nombreTabla);
     }
 
     public ArrayList<String> obtenerNombreTablas() {
 
-        ArrayList<String> resultado = new ArrayList<>();
-
-       try (ResultSet sentenciaResultado = conector.createStatement().executeQuery("SELECT name FROM sqlite_master WHERE type='table';")) {
- 
-            while (sentenciaResultado.next()) {
-
-                String nombre = sentenciaResultado.getString("name");
-                if (!nombre.equals("sqlite_sequence")) resultado.add(nombre);
-            }
-            sentenciaResultado.close();
-
-       } catch (SQLException e) { e.printStackTrace(); }
-
-        return resultado;
+        return gestionTablas.obtenerNombreTablas();
     }
 
     public ArrayList<String> obtenerAtributosTabla(String nombreTabla) {
 
-        ArrayList<String> resultado = new ArrayList<>();
-
-        /// CAMBIAR PARA QUE DEVUELVA CLAVES FORANEAS, CLAVES, TIPOS, ETC.
-        try (ResultSet sentenciaResultado = conector.createStatement().executeQuery("PRAGMA table_info(" + nombreTabla + ");")) {
-
-            while (sentenciaResultado.next()) resultado.add("   - " + sentenciaResultado.getString("name") + ": " + sentenciaResultado.getString("type"));
-
-        } catch (SQLException e) { e.printStackTrace(); }
-
-        return resultado;
+        return gestionTablas.obtenerAtributosTabla(nombreTabla);
     }
+
+    /*****************
+     * GESTION DATOS *
+     *****************/
+
+
+     /********************
+     * GESTION CONSULTAS *
+     *********************/
 }

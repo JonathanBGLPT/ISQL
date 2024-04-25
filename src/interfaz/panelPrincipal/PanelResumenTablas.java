@@ -90,7 +90,7 @@ public class PanelResumenTablas extends JPanel {
             // Al hacer click actualizo PanelGestionTablas
             panelTabla.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e) {
+                public void mousePressed(MouseEvent e) {
                     
                     panelGestionTabla.actualizarPanelGestionTabla(nombreTabla);
                 }
