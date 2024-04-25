@@ -49,6 +49,16 @@ public class ConexionPrincipal {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
+    public void eliminarTabla(String nombreTabla) {
+
+        try (Statement sentencia = conector.createStatement()) {
+
+            sentencia.execute("DROP TABLE " + nombreTabla + ";");
+            sentencia.close();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
     public ArrayList<String> obtenerNombreTablas() {
 
         ArrayList<String> resultado = new ArrayList<>();

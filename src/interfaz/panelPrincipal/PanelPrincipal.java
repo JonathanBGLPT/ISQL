@@ -19,17 +19,17 @@ public class PanelPrincipal extends JPanel {
         panelResumenTablas = new PanelResumenTablas();
         add(panelResumenTablas);
 
-        panelGestionTabla = new PanelGestionTabla();
+        panelGestionTabla = new PanelGestionTabla(this);
         add(panelGestionTabla);
 
         panelConsultas = new PanelConsultas();
         add(panelConsultas);
     }
 
-    public void actualizarPanelPrincipal () {
+    public void actualizarPanelPrincipal (String tablaSeleccionada) {
 
-        panelResumenTablas.actualizarPanelResumenTablas();
-        panelGestionTabla.actualizarPanelGestionTabla();
+        panelResumenTablas.actualizarPanelResumenTablas(panelGestionTabla);
+        panelGestionTabla.actualizarPanelGestionTabla(tablaSeleccionada);
         panelConsultas.actualizarPanelConsultas();
     }
 }

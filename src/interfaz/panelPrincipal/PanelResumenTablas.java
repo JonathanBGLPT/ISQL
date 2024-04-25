@@ -1,8 +1,8 @@
 package interfaz.panelPrincipal;
 
 import java.awt.Font;
+import java.awt.event.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import interfaz.Auxiliar;
 
@@ -18,7 +18,7 @@ public class PanelResumenTablas extends JPanel {
         setLayout(null);
     }
 
-    public void actualizarPanelResumenTablas () {
+    public void actualizarPanelResumenTablas (PanelGestionTabla panelGestionTabla) {
 
         removeAll();
 
@@ -55,14 +55,14 @@ public class PanelResumenTablas extends JPanel {
 
 					/// CAMBIAR PARA PEDIR TODOS LOS ATRIBUTOS
                     Auxiliar.conexionSQL.crearTabla(nombreTabla);
-                    actualizarPanelResumenTablas();
+                    actualizarPanelResumenTablas(panelGestionTabla);
 
 				} else JOptionPane.showMessageDialog(null, "La tabla introducida ya existe.");
 			}
 		});
         add(botonCrearTabla);
 
-        /// Scroll donde aparecen todas las tablas
+        // Scroll donde aparecen todas las tablas
         JPanel panelContenedor = new JPanel();
         panelContenedor.setLayout(new BoxLayout(panelContenedor, BoxLayout.Y_AXIS));
         ArrayList<String> nombreTablas = Auxiliar.conexionSQL.obtenerNombreTablas();
@@ -70,21 +70,32 @@ public class PanelResumenTablas extends JPanel {
         boolean cambio = true;
         for (int t = 0; t < nombreTablas.size(); t++) {
             
+            String nombreTabla = nombreTablas.get(t);
             JPanel panelTabla = new JPanel();
             panelTabla.setLayout(new BoxLayout(panelTabla, BoxLayout.Y_AXIS));
             panelTabla.setBackground((cambio)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY); 
-            JLabel nombreTabla = new JLabel("  " + nombreTablas.get(t).toUpperCase() + ESPACIO_LABEL);
-            nombreTabla.setFont(Auxiliar.fuenteNormal.deriveFont(Font.BOLD));
-            panelTabla.add(nombreTabla);
+            JLabel labelNombreTabla = new JLabel("  " + nombreTabla.toUpperCase() + ESPACIO_LABEL);
+            labelNombreTabla.setFont(Auxiliar.fuenteNormal.deriveFont(Font.BOLD));
+            panelTabla.add(labelNombreTabla);
 
             // Agrego los atributos
-            ArrayList<String> listaAtributos = Auxiliar.conexionSQL.obtenerAtributosTabla(nombreTablas.get(t));
+            ArrayList<String> listaAtributos = Auxiliar.conexionSQL.obtenerAtributosTabla(nombreTabla);
             for (int a = 0; a < listaAtributos.size(); a++) {
 
                 JLabel atributos = new JLabel(listaAtributos.get(a));
                 atributos.setFont(Auxiliar.fuentePequenia);
                 panelTabla.add(atributos);
             }
+
+            // Al hacer click actualizo PanelGestionTablas
+            panelTabla.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    
+                    panelGestionTabla.actualizarPanelGestionTabla(nombreTabla);
+                }
+            });
+
             panelContenedor.add(panelTabla);
             cambio = !cambio;
         }
