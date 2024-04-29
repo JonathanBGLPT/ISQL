@@ -2,6 +2,8 @@ package interfaz;
 
 import java.awt.*;
 
+import javax.swing.JButton;
+
 import sql.ConexionPrincipal;
 
 public class Auxiliar {
@@ -39,4 +41,20 @@ public class Auxiliar {
 
     componente.setLocation((int)(dimensionReferencia.getWidth()*x), (int)(dimensionReferencia.getHeight()*y));
   }
+
+  public static void habilitacionDeBotones(Container contenedor, boolean activar) {
+
+        Component[] componentes = contenedor.getComponents();
+        for (Component componente : componentes) {
+
+            if (componente instanceof JButton) {
+
+                ((JButton)componente).setEnabled(activar);
+
+            } else if (componente instanceof Container) {
+
+              habilitacionDeBotones((Container)componente, activar);
+            }
+        }
+    }
 }

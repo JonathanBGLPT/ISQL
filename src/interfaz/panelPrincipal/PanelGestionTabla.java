@@ -2,28 +2,43 @@ package interfaz.panelPrincipal;
 
 import javax.swing.*;
 import interfaz.Auxiliar;
+import interfaz.panelPrincipal.subPaneles.*;
 
 public class PanelGestionTabla extends JPanel {
     
     private static PanelGestionTablaBotones panelBotones;
+    private PanelPrincipal panelPrincipal;
+    public JPanel panelDeGestiones;
+    public String nombreTablaSeleccionada;
 
-    public PanelGestionTabla (PanelPrincipal panelPrincipal) {
+    public PanelGestionTabla (PanelPrincipal panelPrin) {
 
-        panelBotones = new PanelGestionTablaBotones(panelPrincipal); 
-        setBackground(java.awt.Color.RED); /// CAMBIAR A NULL
+        setBackground(null); 
         Auxiliar.calcularSize(Auxiliar.dimensionVentana, this, 0.45, 0.95);
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, this, 0.21, 0.01);
         setLayout(null);
+
+        // Panel de gestiones
+        panelDeGestiones = new JPanel();
+        Auxiliar.calcularSize(getSize(), panelDeGestiones, 0.98, 0.76);
+        Auxiliar.calcularLocation(getSize(), panelDeGestiones, 0.01, 0.07);
+        panelDeGestiones.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
+        panelDeGestiones.setLayout(null);
+
+        nombreTablaSeleccionada = "";
+        panelPrincipal = panelPrin;
+        panelBotones = new PanelGestionTablaBotones(panelPrincipal); 
     }
 
-    public void actualizarPanelGestionTabla (String nombreTabla) {
+    public void actualizarPanelGestionTabla () {
 
         removeAll();
-        panelBotones.actualizarTablaSeleccionada(nombreTabla);
+        panelBotones.actualizarTablaSeleccionada(nombreTablaSeleccionada);
         add(panelBotones);
+        add(panelDeGestiones);
 
         // Texto tabla seleccionada
-        JLabel textoTablas = new JLabel("Tabla seleccionada: " + nombreTabla);
+        JLabel textoTablas = new JLabel("Tabla seleccionada: " + nombreTablaSeleccionada);
         textoTablas.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), textoTablas, 0.9, 0.03);
         Auxiliar.calcularLocation(getSize(), textoTablas, 0.025, 0.04);
@@ -31,6 +46,51 @@ public class PanelGestionTabla extends JPanel {
 
         revalidate();
         repaint();
+    }
+
+    public void elegirPanelDeGestiones (int opcion) {
+
+        panelPrincipal.panelGestionTabla.panelDeGestiones.removeAll();
+        
+        switch (opcion) {
+
+            // Mostrar datos de la tabla
+            case 0: 
+
+                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelMostarDatos(panelPrincipal));
+                break;
+            
+            // Mostrar panel crear tabla
+            case 1:
+
+                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelCrearModificarTabla(panelPrincipal, true));
+                break;
+                
+            // Mostrar panel modificar tabla
+            case 2:
+
+                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelCrearModificarTabla(panelPrincipal, false));
+                break;
+
+            // Mostrar panel agregar datos manualmente
+            case 3:
+
+                /// IMPLEMENTAR
+                break;
+
+            // Mostrar panel modificar datos
+            case 4:
+
+                /// IMPLEMENTAR
+                break;
+
+            // Mostrar panel eliminar datos
+            case 5:
+
+                /// IMPLEMENTAR
+                break;
+        }
+        panelPrincipal.panelGestionTabla.actualizarPanelGestionTabla();
     }
 }
 
@@ -53,7 +113,11 @@ class PanelGestionTablaBotones extends JPanel {
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonModificarTabla, 0.005, 0.016);
         botonModificarTabla.addActionListener(accion -> {
 
-            /// IMPLEMENTAR
+            if (nombreTablaSeleccionada != null && !nombreTablaSeleccionada.equals("")) {
+
+                /// IMPLEMENTAR
+
+            } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para modificar.");
 		});
         add(botonModificarTabla);
 
@@ -68,7 +132,9 @@ class PanelGestionTablaBotones extends JPanel {
 
                 int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar la tabla: "+ nombreTablaSeleccionada +"?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (respuesta == JOptionPane.YES_OPTION) Auxiliar.conexionSQL.eliminarTabla(nombreTablaSeleccionada);
-                panelPrincipal.actualizarPanelPrincipal("");
+                panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = "";
+                panelPrincipal.panelGestionTabla.panelDeGestiones.removeAll();
+                panelPrincipal.actualizarPanelPrincipal();
             }
 		});
         add(botonEliminarTabla);

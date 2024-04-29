@@ -9,16 +9,18 @@ import interfaz.Auxiliar;
 public class PanelResumenTablas extends JPanel {
 
     private static final String ESPACIO_LABEL = "                                                                                                                                ";
-
-    public PanelResumenTablas () {
+    private PanelPrincipal panelPrincipal;
+    public PanelResumenTablas (PanelPrincipal panelPrin) {
 
         setBackground(null); 
         Auxiliar.calcularSize(Auxiliar.dimensionVentana, this, 0.2, 0.95);
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, this, 0.005, 0.01);
         setLayout(null);
+
+        panelPrincipal = panelPrin;
     }
 
-    public void actualizarPanelResumenTablas (PanelGestionTabla panelGestionTabla) {
+    public void actualizarPanelResumenTablas () {
 
         removeAll();
 
@@ -33,7 +35,7 @@ public class PanelResumenTablas extends JPanel {
         JButton botonCrearTabla = new JButton("Crear tabla");
         botonCrearTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonCrearTabla, 0.55, 0.05);
-        Auxiliar.calcularLocation(getSize(), botonCrearTabla, 0.425, 0.025);
+        Auxiliar.calcularLocation(getSize(), botonCrearTabla, 0.425, 0.02);
         botonCrearTabla.addActionListener(accion -> {
 
             String nombreTabla = null;
@@ -53,9 +55,9 @@ public class PanelResumenTablas extends JPanel {
 
 				if (valido) {
 
-					/// CAMBIAR PARA PEDIR TODOS LOS ATRIBUTOS
-                    Auxiliar.conexionSQL.crearTabla(nombreTabla);
-                    actualizarPanelResumenTablas(panelGestionTabla);
+                    Auxiliar.habilitacionDeBotones(panelPrincipal, false);
+                    panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = nombreTabla;
+                    panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(1);
 
 				} else JOptionPane.showMessageDialog(null, "La tabla introducida ya existe.");
 			}
@@ -92,7 +94,9 @@ public class PanelResumenTablas extends JPanel {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     
-                    panelGestionTabla.actualizarPanelGestionTabla(nombreTabla);
+                    /// ACTUALIZAR PANELGESTIONTABLA PARA MOSTRAR DATOS TABLA
+                    panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = nombreTabla;
+                    panelPrincipal.panelGestionTabla.actualizarPanelGestionTabla();
                 }
             });
 
@@ -104,6 +108,7 @@ public class PanelResumenTablas extends JPanel {
         Auxiliar.calcularLocation(getSize(), panelScroll, 0.025, 0.075);
         panelScroll.getVerticalScrollBar().setUnitIncrement(20);
         panelScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        panelScroll.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
         add(panelScroll);
 
         revalidate();

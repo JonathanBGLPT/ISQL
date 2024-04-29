@@ -6,9 +6,9 @@ import interfaz.*;
 
 public class PanelPrincipal extends JPanel {
     
-    private PanelResumenTablas panelResumenTablas;
-    private PanelGestionTabla panelGestionTabla;
-    private PanelConsultas panelConsultas;
+    public PanelResumenTablas panelResumenTablas;
+    public PanelGestionTabla panelGestionTabla;
+    public PanelConsultas panelConsultas;
 
     public PanelPrincipal (GestorVentanaPrincipal ventanaPrincipal) {
 
@@ -16,20 +16,20 @@ public class PanelPrincipal extends JPanel {
         setBackground(Auxiliar.colorAzulPalido);
         setLayout(null);
 
-        panelResumenTablas = new PanelResumenTablas();
+        panelResumenTablas = new PanelResumenTablas(this);
         add(panelResumenTablas);
 
         panelGestionTabla = new PanelGestionTabla(this);
         add(panelGestionTabla);
 
-        panelConsultas = new PanelConsultas();
+        panelConsultas = new PanelConsultas(this);
         add(panelConsultas);
     }
 
-    public void actualizarPanelPrincipal (String tablaSeleccionada) {
+    public void actualizarPanelPrincipal () {
 
-        panelResumenTablas.actualizarPanelResumenTablas(panelGestionTabla);
-        panelGestionTabla.actualizarPanelGestionTabla(tablaSeleccionada);
+        panelResumenTablas.actualizarPanelResumenTablas();
+        panelGestionTabla.actualizarPanelGestionTabla();
         panelConsultas.actualizarPanelConsultas();
     }
 }

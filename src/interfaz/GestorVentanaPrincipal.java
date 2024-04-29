@@ -33,7 +33,7 @@ public class GestorVentanaPrincipal extends JFrame {
 
         setTitle(nombreBD);
         panelGestionBBDD.setVisible(false);
-        panelPrincipal.actualizarPanelPrincipal("");
+        panelPrincipal.actualizarPanelPrincipal();
         panelPrincipal.setVisible(true);
     }
 
