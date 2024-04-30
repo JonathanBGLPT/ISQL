@@ -95,8 +95,13 @@ public class PanelGestionBBDD extends JPanel {
 				if (ruta.substring(ruta.length()-3, ruta.length()).equals(".db")) {
 
                     nombreBD = ruta.substring(selectorDeCarpeta.getSelectedFile().getParent().length()+1, ruta.length()-3);
-                    int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar la base de datos: "+ nombreBD +"?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if (respuesta == JOptionPane.YES_OPTION) new File(ruta).delete();
+                    String nombreBDSeguridad = JOptionPane.showInputDialog(null, "¿Está seguro de que desea eliminar: "+ nombreBD +"?\nPara ello ingrese el nombre de la base de datos:");
+                    
+                    if (nombreBDSeguridad.equals(nombreBD)) {
+                        
+                        new File(ruta).delete();
+
+                    } else JOptionPane.showMessageDialog(null, "El nombre introducido no coincide con el de la base de datos.");
 					
                 } else JOptionPane.showMessageDialog(null, "El archivo seleccionado no es una base de datos.");
 			} 

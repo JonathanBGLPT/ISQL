@@ -6,11 +6,9 @@ import interfaz.panelPrincipal.PanelPrincipal;
 
 public class GestorVentanaPrincipal extends JFrame {
     
-    // Atributos
     private PanelGestionBBDD panelGestionBBDD;
     private PanelPrincipal panelPrincipal;
 
-    // Constructor
     private GestorVentanaPrincipal () {
 
         setTitle("ISQL");

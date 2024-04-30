@@ -63,13 +63,13 @@ public class PanelGestionTabla extends JPanel {
             // Mostrar panel crear tabla
             case 1:
 
-                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelCrearModificarTabla(panelPrincipal, true));
+                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelCrearTabla(panelPrincipal));
                 break;
                 
             // Mostrar panel modificar tabla
             case 2:
 
-                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelCrearModificarTabla(panelPrincipal, false));
+                /// IMPLEMENTAR
                 break;
 
             // Mostrar panel agregar datos manualmente

@@ -80,13 +80,13 @@ public class PanelResumenTablas extends JPanel {
             labelNombreTabla.setFont(Auxiliar.fuenteNormal.deriveFont(Font.BOLD));
             panelTabla.add(labelNombreTabla);
 
-            // Agrego los atributos
-            ArrayList<String> listaAtributos = Auxiliar.conexionSQL.obtenerAtributosTabla(nombreTabla);
-            for (int a = 0; a < listaAtributos.size(); a++) {
+            // Agrego los campos
+            ArrayList<String> listaCampos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTabla);
+            for (int a = 0; a < listaCampos.size(); a++) {
 
-                JLabel atributos = new JLabel(listaAtributos.get(a));
-                atributos.setFont(Auxiliar.fuentePequenia);
-                panelTabla.add(atributos);
+                JLabel campos = new JLabel(listaCampos.get(a));
+                campos.setFont(Auxiliar.fuentePequenia);
+                panelTabla.add(campos);
             }
 
             // Al hacer click actualizo PanelGestionTablas
@@ -94,9 +94,8 @@ public class PanelResumenTablas extends JPanel {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     
-                    /// ACTUALIZAR PANELGESTIONTABLA PARA MOSTRAR DATOS TABLA
                     panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = nombreTabla;
-                    panelPrincipal.panelGestionTabla.actualizarPanelGestionTabla();
+                    panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
                 }
             });
 

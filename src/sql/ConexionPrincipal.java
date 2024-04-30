@@ -65,9 +65,9 @@ public class ConexionPrincipal {
         return gestionTablas.obtenerNombreTablas();
     }
 
-    public ArrayList<String> obtenerAtributosTabla(String nombreTabla) {
+    public ArrayList<String> obtenerCamposTabla(String nombreTabla) {
 
-        return gestionTablas.obtenerAtributosTabla(nombreTabla);
+        return gestionTablas.obtenerCamposTabla(nombreTabla);
     }
 
     /*****************

@@ -14,7 +14,7 @@ public class ConexionGestionTablas {
 
     public void crearTabla(String nombreTabla) {
 
-        /// CAMBIAR PARA QUE LA CREE CON TODOS LOS ATRIBUTOS
+        /// CAMBIAR PARA QUE LA CREE CON TODOS LOS CAMPOS
         try (Statement sentencia = conector.createStatement()) {
 
             sentencia.execute("CREATE TABLE " + nombreTabla + " (id INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(32));");
@@ -51,7 +51,7 @@ public class ConexionGestionTablas {
         return resultado;
     }
 
-    public ArrayList<String> obtenerAtributosTabla(String nombreTabla) {
+    public ArrayList<String> obtenerCamposTabla(String nombreTabla) {
 
         ArrayList<String> resultado = new ArrayList<>();
 
