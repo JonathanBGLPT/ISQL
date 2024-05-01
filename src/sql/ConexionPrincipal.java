@@ -3,6 +3,8 @@ package sql;
 import java.sql.*;
 import java.util.ArrayList;
 
+import javax.swing.JPanel;
+
 public class ConexionPrincipal {
 
     private Connection conector = null;
@@ -50,9 +52,9 @@ public class ConexionPrincipal {
     /******************
      * GESTION TABLAS *
      ******************/
-    public void crearTabla(String nombreTabla) {
+    public void crearTabla(String nombreTabla, ArrayList<JPanel> campos) {
 
-        gestionTablas.crearTabla(nombreTabla);
+        gestionTablas.crearTabla(nombreTabla, campos);
     }
 
     public void eliminarTabla(String nombreTabla) {

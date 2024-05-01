@@ -32,7 +32,7 @@ public class PanelCrearTabla extends JPanel {
         Auxiliar.calcularLocation(getSize(), botonCancelar, 0.36, 0.92);
         botonCancelar.addActionListener(accion -> {
 
-            int respuesta = JOptionPane.showConfirmDialog(null, "¿Deseas cancelar la creacion de la tabla?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int respuesta = JOptionPane.showConfirmDialog(null, "¿Deseas cancelar la creación de la tabla?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (respuesta == JOptionPane.YES_OPTION) {
 
                 Auxiliar.habilitacionDeBotones(panelPrincipal, true);
@@ -43,25 +43,68 @@ public class PanelCrearTabla extends JPanel {
         add(botonCancelar);
 
         // Boton finalizar 
-        JButton botonFinalizar = new JButton("Finalizar creacion");
+        JButton botonFinalizar = new JButton("Finalizar creación");
         botonFinalizar.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonFinalizar, 0.3, 0.07);
         Auxiliar.calcularLocation(getSize(), botonFinalizar, 0.69, 0.92);
         botonFinalizar.addActionListener(accion -> {
 
-            if (comprobarNombres()) {
+            if (comprobarNombresYClavesForaneas()) {
 
-                /// IMPLEMENTAR
-    
+                Auxiliar.conexionSQL.crearTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, campos);
+                panelPrincipal.panelResumenTablas.actualizarPanelResumenTablas();
                 Auxiliar.habilitacionDeBotones(panelPrincipal, true);
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
             }
 		});
         add(botonFinalizar);
 
+        // Cabecera con el numero, nombre del campo, tipo de dato, clave foranea y borrar
+        JLabel cabeceraNumero = new JLabel("Nº");
+        cabeceraNumero.setHorizontalAlignment(SwingConstants.CENTER);
+        cabeceraNumero.setFont(Auxiliar.fuentePequenia);
+        cabeceraNumero.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+        Auxiliar.calcularSize(getSize(), cabeceraNumero, 0.06, 0.05);
+        Auxiliar.calcularLocation(getSize(), cabeceraNumero, 0.01, 0.01);
+        add(cabeceraNumero);
+        
+        JLabel cabeceraNombre = new JLabel("Nombre del campo");
+        cabeceraNombre.setHorizontalAlignment(SwingConstants.CENTER);
+        cabeceraNombre.setFont(Auxiliar.fuentePequenia);
+        cabeceraNombre.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+        Auxiliar.calcularSize(getSize(), cabeceraNombre, 0.355, 0.05);
+        Auxiliar.calcularLocation(getSize(), cabeceraNombre, 0.07, 0.01);
+        add(cabeceraNombre);
+
+        JLabel cabeceraTipoDato = new JLabel("Tipo de dato");
+        cabeceraTipoDato.setHorizontalAlignment(SwingConstants.CENTER);
+        cabeceraTipoDato.setFont(Auxiliar.fuentePequenia);
+        cabeceraTipoDato.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+        Auxiliar.calcularSize(getSize(), cabeceraTipoDato, 0.17, 0.05);
+        Auxiliar.calcularLocation(getSize(), cabeceraTipoDato, 0.425, 0.01);
+        add(cabeceraTipoDato);
+
+        JLabel cabeceraClaveForanea = new JLabel("Clave foránea");
+        cabeceraClaveForanea.setHorizontalAlignment(SwingConstants.CENTER);
+        cabeceraClaveForanea.setFont(Auxiliar.fuentePequenia);
+        cabeceraClaveForanea.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+        Auxiliar.calcularSize(getSize(), cabeceraClaveForanea, 0.27, 0.05);
+        Auxiliar.calcularLocation(getSize(), cabeceraClaveForanea, 0.595, 0.01);
+        add(cabeceraClaveForanea);
+
+        JLabel cabeceraBorrar = new JLabel("Borrar");
+        cabeceraBorrar.setHorizontalAlignment(SwingConstants.CENTER);
+        cabeceraBorrar.setFont(Auxiliar.fuentePequenia);
+        cabeceraBorrar.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+        Auxiliar.calcularSize(getSize(), cabeceraBorrar, 0.11, 0.05);
+        Auxiliar.calcularLocation(getSize(), cabeceraBorrar, 0.865, 0.01);
+        add(cabeceraBorrar);
+
+    
+
         // Panel para gestionar los campos
         JPanel panelContenedorCampos = new JPanel();
-        Auxiliar.calcularSize(getSize(), panelContenedorCampos, 0.98, 0.9);
+        Auxiliar.calcularSize(getSize(), panelContenedorCampos, 0.98, 0.85);
         panelContenedorCampos.setLayout(new BoxLayout(panelContenedorCampos, BoxLayout.Y_AXIS));
 
         // Boton crear nuevo campo
@@ -151,23 +194,28 @@ public class PanelCrearTabla extends JPanel {
         add(botonCrearCampo);
 
         JScrollPane panelAgregarCampos = new JScrollPane(panelContenedorCampos);
-        Auxiliar.calcularSize(getSize(), panelAgregarCampos, 0.98, 0.9);
-        Auxiliar.calcularLocation(getSize(), panelAgregarCampos, 0.01, 0.01);
+        Auxiliar.calcularSize(getSize(), panelAgregarCampos, 0.98, 0.85);
+        Auxiliar.calcularLocation(getSize(), panelAgregarCampos, 0.01, 0.06);
         panelAgregarCampos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        panelAgregarCampos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         panelAgregarCampos.getVerticalScrollBar().setUnitIncrement(20);
         add(panelAgregarCampos);
     }
 
-    private boolean comprobarNombres() {
+    @SuppressWarnings("rawtypes")
+    private boolean comprobarNombresYClavesForaneas() {
 
         boolean resultado = true;
         String nombresVacios = "";
         String nombresRepetidos = "";
+        String clavesForaneasRepetidas = "";
 
+        String[] clavesForaneasElegidas = new String[campos.size()];
         String[] nombresCampos = new String[campos.size()];
         for (int c = 0; c < campos.size(); c++) {
 
             nombresCampos[c] = ((JTextField)campos.get(c).getComponent(1)).getText();
+            clavesForaneasElegidas[c] = (String)(((JComboBox)campos.get(c).getComponent(5)).getSelectedItem());
             if (nombresCampos[c] == null || nombresCampos[c].equals("")) {
 
                 nombresVacios += "campo " + (c+1) + ", ";
@@ -182,10 +230,17 @@ public class PanelCrearTabla extends JPanel {
                     nombresRepetidos += "campos " + (c1+1) + " y " + (c2+1) + ", "; 
                     resultado = false;
                 }
+                if (((String)((JComboBox)campos.get(c1).getComponent(3)).getSelectedItem()).equals("Entero") && ((String)((JComboBox)campos.get(c2).getComponent(3)).getSelectedItem()).equals("Entero")
+                    && !clavesForaneasElegidas[c1].equals("-") && clavesForaneasElegidas[c1].equals(clavesForaneasElegidas[c2])) {
+
+                    clavesForaneasRepetidas += "campos " + (c1+1) + " y " + (c2+1) + ", "; 
+                    resultado = false;
+                }
             }
         }
-        if (!resultado && nombresVacios.length() != 0) JOptionPane.showMessageDialog(null, "Los siguientes campos estan vacios: " + nombresVacios.substring(0, nombresVacios.length()-2) + ".");
+        if (!resultado && nombresVacios.length() != 0) JOptionPane.showMessageDialog(null, "Los siguientes campos estan vacíos: " + nombresVacios.substring(0, nombresVacios.length()-2) + ".");
         if (!resultado && nombresRepetidos.length() != 0) JOptionPane.showMessageDialog(null, "Los siguientes campos estan repetidos: " + nombresRepetidos.substring(0, nombresRepetidos.length()-2) + ".");
+        if (!resultado && clavesForaneasRepetidas.length() != 0) JOptionPane.showMessageDialog(null, "Los siguientes campos comparten clave foránea: " + clavesForaneasRepetidas.substring(0, clavesForaneasRepetidas.length()-2) + ".");
         return resultado;
     }
 }

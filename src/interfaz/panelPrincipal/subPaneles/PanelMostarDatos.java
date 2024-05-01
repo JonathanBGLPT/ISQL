@@ -16,6 +16,6 @@ public class PanelMostarDatos extends JPanel {
         setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
         setLayout(null);
 
-
+        /// IMPLEMENTAR
     }
 }

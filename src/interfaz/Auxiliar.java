@@ -23,7 +23,7 @@ public class Auxiliar {
 
     conexionSQL = new ConexionPrincipal();
     /// CAMBIAR, SOLAMENTE ESTA PARA PROBAR AJUSTES
-    int option = 2;
+    int option = 1;
     if (option == 1) dimensionVentana = new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.9), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.9));
     if (option == 2) dimensionVentana = new Dimension((int)(1920*0.9), (int)(1080*0.9)); // FULL HD
 
