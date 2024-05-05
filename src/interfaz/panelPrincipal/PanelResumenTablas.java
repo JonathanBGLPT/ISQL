@@ -68,7 +68,7 @@ public class PanelResumenTablas extends JPanel {
         JPanel panelContenedor = new JPanel();
         panelContenedor.setLayout(new BoxLayout(panelContenedor, BoxLayout.Y_AXIS));
         ArrayList<String> nombreTablas = Auxiliar.conexionSQL.obtenerNombreTablas();
-
+        
         boolean cambio = true;
         for (int t = 0; t < nombreTablas.size(); t++) {
             

@@ -46,6 +46,7 @@ public class ConexionGestionTablas {
         try (Statement sentencia = conector.createStatement()) {
 
             sentencia.execute("ALTER TABLE " + nombreTablaAntiguo + " RENAME TO " + nombreTablaNuevo + ";");
+            sentencia.execute("ALTER TABLE " + nombreTablaNuevo + " RENAME COLUMN id_" + nombreTablaAntiguo + " TO id_" + nombreTablaNuevo + ";");
             sentencia.close();
 
         } catch (SQLException e) { e.printStackTrace(); }
@@ -185,7 +186,7 @@ public class ConexionGestionTablas {
 
         ArrayList<String> resultado = new ArrayList<>();
 
-       try (ResultSet sentenciaResultado = conector.createStatement().executeQuery("SELECT name FROM sqlite_master WHERE type='table';")) {
+       try (ResultSet sentenciaResultado = conector.createStatement().executeQuery("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")) {
  
             while (sentenciaResultado.next()) {
 

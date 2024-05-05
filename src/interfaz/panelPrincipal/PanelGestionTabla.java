@@ -49,7 +49,7 @@ public class PanelGestionTabla extends JPanel {
         botonCambiarNombreTabla.addActionListener(accion -> {
 
             String nombreNuevoTabla = null;
-			boolean nombreValido = nombreTablaSeleccionada.equals("");
+			boolean nombreValido = nombreTablaSeleccionada.equals("") || !Auxiliar.botonesActivados;
             while (!nombreValido) {
 
                 nombreNuevoTabla = JOptionPane.showInputDialog(null, "Ingrese el nuevo nombre de la tabla '" + nombreTablaSeleccionada + "':");
