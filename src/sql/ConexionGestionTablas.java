@@ -32,7 +32,7 @@ public class ConexionGestionTablas {
             String claveForanea = (String)(((JComboBox)campos.get(c).getComponent(5)).getSelectedItem());
 
             sentenciaSQLite += nombre + " " + diccionario.get(tipoDeDato) + ",";
-            if (tipoDeDato.equals("Entero") && !claveForanea.equals("-")) sentenciaClavesForaneas += "FOREIGN KEY (" + nombre + ") REFERENCES " + claveForanea + "(id_" + claveForanea + "),";
+            if (tipoDeDato.equals("Entero") && !claveForanea.equals("-")) sentenciaClavesForaneas += "FOREIGN KEY (" + nombre + ") REFERENCES " + claveForanea + "(id_" + claveForanea + ") ON DELETE CASCADE,";
         };
         sentenciaSQLite += sentenciaClavesForaneas;
         sentenciaSQLite = sentenciaSQLite.substring(0, sentenciaSQLite.length()-1) + ");";
@@ -41,6 +41,50 @@ public class ConexionGestionTablas {
 
             sentencia.execute(sentenciaSQLite);
             sentencia.close();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    public void cambiarNombreTabla(String nombreTablaAntiguo, String nombreTablaNuevo) {
+
+        try (Statement sentencia = conector.createStatement()) {
+
+            sentencia.execute("ALTER TABLE " + nombreTablaAntiguo + " RENAME TO " + nombreTablaNuevo + ";");
+            sentencia.close();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public void modificarTabla(String nombreTabla, Map<String,String> nombresCambiados, Map<JPanel,Boolean> camposBorrados, ArrayList<JPanel> camposNuevos) {
+
+        try (Statement sentencia = conector.createStatement()) {
+
+            // Cambiar nombres
+            for (String nombreOriginal : nombresCambiados.keySet()) {
+
+                sentencia.execute("ALTER TABLE " + nombreTabla + " RENAME COLUMN " + nombreOriginal + " TO " + nombresCambiados.get(nombreOriginal) + ";");
+            }
+
+            // Borrar campos
+            for (JPanel panelBorrado : camposBorrados.keySet()) {
+
+                /// IMPLEMENTAR
+            }
+
+            // Agregar campos
+            for (JPanel panelAgregado : camposNuevos) {
+
+                String claveForanea = (String)(((JComboBox)panelAgregado.getComponent(5)).getSelectedItem());
+                if (claveForanea.equals("-")) {
+
+                    sentencia.execute("ALTER TABLE " + nombreTabla + " ADD COLUMN " + ((JTextField)panelAgregado.getComponent(1)).getText() + " " + ((String)(((JComboBox)panelAgregado.getComponent(3)).getSelectedItem())) + ";");
+
+                } else {
+
+                    /// IMPLEMENTAR
+                }
+            }
 
         } catch (SQLException e) { e.printStackTrace(); }
     }
@@ -116,7 +160,7 @@ public class ConexionGestionTablas {
         return resultado;
     }
 
-    private boolean comprobarClaveForanea(String nombreTabla, String campo) {
+    public boolean comprobarClaveForanea(String nombreTabla, String campo) {
 
         boolean resultado = false;
 
@@ -125,6 +169,21 @@ public class ConexionGestionTablas {
             while (!resultado && sentenciaResultado.next()) resultado = campo.equals(sentenciaResultado.getString("from"));
 
         } catch (SQLException e) { e.printStackTrace(); }
+
+        return resultado;
+    }
+
+    public String obtenerTablaOriginalClaveForanea (String nombreTabla, String campo) {
+
+        String resultado = null;
+
+        try (ResultSet clavesForaneas = conector.getMetaData().getImportedKeys(conector.getCatalog(), null, nombreTabla)) {
+
+            while (resultado == null && clavesForaneas.next()) {
+
+                if (clavesForaneas.getString("FKCOLUMN_NAME").equals(campo)) resultado = clavesForaneas.getString("PKTABLE_NAME");
+            }
+        } catch (Exception e) { e.printStackTrace(); }
 
         return resultado;
     }

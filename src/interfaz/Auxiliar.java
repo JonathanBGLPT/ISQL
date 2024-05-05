@@ -18,12 +18,13 @@ public class Auxiliar {
   public static Font fuenteNormal;
   public static Font fuentePequenia;
 
+  public static boolean botonesActivados = true;
 
   public static void inicializarAjustes () {
 
     conexionSQL = new ConexionPrincipal();
     /// CAMBIAR, SOLAMENTE ESTA PARA PROBAR AJUSTES
-    int option = 1;
+    int option = 2;
     if (option == 1) dimensionVentana = new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.9), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.9));
     if (option == 2) dimensionVentana = new Dimension((int)(1920*0.9), (int)(1080*0.9)); // FULL HD
 
@@ -44,17 +45,15 @@ public class Auxiliar {
 
   public static void habilitacionDeBotones(Container contenedor, boolean activar) {
 
-        Component[] componentes = contenedor.getComponents();
-        for (Component componente : componentes) {
+    botonesActivados = activar;
+    Component[] componentes = contenedor.getComponents();
+    for (Component componente : componentes) {
 
-            if (componente instanceof JButton) {
+      if (componente instanceof JButton) {
 
-                ((JButton)componente).setEnabled(activar);
+        ((JButton)componente).setEnabled(activar);
 
-            } else if (componente instanceof Container) {
-
-              habilitacionDeBotones((Container)componente, activar);
-            }
-        }
+      } else if (componente instanceof Container) habilitacionDeBotones((Container)componente, activar);
     }
+  }
 }

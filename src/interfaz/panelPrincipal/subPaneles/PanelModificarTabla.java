@@ -1,19 +1,24 @@
 package interfaz.panelPrincipal.subPaneles;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
 import interfaz.Auxiliar;
 import interfaz.panelPrincipal.PanelPrincipal;
 
-public class PanelCrearTabla extends JPanel {
+public class PanelModificarTabla extends JPanel {
     
     private PanelPrincipal panelPrincipal;
-    private ArrayList<JPanel> campos;
+    private Map<String,String> nombresCambiados;
+    private Map<JPanel,Boolean> camposBorrados;
+    private ArrayList<JPanel> camposNuevos;
+    private ArrayList<JPanel> camposSinModificar;
+    private Map<JPanel,String> nombresCamposGuardados;
 
-    public PanelCrearTabla (PanelPrincipal panelPrin) {
+    @SuppressWarnings("rawtypes")
+    public PanelModificarTabla (PanelPrincipal panelPrin) {
 
         Auxiliar.calcularSize(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 1, 1);
         Auxiliar.calcularLocation(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 0, 0);
@@ -21,35 +26,42 @@ public class PanelCrearTabla extends JPanel {
         setLayout(null);
 
         panelPrincipal = panelPrin;
-        campos = new ArrayList<>();
-
+        nombresCambiados = new HashMap<>();
+        nombresCamposGuardados = new HashMap<>();
+        camposBorrados = new HashMap<>();
+        camposNuevos = new ArrayList<>();
+        camposSinModificar = new ArrayList<>();
+        
         // Boton cancelar
         JButton botonCancelar = new JButton("Cancelar");
         botonCancelar.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonCancelar, 0.3, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonCancelar, 0.36, 0.92);
+        Auxiliar.calcularSize(getSize(), botonCancelar, 0.275, 0.07);
+        Auxiliar.calcularLocation(getSize(), botonCancelar, 0.335, 0.92);
         botonCancelar.addActionListener(accion -> {
 
-            int respuesta = JOptionPane.showConfirmDialog(null, "¿Deseas cancelar la creación de la tabla?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int respuesta = JOptionPane.showConfirmDialog(null, "¿Deseas cancelar la modificación de la tabla?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (respuesta == JOptionPane.YES_OPTION) {
 
                 Auxiliar.habilitacionDeBotones(panelPrincipal, true);
-                panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = "";
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
             };
 		});
         add(botonCancelar);
 
         // Boton finalizar 
-        JButton botonFinalizar = new JButton("Finalizar creación");
+        JButton botonFinalizar = new JButton("Finalizar modificación");
         botonFinalizar.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonFinalizar, 0.3, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonFinalizar, 0.69, 0.92);
+        Auxiliar.calcularSize(getSize(), botonFinalizar, 0.35, 0.07);
+        Auxiliar.calcularLocation(getSize(), botonFinalizar, 0.64, 0.92);
         botonFinalizar.addActionListener(accion -> {
 
             if (comprobarNombresYClavesForaneas()) {
 
-                Auxiliar.conexionSQL.crearTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, campos);
+                for (JPanel panelAComprobar : camposSinModificar) {
+
+                    if (!nombresCamposGuardados.get(panelAComprobar).equals(((JTextField)panelAComprobar.getComponent(1)).getText())) nombresCambiados.put(nombresCamposGuardados.get(panelAComprobar), ((JTextField)panelAComprobar.getComponent(1)).getText());
+                }
+                Auxiliar.conexionSQL.modificarTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, nombresCambiados, camposBorrados, camposNuevos);
                 panelPrincipal.panelResumenTablas.actualizarPanelResumenTablas();
                 Auxiliar.habilitacionDeBotones(panelPrincipal, true);
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
@@ -108,14 +120,36 @@ public class PanelCrearTabla extends JPanel {
         // Boton crear nuevo campo
         JButton botonCrearCampo = new JButton("Crear campo");
         botonCrearCampo.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonCrearCampo, 0.3, 0.07);
+        Auxiliar.calcularSize(getSize(), botonCrearCampo, 0.275, 0.07);
         Auxiliar.calcularLocation(getSize(), botonCrearCampo, 0.03, 0.92);
         botonCrearCampo.addActionListener(accion -> {
 
-            crearCampoNuevo(panelContenedorCampos);
+            crearCampo(panelContenedorCampos, true);
         });
         add(botonCrearCampo);
 
+        // Agrego los campos que ya existian
+        ArrayList<String> camposExistentes = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
+        for (String campoExistente : camposExistentes) {
+
+            String[] campoSeparado = campoExistente.split("\\s+");
+
+            if (!campoSeparado[2].equals("id_" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + ":")) {
+
+                crearCampo(panelContenedorCampos, false);
+                JPanel panelCampo = (JPanel)camposSinModificar.get(camposSinModificar.size()-1);
+
+                ((JTextField)panelCampo.getComponent(1)).setText(campoSeparado[2].substring(0, campoSeparado[2].length()-1));
+                nombresCamposGuardados.put(panelCampo, ((JTextField)panelCampo.getComponent(1)).getText());
+
+                if (campoSeparado[3].charAt(campoSeparado[3].length()-1) == '*') {
+
+                    ((JComboBox)panelCampo.getComponent(3)).setSelectedItem("Entero");
+                    ((JComboBox)panelCampo.getComponent(5)).setSelectedItem(Auxiliar.conexionSQL.obtenerTablaOriginalClaveForanea(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, campoSeparado[2].substring(0, campoSeparado[2].length()-1)));
+
+                } else ((JComboBox)panelCampo.getComponent(3)).setSelectedItem(campoSeparado[3]);
+            }
+        }
         JScrollPane panelAgregarCampos = new JScrollPane(panelContenedorCampos);
         Auxiliar.calcularSize(getSize(), panelAgregarCampos, 0.98, 0.85);
         Auxiliar.calcularLocation(getSize(), panelAgregarCampos, 0.01, 0.06);
@@ -133,12 +167,12 @@ public class PanelCrearTabla extends JPanel {
         String nombresRepetidos = "";
         String clavesForaneasRepetidas = "";
 
-        String[] clavesForaneasElegidas = new String[campos.size()];
-        String[] nombresCampos = new String[campos.size()];
-        for (int c = 0; c < campos.size(); c++) {
+        String[] clavesForaneasElegidas = new String[camposSinModificar.size() + camposNuevos.size()];
+        String[] nombresCampos = new String[camposSinModificar.size() + camposNuevos.size()];
+        for (int c = 0; c < (camposSinModificar.size() + camposNuevos.size()); c++) {
 
-            nombresCampos[c] = ((JTextField)campos.get(c).getComponent(1)).getText();
-            clavesForaneasElegidas[c] = (String)(((JComboBox)campos.get(c).getComponent(5)).getSelectedItem());
+            nombresCampos[c] = (c < camposSinModificar.size())? ((JTextField)camposSinModificar.get(c).getComponent(1)).getText() : ((JTextField)camposNuevos.get(c-camposSinModificar.size()).getComponent(1)).getText();
+            clavesForaneasElegidas[c] = (String)((c < camposSinModificar.size())? (((JComboBox)camposSinModificar.get(c).getComponent(5)).getSelectedItem()) : (((JComboBox)camposNuevos.get(c-camposSinModificar.size()).getComponent(5)).getSelectedItem()));
             if (nombresCampos[c] == null || nombresCampos[c].equals("")) {
 
                 nombresVacios += "campo " + (c+1) + ", ";
@@ -153,8 +187,9 @@ public class PanelCrearTabla extends JPanel {
                     nombresRepetidos += "campos " + (c1+1) + " y " + (c2+1) + ", "; 
                     resultado = false;
                 }
-                if (((String)((JComboBox)campos.get(c1).getComponent(3)).getSelectedItem()).equals("Entero") && ((String)((JComboBox)campos.get(c2).getComponent(3)).getSelectedItem()).equals("Entero")
-                    && !clavesForaneasElegidas[c1].equals("-") && clavesForaneasElegidas[c1].equals(clavesForaneasElegidas[c2])) {
+                String tipoElegido1 = (String)((c1 < camposSinModificar.size())? ((JComboBox)camposSinModificar.get(c1).getComponent(3)).getSelectedItem() : ((JComboBox)camposNuevos.get(c1-camposSinModificar.size()).getComponent(3)).getSelectedItem());
+                String tipoElegido2 = (String)((c2 < camposSinModificar.size())? ((JComboBox)camposSinModificar.get(c2).getComponent(3)).getSelectedItem() : ((JComboBox)camposNuevos.get(c2-camposSinModificar.size()).getComponent(3)).getSelectedItem());
+                if (tipoElegido1.equals("Entero") && tipoElegido2.equals("Entero") && !clavesForaneasElegidas[c1].equals("-") && clavesForaneasElegidas[c1].equals(clavesForaneasElegidas[c2])) {
 
                     clavesForaneasRepetidas += "campos " + (c1+1) + " y " + (c2+1) + ", "; 
                     resultado = false;
@@ -167,16 +202,16 @@ public class PanelCrearTabla extends JPanel {
         return resultado;
     }
 
-    private void crearCampoNuevo(JPanel panelContenedorCampos) {
+    private void crearCampo(JPanel panelContenedorCampos, boolean campoNuevo) {
 
         JPanel panelCampo = new JPanel();
         panelCampo.setLayout(new BoxLayout(panelCampo, BoxLayout.X_AXIS));
         panelCampo.setAlignmentX(Component.LEFT_ALIGNMENT);
         panelCampo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelCampo.setBackground((campos.size() % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
+        panelCampo.setBackground(((camposSinModificar.size() + camposNuevos.size()) % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
 
         // Numero del campo
-        JLabel numeroDelCampo = new JLabel((campos.size()+1) + ((campos.size() > 8)? " " : "   "));
+        JLabel numeroDelCampo = new JLabel(((camposSinModificar.size() + camposNuevos.size())+1) + (((camposSinModificar.size() + camposNuevos.size()) > 8)? " " : "   "));
         numeroDelCampo.setFont(Auxiliar.fuenteNormal);
         panelCampo.add(numeroDelCampo);
 
@@ -200,6 +235,7 @@ public class PanelCrearTabla extends JPanel {
         // Declaracion de clave foranea
         ArrayList<String> clavesForaneas = Auxiliar.conexionSQL.obtenerNombreTablas();
         clavesForaneas.add(0, "-");
+        clavesForaneas.remove("" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
         JComboBox<String> comboClavesForaneas = new JComboBox<>(clavesForaneas.toArray(new String[0]));
 
         // Tipo de dato
@@ -209,8 +245,9 @@ public class PanelCrearTabla extends JPanel {
         comboElegirTipoDeDato.setFont(Auxiliar.fuenteNormal);
         comboElegirTipoDeDato.addActionListener(accion2 -> {
 
-            comboClavesForaneas.setEnabled(((String)comboElegirTipoDeDato.getSelectedItem()).equals("Entero"));
+            if (campoNuevo) comboClavesForaneas.setEnabled(((String)comboElegirTipoDeDato.getSelectedItem()).equals("Entero"));
         });
+        comboElegirTipoDeDato.setEnabled(campoNuevo);
         panelCampo.add(comboElegirTipoDeDato);
 
         Component espacioHorizontal2 = Box.createHorizontalStrut(20);
@@ -220,6 +257,7 @@ public class PanelCrearTabla extends JPanel {
         // Configuracion de clave foranea
         comboClavesForaneas.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.3), (int)(getSize().getHeight()*0.05)));
         comboClavesForaneas.setFont(Auxiliar.fuenteNormal);
+        comboClavesForaneas.setEnabled(campoNuevo);
         panelCampo.add(comboClavesForaneas);
 
         // Eliminar
@@ -229,20 +267,28 @@ public class PanelCrearTabla extends JPanel {
         botonEliminarCampo.setContentAreaFilled(false);
         botonEliminarCampo.addActionListener(accion2 -> {
 
-            for (int c = campos.size()-1; c >= Integer.parseInt(numeroDelCampo.getText().trim()); c--) {
-
-                ((JLabel)campos.get(c).getComponent(0)).setText(((JLabel)campos.get(c-1).getComponent(0)).getText());
-                campos.get(c).setBackground((campos.get(c).getBackground() == java.awt.Color.LIGHT_GRAY)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
-            }
-            campos.remove(panelCampo);
             panelContenedorCampos.remove(panelCampo);
+            for (int c = 0; c < panelContenedorCampos.getComponentCount(); c++) {
+
+                JPanel panelCampoAux = (JPanel)panelContenedorCampos.getComponent(c);
+                ((JLabel)panelCampoAux.getComponent(0)).setText((c+1) + (((c+1) > 8)? " " : "   "));
+                panelCampoAux.setBackground(((c) % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
+            }
+            if (!campoNuevo) {
+
+                camposBorrados.put(panelCampo, Auxiliar.conexionSQL.comprobarClaveForanea(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, nombreDelCampo.getText()));
+                camposSinModificar.remove(panelCampo);
+
+            } else camposNuevos.remove(panelCampo);
+
             revalidate();
             repaint();
         });
         panelCampo.add(botonEliminarCampo);
 
+        if (campoNuevo) camposNuevos.add(panelCampo);
+        if (!campoNuevo) camposSinModificar.add(panelCampo);
         panelContenedorCampos.add(panelCampo);
-        campos.add(panelCampo);
         revalidate();
         repaint();
     }

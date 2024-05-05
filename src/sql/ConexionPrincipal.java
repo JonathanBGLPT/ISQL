@@ -2,6 +2,7 @@ package sql;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
@@ -23,6 +24,7 @@ public class ConexionPrincipal {
                 gestionTablas = new ConexionGestionTablas(conector);
                 gestionDatos = new ConexionGestionDatos(conector);
                 gestionConsultas = new ConexionGestionConsultas(conector);
+                conector.createStatement().execute("PRAGMA foreign_keys = ON;");
 			    resultado = true;
 		    }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -62,6 +64,16 @@ public class ConexionPrincipal {
         gestionTablas.eliminarTabla(nombreTabla);
     }
 
+    public void cambiarNombreTabla(String nombreTablaAntiguo, String nombreTablaNuevo) {
+
+        gestionTablas.cambiarNombreTabla(nombreTablaAntiguo, nombreTablaNuevo);
+    }
+
+    public void modificarTabla(String nombreTabla, Map<String,String> nombresCambiados, Map<JPanel,Boolean> camposBorrados, ArrayList<JPanel> camposNuevos) {
+
+        gestionTablas.modificarTabla(nombreTabla, nombresCambiados, camposBorrados, camposNuevos);
+    }
+
     public ArrayList<String> obtenerNombreTablas() {
 
         return gestionTablas.obtenerNombreTablas();
@@ -70,6 +82,16 @@ public class ConexionPrincipal {
     public ArrayList<String> obtenerCamposTabla(String nombreTabla) {
 
         return gestionTablas.obtenerCamposTabla(nombreTabla);
+    }
+
+    public boolean comprobarClaveForanea(String nombreTabla, String campo) {
+
+        return gestionTablas.comprobarClaveForanea(nombreTabla, campo);
+    }
+
+    public String obtenerTablaOriginalClaveForanea (String nombreTabla, String campo) {
+
+        return gestionTablas.obtenerTablaOriginalClaveForanea(nombreTabla, campo);
     }
 
     /*****************

@@ -1,6 +1,9 @@
 package interfaz.panelPrincipal;
 
+import java.awt.Image;
+
 import javax.swing.*;
+
 import interfaz.Auxiliar;
 import interfaz.panelPrincipal.subPaneles.*;
 
@@ -37,10 +40,35 @@ public class PanelGestionTabla extends JPanel {
         add(panelBotones);
         add(panelDeGestiones);
 
+        // Boton editar nombre de la tabla
+        JButton botonCambiarNombreTabla = new JButton();
+        botonCambiarNombreTabla.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/editPencil.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()* 0.04), (int)(Auxiliar.dimensionVentana.getHeight()* 0.04), Image.SCALE_SMOOTH)));
+        botonCambiarNombreTabla.addActionListener(accion -> {
+
+            String nombreNuevoTabla = null;
+			boolean nombreValido = false;
+            while (!nombreValido) {
+
+                nombreNuevoTabla = JOptionPane.showInputDialog(null, "Ingrese el nuevo nombre de la tabla:");
+                nombreValido = nombreNuevoTabla == null || (nombreNuevoTabla.length() > 0 && nombreNuevoTabla.length() <= 16);
+                if (nombreNuevoTabla != null && (nombreNuevoTabla.length() == 0 || nombreNuevoTabla.length() > 16)) JOptionPane.showMessageDialog(null, "El nombre de la tabla debe contener entre 1 y 16 caracteres.");
+            }
+
+            if (nombreNuevoTabla != null) {
+
+                Auxiliar.conexionSQL.cambiarNombreTabla(nombreTablaSeleccionada, nombreNuevoTabla);
+                panelPrincipal.panelResumenTablas.actualizarPanelResumenTablas();
+                nombreTablaSeleccionada = nombreNuevoTabla;
+            }
+            revalidate();
+            repaint();
+        });
+        add(botonCambiarNombreTabla);
+
         // Texto tabla seleccionada
         JLabel textoTablas = new JLabel("Tabla seleccionada: " + nombreTablaSeleccionada);
         textoTablas.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(getSize(), textoTablas, 0.9, 0.03);
+        Auxiliar.calcularSize(getSize(), textoTablas, 0.95, 0.03);
         Auxiliar.calcularLocation(getSize(), textoTablas, 0.025, 0.04);
         add(textoTablas);
 
@@ -69,7 +97,7 @@ public class PanelGestionTabla extends JPanel {
             // Mostrar panel modificar tabla
             case 2:
 
-                /// IMPLEMENTAR
+                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelModificarTabla(panelPrincipal));
                 break;
 
             // Mostrar panel agregar datos manualmente
@@ -115,7 +143,8 @@ class PanelGestionTablaBotones extends JPanel {
 
             if (nombreTablaSeleccionada != null && !nombreTablaSeleccionada.equals("")) {
 
-                /// IMPLEMENTAR
+                Auxiliar.habilitacionDeBotones(panelPrincipal, false);
+                panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(2);
 
             } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para modificar.");
 		});
@@ -135,7 +164,8 @@ class PanelGestionTablaBotones extends JPanel {
                 panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = "";
                 panelPrincipal.panelGestionTabla.panelDeGestiones.removeAll();
                 panelPrincipal.actualizarPanelPrincipal();
-            }
+
+            } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para eliminar.");
 		});
         add(botonEliminarTabla);
 

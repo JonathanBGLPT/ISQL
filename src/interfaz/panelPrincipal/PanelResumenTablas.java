@@ -94,10 +94,14 @@ public class PanelResumenTablas extends JPanel {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     
-                    panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = nombreTabla;
-                    panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
+                    if (Auxiliar.botonesActivados) {
+
+                        panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = nombreTabla;
+                        panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
+                    }
                 }
             });
+            
 
             panelContenedor.add(panelTabla);
             cambio = !cambio;
