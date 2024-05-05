@@ -1,6 +1,7 @@
 package interfaz.panelPrincipal;
 
 import java.awt.Image;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -43,25 +44,34 @@ public class PanelGestionTabla extends JPanel {
         // Boton editar nombre de la tabla
         JButton botonCambiarNombreTabla = new JButton();
         botonCambiarNombreTabla.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/editPencil.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()* 0.04), (int)(Auxiliar.dimensionVentana.getHeight()* 0.04), Image.SCALE_SMOOTH)));
+        botonCambiarNombreTabla.setSize((int)(getSize().getWidth()*0.05), (int)(getSize().getWidth()*0.05));
+        Auxiliar.calcularLocation(getSize(), botonCambiarNombreTabla, 0.94, 0.03);
         botonCambiarNombreTabla.addActionListener(accion -> {
 
             String nombreNuevoTabla = null;
-			boolean nombreValido = false;
+			boolean nombreValido = nombreTablaSeleccionada.equals("");
             while (!nombreValido) {
 
-                nombreNuevoTabla = JOptionPane.showInputDialog(null, "Ingrese el nuevo nombre de la tabla:");
+                nombreNuevoTabla = JOptionPane.showInputDialog(null, "Ingrese el nuevo nombre de la tabla '" + nombreTablaSeleccionada + "':");
                 nombreValido = nombreNuevoTabla == null || (nombreNuevoTabla.length() > 0 && nombreNuevoTabla.length() <= 16);
                 if (nombreNuevoTabla != null && (nombreNuevoTabla.length() == 0 || nombreNuevoTabla.length() > 16)) JOptionPane.showMessageDialog(null, "El nombre de la tabla debe contener entre 1 y 16 caracteres.");
             }
 
             if (nombreNuevoTabla != null) {
 
-                Auxiliar.conexionSQL.cambiarNombreTabla(nombreTablaSeleccionada, nombreNuevoTabla);
-                panelPrincipal.panelResumenTablas.actualizarPanelResumenTablas();
-                nombreTablaSeleccionada = nombreNuevoTabla;
+                ArrayList<String> nombreTablas = Auxiliar.conexionSQL.obtenerNombreTablas();
+				boolean valido = true;
+				for (int t = 0; t < nombreTablas.size() && valido; t++) valido = !(nombreTablas.get(t).equals(nombreNuevoTabla));
+
+				if (valido) {
+
+                    Auxiliar.conexionSQL.cambiarNombreTabla(nombreTablaSeleccionada, nombreNuevoTabla);
+                    panelPrincipal.panelResumenTablas.actualizarPanelResumenTablas();
+                    nombreTablaSeleccionada = nombreNuevoTabla;
+
+				} else JOptionPane.showMessageDialog(null, "La tabla introducida ya existe.");
             }
-            revalidate();
-            repaint();
+            actualizarPanelGestionTabla();
         });
         add(botonCambiarNombreTabla);
 

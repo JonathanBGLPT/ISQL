@@ -81,12 +81,12 @@ public class PanelResumenTablas extends JPanel {
             panelTabla.add(labelNombreTabla);
 
             // Agrego los campos
-            ArrayList<String> listaCampos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTabla);
-            for (int a = 0; a < listaCampos.size(); a++) {
+            ArrayList<String[]> listaCampos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTabla);
+            for (String[] campoDesglosado : listaCampos) {
 
-                JLabel campos = new JLabel(listaCampos.get(a));
-                campos.setFont(Auxiliar.fuentePequenia);
-                panelTabla.add(campos);
+                JLabel campo = new JLabel("   - " + campoDesglosado[0] + ": " + campoDesglosado[1] + (campoDesglosado[2].equals("")? "" : "(" + campoDesglosado[2] + ")"));
+                campo.setFont(Auxiliar.fuentePequenia);
+                panelTabla.add(campo);
             }
 
             // Al hacer click actualizo PanelGestionTablas

@@ -1,8 +1,7 @@
 package sql;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 import javax.swing.JPanel;
 
@@ -69,7 +68,7 @@ public class ConexionPrincipal {
         gestionTablas.cambiarNombreTabla(nombreTablaAntiguo, nombreTablaNuevo);
     }
 
-    public void modificarTabla(String nombreTabla, Map<String,String> nombresCambiados, Map<JPanel,Boolean> camposBorrados, ArrayList<JPanel> camposNuevos) {
+    public void modificarTabla(String nombreTabla, Map<String,String> nombresCambiados, Set<String> camposBorrados, ArrayList<JPanel> camposNuevos) {
 
         gestionTablas.modificarTabla(nombreTabla, nombresCambiados, camposBorrados, camposNuevos);
     }
@@ -79,7 +78,7 @@ public class ConexionPrincipal {
         return gestionTablas.obtenerNombreTablas();
     }
 
-    public ArrayList<String> obtenerCamposTabla(String nombreTabla) {
+    public ArrayList<String[]> obtenerCamposTabla(String nombreTabla) {
 
         return gestionTablas.obtenerCamposTabla(nombreTabla);
     }

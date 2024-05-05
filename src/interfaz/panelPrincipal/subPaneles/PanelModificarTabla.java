@@ -12,7 +12,7 @@ public class PanelModificarTabla extends JPanel {
     
     private PanelPrincipal panelPrincipal;
     private Map<String,String> nombresCambiados;
-    private Map<JPanel,Boolean> camposBorrados;
+    private Set<String> camposBorrados;
     private ArrayList<JPanel> camposNuevos;
     private ArrayList<JPanel> camposSinModificar;
     private Map<JPanel,String> nombresCamposGuardados;
@@ -28,7 +28,7 @@ public class PanelModificarTabla extends JPanel {
         panelPrincipal = panelPrin;
         nombresCambiados = new HashMap<>();
         nombresCamposGuardados = new HashMap<>();
-        camposBorrados = new HashMap<>();
+        camposBorrados = new HashSet<>();
         camposNuevos = new ArrayList<>();
         camposSinModificar = new ArrayList<>();
         
@@ -129,25 +129,23 @@ public class PanelModificarTabla extends JPanel {
         add(botonCrearCampo);
 
         // Agrego los campos que ya existian
-        ArrayList<String> camposExistentes = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
-        for (String campoExistente : camposExistentes) {
+        ArrayList<String[]> camposExistentes = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
+        for (String[] campoExistente : camposExistentes) {
 
-            String[] campoSeparado = campoExistente.split("\\s+");
-
-            if (!campoSeparado[2].equals("id_" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + ":")) {
+            if (!campoExistente[0].equals("id_" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada)) {
 
                 crearCampo(panelContenedorCampos, false);
                 JPanel panelCampo = (JPanel)camposSinModificar.get(camposSinModificar.size()-1);
 
-                ((JTextField)panelCampo.getComponent(1)).setText(campoSeparado[2].substring(0, campoSeparado[2].length()-1));
+                ((JTextField)panelCampo.getComponent(1)).setText(campoExistente[0]);
                 nombresCamposGuardados.put(panelCampo, ((JTextField)panelCampo.getComponent(1)).getText());
 
-                if (campoSeparado[3].charAt(campoSeparado[3].length()-1) == '*') {
+                if (!campoExistente[2].equals("")) {
 
                     ((JComboBox)panelCampo.getComponent(3)).setSelectedItem("Entero");
-                    ((JComboBox)panelCampo.getComponent(5)).setSelectedItem(Auxiliar.conexionSQL.obtenerTablaOriginalClaveForanea(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, campoSeparado[2].substring(0, campoSeparado[2].length()-1)));
+                    ((JComboBox)panelCampo.getComponent(5)).setSelectedItem(campoExistente[2]);
 
-                } else ((JComboBox)panelCampo.getComponent(3)).setSelectedItem(campoSeparado[3]);
+                } else ((JComboBox)panelCampo.getComponent(3)).setSelectedItem(campoExistente[1]);
             }
         }
         JScrollPane panelAgregarCampos = new JScrollPane(panelContenedorCampos);
@@ -276,7 +274,7 @@ public class PanelModificarTabla extends JPanel {
             }
             if (!campoNuevo) {
 
-                camposBorrados.put(panelCampo, Auxiliar.conexionSQL.comprobarClaveForanea(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, nombreDelCampo.getText()));
+                camposBorrados.add(nombreDelCampo.getText());
                 camposSinModificar.remove(panelCampo);
 
             } else camposNuevos.remove(panelCampo);
