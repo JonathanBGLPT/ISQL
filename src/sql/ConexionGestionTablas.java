@@ -93,7 +93,6 @@ public class ConexionGestionTablas {
                 // Creo la copia de la tabla y le paso los datos
                 sentenciaSQLite += sentenciaClavesForaneas;
                 sentenciaSQLite = sentenciaSQLite.substring(0, sentenciaSQLite.length()-1) + ");";
-                JOptionPane.showMessageDialog(null,sentenciaSQLite);
                 sentencia.execute(sentenciaSQLite);
 
                 ArrayList<String[]> campos2 = obtenerCamposTabla("nuevaTablaTemporal");
@@ -109,7 +108,6 @@ public class ConexionGestionTablas {
                 }
                 sentenciaSQLite = sentenciaSQLite.substring(0, sentenciaSQLite.length()-2) + ") ";
                 sentenciaClavesForaneas = sentenciaClavesForaneas.substring(0, sentenciaClavesForaneas.length()-2) + " FROM " + nombreTabla + ";";
-                JOptionPane.showMessageDialog(null, sentenciaSQLite + sentenciaClavesForaneas);
                 sentencia.execute(sentenciaSQLite + sentenciaClavesForaneas);
 
                 eliminarTabla(nombreTabla);
@@ -124,7 +122,7 @@ public class ConexionGestionTablas {
             }
             sentencia.close();
 
-        } catch (SQLException e) { JOptionPane.showMessageDialog(null, e.getMessage()); }
+        } catch (SQLException e) { e.printStackTrace(); }
     }
 
     @SuppressWarnings("rawtypes")
