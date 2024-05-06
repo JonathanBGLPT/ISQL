@@ -25,7 +25,8 @@ public class ConexionPrincipal {
                 gestionConsultas = new ConexionGestionConsultas(conector);
                 conector.createStatement().execute("PRAGMA foreign_keys = ON;");
 			    resultado = true;
-		    }
+            }   
+                    
         } catch (SQLException e) { e.printStackTrace(); }
 
 		return resultado;
@@ -96,7 +97,10 @@ public class ConexionPrincipal {
     /*****************
      * GESTION DATOS *
      *****************/
+    public ArrayList<String[]> obtenerTodosLosDatosTabla(String nombreTabla) {
 
+        return gestionDatos.obtenerTodosLosDatosTabla(nombreTabla);
+    }
 
      /********************
      * GESTION CONSULTAS *

@@ -2,7 +2,6 @@ package sql;
 
 import java.sql.*;
 import java.util.*;
-
 import javax.swing.*;
 
 public class ConexionGestionTablas {
@@ -17,13 +16,13 @@ public class ConexionGestionTablas {
     @SuppressWarnings("rawtypes")
     public void crearTabla(String nombreTabla, ArrayList<JPanel> campos) {
 
-        String sentenciaSQLite = "CREATE TABLE " + nombreTabla + " ( id_" + nombreTabla + " INTEGER PRIMARY KEY AUTOINCREMENT,";
+        String sentenciaSQLite = "CREATE TABLE " + nombreTabla.trim().replaceAll("\\s+", "_") + " ( id_" + nombreTabla.trim().replaceAll("\\s+", "_") + " INTEGER PRIMARY KEY AUTOINCREMENT,";
         String sentenciaClavesForaneas = "";
         Map<String, String> diccionario = getMapaConvertirTiposNaturalASQL();
 
         for (int c = 0; c < campos.size(); c++) {
 
-            String nombre = ((JTextField)campos.get(c).getComponent(1)).getText();
+            String nombre = ((JTextField)campos.get(c).getComponent(1)).getText().trim().replaceAll("\\s+", "_");
             String tipoDeDato = (String)(((JComboBox)campos.get(c).getComponent(3)).getSelectedItem());
             String claveForanea = (String)(((JComboBox)campos.get(c).getComponent(5)).getSelectedItem());
 
@@ -35,6 +34,7 @@ public class ConexionGestionTablas {
 
         try (Statement sentencia = conector.createStatement()) {
 
+            System.out.println(sentenciaSQLite);
             sentencia.execute(sentenciaSQLite);
             sentencia.close();
 
@@ -45,8 +45,8 @@ public class ConexionGestionTablas {
 
         try (Statement sentencia = conector.createStatement()) {
 
-            sentencia.execute("ALTER TABLE " + nombreTablaAntiguo + " RENAME TO " + nombreTablaNuevo + ";");
-            sentencia.execute("ALTER TABLE " + nombreTablaNuevo + " RENAME COLUMN id_" + nombreTablaAntiguo + " TO id_" + nombreTablaNuevo + ";");
+            sentencia.execute("ALTER TABLE " + nombreTablaAntiguo + " RENAME TO " + nombreTablaNuevo.trim().replaceAll("\\s+", "_") + ";");
+            sentencia.execute("ALTER TABLE " + nombreTablaNuevo.trim().replaceAll("\\s+", "_") + " RENAME COLUMN id_" + nombreTablaAntiguo + " TO id_" + nombreTablaNuevo.trim().replaceAll("\\s+", "_") + ";");
             sentencia.close();
 
         } catch (SQLException e) { e.printStackTrace(); }
@@ -60,7 +60,7 @@ public class ConexionGestionTablas {
         try (Statement sentencia = conector.createStatement()) {
 
             // Cambiar nombres
-            for (String nombreOriginal : nombresCambiados.keySet()) sentencia.execute("ALTER TABLE " + nombreTabla + " RENAME COLUMN " + nombreOriginal + " TO " + nombresCambiados.get(nombreOriginal) + ";");
+            for (String nombreOriginal : nombresCambiados.keySet()) sentencia.execute("ALTER TABLE " + nombreTabla + " RENAME COLUMN " + nombreOriginal + " TO " + nombresCambiados.get(nombreOriginal).trim().replaceAll("\\s+", "_") + ";");
 
             // Borrar campos y agregar campos foraneos
             if (camposBorrados.size() > 0 || contieneUnaNuevaClaveForanea(camposNuevos)) {
@@ -85,7 +85,7 @@ public class ConexionGestionTablas {
                     String tipo = (String)(((JComboBox)panelAgregado.getComponent(3)).getSelectedItem());
                     if (tipo.equals("Entero") && !((String)(((JComboBox)panelAgregado.getComponent(5)).getSelectedItem())).equals("-")) {
     
-                        String nombre = ((JTextField)panelAgregado.getComponent(1)).getText();
+                        String nombre = ((JTextField)panelAgregado.getComponent(1)).getText().trim().replaceAll("\\s+", "_");
                         String claveForanea = (String)(((JComboBox)panelAgregado.getComponent(5)).getSelectedItem());
                         sentenciaSQLite += nombre + " " + diccionario.get(tipo) + ",";
                         sentenciaClavesForaneas += "FOREIGN KEY (" + nombre + ") REFERENCES " + claveForanea + "(id_" + claveForanea + ") ON DELETE CASCADE,";
@@ -119,7 +119,7 @@ public class ConexionGestionTablas {
             for (JPanel panelAgregado : camposNuevos) {
 
                 String tipo = (String)(((JComboBox)panelAgregado.getComponent(3)).getSelectedItem());
-                if (!tipo.equals("Entero") || ((String)(((JComboBox)panelAgregado.getComponent(5)).getSelectedItem())).equals("-")) sentencia.execute("ALTER TABLE " + nombreTabla + " ADD COLUMN " + ((JTextField)panelAgregado.getComponent(1)).getText() + " " + diccionario.get(tipo) + ";");
+                if (!tipo.equals("Entero") || ((String)(((JComboBox)panelAgregado.getComponent(5)).getSelectedItem())).equals("-")) sentencia.execute("ALTER TABLE " + nombreTabla + " ADD COLUMN " + ((JTextField)panelAgregado.getComponent(1)).getText().trim().replaceAll("\\s+", "_") + " " + diccionario.get(tipo) + ";");
             }
             sentencia.close();
 

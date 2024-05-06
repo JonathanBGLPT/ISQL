@@ -95,7 +95,7 @@ public class PanelGestionTabla extends JPanel {
             // Mostrar datos de la tabla
             case 0: 
 
-                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelMostarDatos(panelPrincipal));
+                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelMostarDatos(panelPrincipal, Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(nombreTablaSeleccionada)));
                 break;
             
             // Mostrar panel crear tabla
@@ -148,7 +148,7 @@ class PanelGestionTablaBotones extends JPanel {
         JButton botonModificarTabla = new JButton("Modificar tabla");
         botonModificarTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonModificarTabla, 0.14, 0.05);
-        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonModificarTabla, 0.005, 0.016);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonModificarTabla, 0.005, 0);
         botonModificarTabla.addActionListener(accion -> {
 
             if (nombreTablaSeleccionada != null && !nombreTablaSeleccionada.equals("")) {
@@ -164,7 +164,7 @@ class PanelGestionTablaBotones extends JPanel {
         JButton botonEliminarTabla = new JButton("Eliminar tabla");
         botonEliminarTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonEliminarTabla, 0.14, 0.05);
-        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonEliminarTabla, 0.005, 0.083);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonEliminarTabla, 0.155, 0);
         botonEliminarTabla.addActionListener(accion -> {
 
             if (nombreTablaSeleccionada != null && !nombreTablaSeleccionada.equals("")) {
@@ -179,33 +179,11 @@ class PanelGestionTablaBotones extends JPanel {
 		});
         add(botonEliminarTabla);
 
-        // Boton para modificar datos existentes
-        JButton botonModificarDatos = new JButton("Modificar datos");
-        botonModificarDatos.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonModificarDatos, 0.14, 0.05);
-        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonModificarDatos, 0.155, 0);
-        botonModificarDatos.addActionListener(accion -> {
-
-            /// IMPLEMENTAR
-		});
-        add(botonModificarDatos);
-
-        // Boton para eliminar datos
-        JButton botonEliminarDatos = new JButton("Eliminar datos");
-        botonEliminarDatos.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonEliminarDatos, 0.14, 0.05);
-        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonEliminarDatos, 0.305, 0);
-        botonEliminarDatos.addActionListener(accion -> {
-
-            /// IMPLEMENTAR
-		});
-        add(botonEliminarDatos);
-
         // Boton para agregar datos de forma manual
         JButton botonAgregarDatosManual = new JButton("<html>Agregar datos<br><center>manualmente</center></html>");
         botonAgregarDatosManual.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonAgregarDatosManual, 0.14, 0.09);
-        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonAgregarDatosManual, 0.155, 0.06);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonAgregarDatosManual, 0.005, 0.06);
         botonAgregarDatosManual.addActionListener(accion -> {
 
             /// IMPLEMENTAR
@@ -216,12 +194,45 @@ class PanelGestionTablaBotones extends JPanel {
         JButton botonAgregarDatosDesdeArchivo = new JButton("<html>Agregar datos<br><center>desde archivo</center></html>");
         botonAgregarDatosDesdeArchivo.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonAgregarDatosDesdeArchivo, 0.14, 0.09);
-        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonAgregarDatosDesdeArchivo, 0.305, 0.06);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonAgregarDatosDesdeArchivo, 0.155, 0.06);
         botonAgregarDatosDesdeArchivo.addActionListener(accion -> {
 
             /// IMPLEMENTAR
 		});
         add(botonAgregarDatosDesdeArchivo);
+
+        // Boton para modificar datos existentes
+        JButton botonModificarDatos = new JButton("Modificar datos");
+        botonModificarDatos.setFont(Auxiliar.fuenteGrande);
+        Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonModificarDatos, 0.14, 0.046);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonModificarDatos, 0.305, 0);
+        botonModificarDatos.addActionListener(accion -> {
+
+            /// IMPLEMENTAR
+		});
+        add(botonModificarDatos);
+
+        // Boton para eliminar datos
+        JButton botonEliminarDatos = new JButton("Eliminar datos");
+        botonEliminarDatos.setFont(Auxiliar.fuenteGrande);
+        Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonEliminarDatos, 0.14, 0.046);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonEliminarDatos, 0.305, 0.052);
+        botonEliminarDatos.addActionListener(accion -> {
+
+            /// IMPLEMENTAR
+		});
+        add(botonEliminarDatos);
+
+        // Boton para generar CSV
+        JButton botonGenerarCSV = new JButton("Generar CSV");
+        botonGenerarCSV.setFont(Auxiliar.fuenteGrande);
+        Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonGenerarCSV, 0.14, 0.046);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonGenerarCSV, 0.305, 0.104);
+        botonGenerarCSV.addActionListener(accion -> {
+
+            /// IMPLEMENTAR
+		});
+        add(botonGenerarCSV);
     }
 
     public void actualizarTablaSeleccionada(String nombreTabla) {
