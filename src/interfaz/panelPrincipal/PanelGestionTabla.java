@@ -14,6 +14,7 @@ public class PanelGestionTabla extends JPanel {
     private PanelPrincipal panelPrincipal;
     public JPanel panelDeGestiones;
     public String nombreTablaSeleccionada;
+    public ArrayList<String[]> datosMostrarTabla;
 
     public PanelGestionTabla (PanelPrincipal panelPrin) {
 
@@ -95,7 +96,7 @@ public class PanelGestionTabla extends JPanel {
             // Mostrar datos de la tabla
             case 0: 
 
-                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelMostarDatos(panelPrincipal, Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(nombreTablaSeleccionada)));
+                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelMostarDatos(panelPrincipal, datosMostrarTabla));
                 break;
             
             // Mostrar panel crear tabla

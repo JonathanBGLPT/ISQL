@@ -97,6 +97,7 @@ public class PanelResumenTablas extends JPanel {
                     if (Auxiliar.botonesActivados) {
 
                         panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = nombreTabla;
+                        panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(nombreTabla);
                         panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
                     }
                 }
