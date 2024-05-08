@@ -176,7 +176,7 @@ class PanelGestionTablaBotones extends JPanel {
                 int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar la tabla: "+ nombreTablaSeleccionada +"?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (respuesta == JOptionPane.YES_OPTION) Auxiliar.conexionSQL.eliminarTabla(nombreTablaSeleccionada);
                 panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = "";
-                panelPrincipal.panelGestionTabla.panelDeGestiones.removeAll();
+                panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
                 panelPrincipal.actualizarPanelPrincipal();
 
             } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para eliminar.");

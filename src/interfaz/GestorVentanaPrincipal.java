@@ -1,5 +1,6 @@
 package interfaz;
 
+import java.awt.event.*;
 import javax.swing.*;
 import interfaz.panelPrincipal.PanelPrincipal;
 
@@ -24,6 +25,18 @@ public class GestorVentanaPrincipal extends JFrame {
         add(panelPrincipal);
         
         panelGestionBBDD.setVisible(true);
+
+        addWindowStateListener(new WindowStateListener() {
+            @Override
+            public void windowStateChanged(WindowEvent e) {
+                
+                if ((e.getNewState() & JFrame.NORMAL) == JFrame.NORMAL) {
+                    
+                    revalidate();
+                    repaint();
+                }
+            }
+        });
     }
 
     public void mostrarPanelPrincipal (String nombreBD) {
