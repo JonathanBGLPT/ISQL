@@ -1,7 +1,6 @@
 package interfaz;
 
 import javax.swing.*;
-
 import interfaz.panelPrincipal.PanelPrincipal;
 
 public class GestorVentanaPrincipal extends JFrame {
@@ -33,6 +32,7 @@ public class GestorVentanaPrincipal extends JFrame {
         panelGestionBBDD.setVisible(false);
         panelPrincipal.actualizarPanelPrincipal();
         panelPrincipal.setVisible(true);
+        panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
     }
 
     public static void main (String[] args) {

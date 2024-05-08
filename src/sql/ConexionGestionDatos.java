@@ -28,6 +28,7 @@ public class ConexionGestionDatos {
                 resultado.add(fila);
             }
             sentenciaResultado.close();
+            
         } catch (SQLException e) { e.printStackTrace(); }
 
         return resultado;

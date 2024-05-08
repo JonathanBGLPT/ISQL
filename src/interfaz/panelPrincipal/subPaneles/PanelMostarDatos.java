@@ -49,11 +49,14 @@ public class PanelMostarDatos extends JPanel {
         JPanel panelContenedorDatos = new JPanel();
         panelContenedorDatos.setLayout(new BoxLayout(panelContenedorDatos, BoxLayout.Y_AXIS));
 
-        for (String[] fila : datosTabla) {
+        boolean datosValidos = !panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("") && datosTabla != null;
+        for (int f = 0; datosValidos && f < datosTabla.size(); f++) {
 
+            String[] fila = datosTabla.get(f);
             JPanel panelFila = new JPanel();
             panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
             panelFila.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25*campos.size()), (int)(getSize().getHeight()*0.03)));
+            panelFila.setBackground((f % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
             for (String dato : fila) {
 
                 JLabel campo = new JLabel("<html>" + dato + "</html>");

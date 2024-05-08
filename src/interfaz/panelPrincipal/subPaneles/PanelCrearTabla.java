@@ -35,6 +35,7 @@ public class PanelCrearTabla extends JPanel {
 
                 Auxiliar.habilitacionDeBotones(panelPrincipal, true);
                 panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = "";
+                panelPrincipal.panelGestionTabla.actualizarPanelGestionTabla();
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
             };
 		});

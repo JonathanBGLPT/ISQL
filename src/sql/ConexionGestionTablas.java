@@ -205,19 +205,22 @@ public class ConexionGestionTablas {
         ArrayList<String[]> resultado = new ArrayList<>();
         Map<String,String> diccionario = getMapaConvertirTiposSQLANatural();
 
-        try (ResultSet sentenciaResultado = conector.createStatement().executeQuery("PRAGMA table_info(" + nombreTabla + ");")) {
+        if (!nombreTabla.equals("")) {
 
-            while (sentenciaResultado.next()) {
+            try (ResultSet sentenciaResultado = conector.createStatement().executeQuery("PRAGMA table_info(" + nombreTabla + ");")) {
 
-                String[] campos = new String[3];
-                campos[0] = sentenciaResultado.getString("name");
-                campos[1] = diccionario.get(sentenciaResultado.getString("type"));
-                campos[2] = (comprobarClaveForanea(nombreTabla, sentenciaResultado.getString("name"))? obtenerTablaOriginalClaveForanea(nombreTabla,campos[0]) : "");
-                resultado.add(campos);
-            }
-            sentenciaResultado.close();
-
-        } catch (SQLException e) { e.printStackTrace(); }
+                while (sentenciaResultado.next()) {
+    
+                    String[] campos = new String[3];
+                    campos[0] = sentenciaResultado.getString("name");
+                    campos[1] = diccionario.get(sentenciaResultado.getString("type"));
+                    campos[2] = (comprobarClaveForanea(nombreTabla, sentenciaResultado.getString("name"))? obtenerTablaOriginalClaveForanea(nombreTabla,campos[0]) : "");
+                    resultado.add(campos);
+                }
+                sentenciaResultado.close();
+    
+            } catch (SQLException e) { e.printStackTrace(); }
+        }
 
         return resultado;
     }

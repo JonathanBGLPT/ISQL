@@ -1,9 +1,11 @@
 package interfaz.panelPrincipal;
 
 import java.awt.Image;
+import java.io.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import interfaz.Auxiliar;
 import interfaz.panelPrincipal.subPaneles.*;
@@ -69,6 +71,7 @@ public class PanelGestionTabla extends JPanel {
                     Auxiliar.conexionSQL.cambiarNombreTabla(nombreTablaSeleccionada, nombreNuevoTabla);
                     panelPrincipal.panelResumenTablas.actualizarPanelResumenTablas();
                     nombreTablaSeleccionada = nombreNuevoTabla;
+                    elegirPanelDeGestiones(0);
 
 				} else JOptionPane.showMessageDialog(null, "La tabla introducida ya existe.");
             }
@@ -191,16 +194,41 @@ class PanelGestionTablaBotones extends JPanel {
 		});
         add(botonAgregarDatosManual);
 
-        // Boton para agregar datos desde un CSV o un XLSX
-        JButton botonAgregarDatosDesdeArchivo = new JButton("<html>Agregar datos<br><center>desde archivo</center></html>");
-        botonAgregarDatosDesdeArchivo.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonAgregarDatosDesdeArchivo, 0.14, 0.09);
-        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonAgregarDatosDesdeArchivo, 0.155, 0.06);
-        botonAgregarDatosDesdeArchivo.addActionListener(accion -> {
+        // Boton para agregar datos desde un CSV
+        JButton botonAgregarDatosDesdeCSV = new JButton("<html>Agregar datos<br><center>desde CSV</center></html>");
+        botonAgregarDatosDesdeCSV.setFont(Auxiliar.fuenteGrande);
+        Auxiliar.calcularSize(Auxiliar.dimensionVentana, botonAgregarDatosDesdeCSV, 0.14, 0.09);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonAgregarDatosDesdeCSV, 0.155, 0.06);
+        botonAgregarDatosDesdeCSV.addActionListener(accion -> {
 
-            /// IMPLEMENTAR
+            JFileChooser selectorDeCarpeta = new JFileChooser();
+			selectorDeCarpeta.setCurrentDirectory(new File(System.getProperty("user.home") + File.separator + "Desktop"));
+            selectorDeCarpeta.removeChoosableFileFilter(selectorDeCarpeta.getFileFilter());
+            selectorDeCarpeta.setFileFilter(new FileNameExtensionFilter(".csv", "csv"));
+
+            if (selectorDeCarpeta.showOpenDialog(this) == 0) {
+
+                String ruta = selectorDeCarpeta.getSelectedFile().getAbsolutePath(); 
+				if (ruta.substring(ruta.length()-4, ruta.length()).equals(".csv")) {
+
+					String fila = "";
+                    try (BufferedReader lectorCSV = new BufferedReader(new FileReader(ruta))) {
+
+                        while ((fila = lectorCSV.readLine()) != null) {  
+
+                            String[] values = fila.split(",");  
+                            
+                            for (String value : values)  System.out.print(value + " "); 
+                            System.out.println(); 
+                        }
+                    } catch (IOException e) { e.printStackTrace(); }
+                    
+                } else JOptionPane.showMessageDialog(null, "El archivo seleccionado no es valido, debe ser un CSV.");
+			} 
+
+            
 		});
-        add(botonAgregarDatosDesdeArchivo);
+        add(botonAgregarDatosDesdeCSV);
 
         // Boton para modificar datos existentes
         JButton botonModificarDatos = new JButton("Modificar datos");
