@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 
 public class ConexionPrincipal {
 
+    public String ultimaRutaBD;
+
     private Connection conector = null;
     private ConexionGestionTablas gestionTablas;
     private ConexionGestionDatos gestionDatos;
@@ -24,6 +26,7 @@ public class ConexionPrincipal {
                 gestionDatos = new ConexionGestionDatos(conector);
                 gestionConsultas = new ConexionGestionConsultas(conector);
                 conector.createStatement().execute("PRAGMA foreign_keys = ON;");
+                ultimaRutaBD = ruta;
 			    resultado = true;
             }   
                     
@@ -102,6 +105,10 @@ public class ConexionPrincipal {
         return gestionDatos.obtenerTodosLosDatosTabla(nombreTabla);
     }
 
+    public boolean insertarFila(String sentenciaSQL, String[] valores, String[] tipos) {
+
+        return gestionDatos.insertarFila(sentenciaSQL, valores, tipos);
+    }
      /********************
      * GESTION CONSULTAS *
      *********************/

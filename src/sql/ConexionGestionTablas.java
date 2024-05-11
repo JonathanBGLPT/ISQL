@@ -26,15 +26,17 @@ public class ConexionGestionTablas {
             String tipoDeDato = (String)(((JComboBox)campos.get(c).getComponent(3)).getSelectedItem());
             String claveForanea = (String)(((JComboBox)campos.get(c).getComponent(5)).getSelectedItem());
 
-            sentenciaSQLite += nombre + " " + diccionario.get(tipoDeDato) + ",";
-            if (tipoDeDato.equals("Entero") && !claveForanea.equals("-")) sentenciaClavesForaneas += "FOREIGN KEY (" + nombre + ") REFERENCES " + claveForanea + "(id_" + claveForanea + ") ON DELETE CASCADE,";
+            if (!nombre.equals("id_" + nombreTabla.trim().replaceAll("\\s+", "_"))) {
+
+                sentenciaSQLite += nombre + " " + diccionario.get(tipoDeDato) + ",";
+                if (tipoDeDato.equals("Entero") && !claveForanea.equals("-")) sentenciaClavesForaneas += "FOREIGN KEY (" + nombre + ") REFERENCES " + claveForanea + "(id_" + claveForanea + ") ON DELETE CASCADE,";
+            }
         };
         sentenciaSQLite += sentenciaClavesForaneas;
         sentenciaSQLite = sentenciaSQLite.substring(0, sentenciaSQLite.length()-1) + ");";
 
         try (Statement sentencia = conector.createStatement()) {
 
-            System.out.println(sentenciaSQLite);
             sentencia.execute(sentenciaSQLite);
             sentencia.close();
 
@@ -255,4 +257,6 @@ public class ConexionGestionTablas {
 
         return resultado;
     }
+
+    
 }

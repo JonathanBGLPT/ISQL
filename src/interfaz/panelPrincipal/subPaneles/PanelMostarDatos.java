@@ -28,14 +28,17 @@ public class PanelMostarDatos extends JPanel {
         ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
         JPanel panelCabecera = new JPanel();
         panelCabecera.setLayout(new BoxLayout(panelCabecera, BoxLayout.X_AXIS));
-        for (String[] campo : campos) {
+        if (!panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("")) {
 
-            JLabel nombreCampo = new JLabel("<html>"+ campo[0] + "</html>");
-            nombreCampo.setHorizontalAlignment(JLabel.CENTER);
-            nombreCampo.setFont(Auxiliar.fuentePequenia);
-            nombreCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
-            nombreCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
-            panelCabecera.add(nombreCampo);
+            for (String[] campo : campos) {
+
+                JLabel nombreCampo = new JLabel("<html>"+ campo[0] + "</html>");
+                nombreCampo.setHorizontalAlignment(JLabel.CENTER);
+                nombreCampo.setFont(Auxiliar.fuentePequenia);
+                nombreCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+                nombreCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+                panelCabecera.add(nombreCampo);
+            }
         }
         JScrollPane panelMostarCampos = new JScrollPane(panelCabecera);
         Auxiliar.calcularSize(getSize(), panelMostarCampos, 0.978, 0.05);
@@ -48,7 +51,7 @@ public class PanelMostarDatos extends JPanel {
         // Scroll que muestra los datos de la tabla
         JPanel panelContenedorDatos = new JPanel();
         panelContenedorDatos.setLayout(new BoxLayout(panelContenedorDatos, BoxLayout.Y_AXIS));
-
+        
         boolean datosValidos = !panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("") && datosTabla != null;
         for (int f = 0; datosValidos && f < datosTabla.size(); f++) {
 
@@ -59,6 +62,7 @@ public class PanelMostarDatos extends JPanel {
             panelFila.setBackground((f % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
             for (String dato : fila) {
 
+                if (dato.length() > 16) dato = dato.substring(0, 16) + "...";
                 JLabel campo = new JLabel("<html>" + dato + "</html>");
                 campo.setFont(Auxiliar.fuentePequenia);
                 campo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));

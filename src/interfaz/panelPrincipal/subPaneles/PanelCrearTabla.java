@@ -53,6 +53,7 @@ public class PanelCrearTabla extends JPanel {
                 Auxiliar.conexionSQL.crearTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, campos);
                 panelPrincipal.panelResumenTablas.actualizarPanelResumenTablas();
                 Auxiliar.habilitacionDeBotones(panelPrincipal, true);
+                panelPrincipal.panelGestionTabla.datosMostrarTabla = null;
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
             }
 		});

@@ -2,7 +2,7 @@ package interfaz.panelPrincipal;
 
 import java.awt.Image;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -176,6 +176,7 @@ class PanelGestionTablaBotones extends JPanel {
                 int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar la tabla: "+ nombreTablaSeleccionada +"?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (respuesta == JOptionPane.YES_OPTION) Auxiliar.conexionSQL.eliminarTabla(nombreTablaSeleccionada);
                 panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = "";
+                panelPrincipal.panelGestionTabla.datosMostrarTabla = null;
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
                 panelPrincipal.actualizarPanelPrincipal();
 
@@ -212,15 +213,57 @@ class PanelGestionTablaBotones extends JPanel {
 				if (ruta.substring(ruta.length()-4, ruta.length()).equals(".csv")) {
 
 					String fila = "";
-                    try (BufferedReader lectorCSV = new BufferedReader(new FileReader(ruta))) {
+                    String rutaFallidos = selectorDeCarpeta.getSelectedFile().getParent() + File.separator + nombreTablaSeleccionada + "FilasFallidas.csv";
+                    
+                    try (BufferedReader lectorCSV = new BufferedReader(new FileReader(ruta));
+                        FileWriter escritorCSVFallidos = new FileWriter(rutaFallidos)) {
 
-                        while ((fila = lectorCSV.readLine()) != null) {  
+                        String cabecera = lectorCSV.readLine();
+                        escritorCSVFallidos.append(cabecera).append("\n");
+                        String[] cabeceraSeparada = cabecera.split(";");
+                        if (comprobarCabeceraCSV(cabeceraSeparada)) {
 
-                            String[] values = fila.split(",");  
-                            
-                            for (String value : values)  System.out.print(value + " "); 
-                            System.out.println(); 
-                        }
+                            int contadorTotal = 1;
+                            int contadorFallos = 0;
+                            String filasFallidas = "";
+
+                            // Creo la sentencia para insertar los valores
+                            String sentenciaSQL = "INSERT INTO " + nombreTablaSeleccionada + " (";
+                            for (String campo : cabeceraSeparada) sentenciaSQL += campo + ", ";
+                            sentenciaSQL = sentenciaSQL.substring(0, sentenciaSQL.length()-2) + ") VALUES (";
+                            for (int c = 0; c < cabeceraSeparada.length; c++) sentenciaSQL += "?, ";
+                            sentenciaSQL = sentenciaSQL.substring(0, sentenciaSQL.length()-2) + ");";
+
+                            // Creo el array con los tipos
+                            Map<String, String> mapaTipos = new HashMap<>();
+                            ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTablaSeleccionada);
+                            for (String[] campo : campos) mapaTipos.put(campo[0].toLowerCase(), campo[1]);
+                            String[] tipos = new String[cabeceraSeparada.length];
+                            for (int c = 0; c < cabeceraSeparada.length; c++) tipos[c] = mapaTipos.get(cabeceraSeparada[c].toLowerCase());
+
+                            while ((fila = lectorCSV.readLine()) != null) {  
+
+                                contadorTotal++;
+                                if (!Auxiliar.conexionSQL.insertarFila(sentenciaSQL, fila.split(";"), tipos)) {
+
+                                    contadorFallos++;
+                                    escritorCSVFallidos.append(fila).append("\n");
+                                    filasFallidas += contadorTotal + ", ";
+                                }
+                            }
+                            JOptionPane.showMessageDialog(null, "Se han agregado " + (contadorTotal - contadorFallos - 1) + " filas y han fallado " + contadorFallos + " lineas" + ((contadorFallos == 0)? "." : ": " + filasFallidas.substring(0, filasFallidas.length()-2) + "."));
+                            panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
+                            panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
+
+                            if (contadorFallos > 0) {
+
+                                JOptionPane.showMessageDialog(null, "Se ha generado un CSV para que puedas rellenar las filas faltantes en esta ruta: " + rutaFallidos);
+
+                            } else new File(rutaFallidos).delete();
+
+                            lectorCSV.close();
+                            escritorCSVFallidos.close();
+                        }                    
                     } catch (IOException e) { e.printStackTrace(); }
                     
                 } else JOptionPane.showMessageDialog(null, "El archivo seleccionado no es valido, debe ser un CSV.");
@@ -259,7 +302,21 @@ class PanelGestionTablaBotones extends JPanel {
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonGenerarCSV, 0.305, 0.104);
         botonGenerarCSV.addActionListener(accion -> {
 
-            /// IMPLEMENTAR
+            /// IMPLEMENTAR COMO GENERA LAS IMAGENES (SEGURAMENTE GUARDANDOLAS EN UNA CARPETA EN EL MISMO NIVEL, CON EL NOMBRE COMO ID DE CADA IMAGEN)
+            try (FileWriter escritorCSV = new FileWriter(nombreTablaSeleccionada + ".csv")) {
+                
+                ArrayList<String[]> cabecera = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTablaSeleccionada);
+                for (String[] campoCabecera : cabecera) escritorCSV.append(campoCabecera[0]).append(";");
+                escritorCSV.append("\n");
+
+                ArrayList<String[]> datos = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(nombreTablaSeleccionada);
+                for (String[] fila : datos) {
+
+                    for (String dato : fila) escritorCSV.append(dato).append(";");
+                    escritorCSV.append("\n");
+                }
+
+            } catch (IOException e) { e.printStackTrace(); }
 		});
         add(botonGenerarCSV);
     }
@@ -267,5 +324,28 @@ class PanelGestionTablaBotones extends JPanel {
     public void actualizarTablaSeleccionada(String nombreTabla) {
 
         nombreTablaSeleccionada = nombreTabla;
+    }
+
+    private boolean comprobarCabeceraCSV(String[] cabecera) {
+
+        ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTablaSeleccionada);
+        Set<String> camposBusqueda = new HashSet<>();
+        for (String[] campo : campos) if (!campo[0].equals("id_" + nombreTablaSeleccionada)) camposBusqueda.add(campo[0].toLowerCase());
+        boolean resultado = cabecera.length == camposBusqueda.size();
+
+        if (resultado) {
+
+            for (String campoCabecera : cabecera) camposBusqueda.remove(campoCabecera.toLowerCase());
+            if (camposBusqueda.size() > 0) {
+
+                String camposFaltantes = "";
+                for (String campoFaltante : camposBusqueda) camposFaltantes += campoFaltante + ", ";
+                JOptionPane.showMessageDialog(null, "Faltan los siguientes campos en el CSV: " + camposFaltantes.substring(0, camposFaltantes.length()-2) + ".");
+                resultado = false;
+            }
+
+        } else JOptionPane.showMessageDialog(null, "La cabecera del CSV debe contener todos los campos excepto 'id_" +  nombreTablaSeleccionada + "'.");
+
+        return resultado;
     }
 }
