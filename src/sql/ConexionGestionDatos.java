@@ -29,15 +29,16 @@ public class ConexionGestionDatos {
                 String[] fila = new String[numeroCampos];
                 for (int c = 0; c < fila.length; c++) {
 
+                    String dato = sentenciaResultado.getString(c+1);
                     if (campos.get(c)[1].equals("Fecha")) {
 
-                        fila[c] = new SimpleDateFormat("dd/MM/yyyy").format(new Date(Long.parseLong(sentenciaResultado.getString(c+1))));
+                        fila[c] = (dato == null)? "" : new SimpleDateFormat("dd/MM/yyyy").format(new Date(Long.parseLong(dato)));
 
                     } else if (campos.get(c)[1].equals("Imagen")) {
 
                         /// IMPLEMENTAR COMO DEVUELVO LAS IMAGENES
 
-                    } else fila[c] = sentenciaResultado.getString(c+1);
+                    } else fila[c] = (dato == null)? "" : dato;
                 }
                 resultado.add(fila);
             }
@@ -60,22 +61,38 @@ public class ConexionGestionDatos {
 
                     case "Entero":
 
-                        sentenciaPreparada.setInt(v+1, Integer.parseInt(valores[v]));
+                        if (!valores[v].equals("")) {
+
+                            sentenciaPreparada.setInt(v+1, Integer.parseInt(valores[v]));
+
+                        } else sentenciaPreparada.setNull(v+1, java.sql.Types.INTEGER);
                         break;
 
                     case "Decimal":
 
-                        sentenciaPreparada.setDouble(v+1, Double.parseDouble(valores[v]));
+                        if (!valores[v].equals("")) {
+
+                            sentenciaPreparada.setDouble(v+1, Double.parseDouble(valores[v]));
+
+                        } else sentenciaPreparada.setNull(v+1, java.sql.Types.DOUBLE);
                         break;
 
                     case "Texto":
 
-                        sentenciaPreparada.setString(v+1, valores[v]);
+                        if (!valores[v].equals("")) {
+
+                            sentenciaPreparada.setString(v+1, valores[v]);
+
+                        } else sentenciaPreparada.setNull(v+1, java.sql.Types.VARCHAR);
                         break;
 
                     case "Fecha":
 
-                        sentenciaPreparada.setDate(v+1, convertirFechaAFormatoSQL(valores[v]));
+                        if (!valores[v].equals("")) {
+
+                            sentenciaPreparada.setDate(v+1, convertirFechaAFormatoSQL(valores[v]));
+
+                        } else sentenciaPreparada.setNull(v+1, java.sql.Types.DATE);
                         break;
 
                     case "Imagen":

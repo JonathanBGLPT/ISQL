@@ -51,7 +51,11 @@ public class PanelMostarDatos extends JPanel {
         // Scroll que muestra los datos de la tabla
         JPanel panelContenedorDatos = new JPanel();
         panelContenedorDatos.setLayout(new BoxLayout(panelContenedorDatos, BoxLayout.Y_AXIS));
-        
+        JPanel panelFilaVacia = new JPanel();
+        panelFilaVacia.setLayout(new BoxLayout(panelFilaVacia, BoxLayout.X_AXIS));
+        panelFilaVacia.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25*campos.size()), 0));
+        panelContenedorDatos.add(panelFilaVacia);
+
         boolean datosValidos = !panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("") && datosTabla != null;
         for (int f = 0; datosValidos && f < datosTabla.size(); f++) {
 
@@ -63,8 +67,13 @@ public class PanelMostarDatos extends JPanel {
             for (String dato : fila) {
 
                 if (dato.length() > 16) dato = dato.substring(0, 16) + "...";
-                JLabel campo = new JLabel("<html>" + dato + "</html>");
+                JLabel campo = new JLabel("<html>&#8203;" + dato + "</html>");
                 campo.setFont(Auxiliar.fuentePequenia);
+                if (dato.equals("")) {
+                    
+                    campo.setOpaque(true);
+                    campo.setBackground(java.awt.Color.RED);
+                }
                 campo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 campo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
                 panelFila.add(campo);

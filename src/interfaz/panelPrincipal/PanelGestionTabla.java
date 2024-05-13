@@ -99,25 +99,26 @@ public class PanelGestionTabla extends JPanel {
             // Mostrar datos de la tabla
             case 0: 
 
-                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelMostarDatos(panelPrincipal, datosMostrarTabla));
+                panelDeGestiones.add(new PanelMostarDatos(panelPrincipal, datosMostrarTabla));
                 break;
             
             // Mostrar panel crear tabla
             case 1:
 
-                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelCrearTabla(panelPrincipal));
+                datosMostrarTabla = null;
+                panelDeGestiones.add(new PanelCrearTabla(panelPrincipal));
                 break;
                 
             // Mostrar panel modificar tabla
             case 2:
 
-                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelModificarTabla(panelPrincipal));
+                panelDeGestiones.add(new PanelModificarTabla(panelPrincipal));
                 break;
 
             // Mostrar panel agregar datos manualmente
             case 3:
 
-                /// IMPLEMENTAR
+                panelDeGestiones.add(new PanelAgregarDatos(panelPrincipal));
                 break;
 
             // Mostrar panel modificar datos
@@ -155,7 +156,7 @@ class PanelGestionTablaBotones extends JPanel {
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonModificarTabla, 0.005, 0);
         botonModificarTabla.addActionListener(accion -> {
 
-            if (nombreTablaSeleccionada != null && !nombreTablaSeleccionada.equals("")) {
+            if (!nombreTablaSeleccionada.equals("")) {
 
                 Auxiliar.habilitacionDeBotones(panelPrincipal, false);
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(2);
@@ -173,13 +174,18 @@ class PanelGestionTablaBotones extends JPanel {
 
             if (nombreTablaSeleccionada != null && !nombreTablaSeleccionada.equals("")) {
 
-                int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar la tabla: "+ nombreTablaSeleccionada +"?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (respuesta == JOptionPane.YES_OPTION) Auxiliar.conexionSQL.eliminarTabla(nombreTablaSeleccionada);
-                panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = "";
-                panelPrincipal.panelGestionTabla.datosMostrarTabla = null;
-                panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
-                panelPrincipal.actualizarPanelPrincipal();
+                String nombreTablaSeguridad = JOptionPane.showInputDialog(null, "¿Está seguro de que desea eliminar: "+ nombreTablaSeleccionada +"?\nPara ello ingrese el nombre de la tabla:");
+                    
+                if (nombreTablaSeguridad.equals(nombreTablaSeleccionada)) {
+                    
+                    Auxiliar.conexionSQL.eliminarTabla(nombreTablaSeleccionada);
+                    panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = "";
+                    panelPrincipal.panelGestionTabla.datosMostrarTabla = null;
+                    panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
+                    panelPrincipal.actualizarPanelPrincipal();
 
+                } else JOptionPane.showMessageDialog(null, "El nombre introducido no coincide con el de la tabla.");
+                    
             } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para eliminar.");
 		});
         add(botonEliminarTabla);
@@ -191,7 +197,12 @@ class PanelGestionTablaBotones extends JPanel {
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonAgregarDatosManual, 0.005, 0.06);
         botonAgregarDatosManual.addActionListener(accion -> {
 
-            /// IMPLEMENTAR
+            if (!nombreTablaSeleccionada.equals("")) {
+
+                Auxiliar.habilitacionDeBotones(panelPrincipal, false);
+                panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(3);
+
+            } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para agregarle datos.");
 		});
         add(botonAgregarDatosManual);
 
@@ -202,72 +213,80 @@ class PanelGestionTablaBotones extends JPanel {
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonAgregarDatosDesdeCSV, 0.155, 0.06);
         botonAgregarDatosDesdeCSV.addActionListener(accion -> {
 
-            JFileChooser selectorDeCarpeta = new JFileChooser();
-			selectorDeCarpeta.setCurrentDirectory(new File(System.getProperty("user.home") + File.separator + "Desktop"));
-            selectorDeCarpeta.removeChoosableFileFilter(selectorDeCarpeta.getFileFilter());
-            selectorDeCarpeta.setFileFilter(new FileNameExtensionFilter(".csv", "csv"));
+            if (!nombreTablaSeleccionada.equals("")) {
 
-            if (selectorDeCarpeta.showOpenDialog(this) == 0) {
+                JFileChooser selectorDeCarpeta = new JFileChooser();
+                selectorDeCarpeta.setCurrentDirectory(new File(System.getProperty("user.home") + File.separator + "Desktop"));
+                selectorDeCarpeta.removeChoosableFileFilter(selectorDeCarpeta.getFileFilter());
+                selectorDeCarpeta.setFileFilter(new FileNameExtensionFilter(".csv", "csv"));
 
-                String ruta = selectorDeCarpeta.getSelectedFile().getAbsolutePath(); 
-				if (ruta.substring(ruta.length()-4, ruta.length()).equals(".csv")) {
+                if (selectorDeCarpeta.showOpenDialog(this) == 0) {
 
-					String fila = "";
-                    String rutaFallidos = selectorDeCarpeta.getSelectedFile().getParent() + File.separator + nombreTablaSeleccionada + "FilasFallidas.csv";
-                    
-                    try (BufferedReader lectorCSV = new BufferedReader(new FileReader(ruta));
-                        FileWriter escritorCSVFallidos = new FileWriter(rutaFallidos)) {
+                    String ruta = selectorDeCarpeta.getSelectedFile().getAbsolutePath(); 
+                    if (ruta.substring(ruta.length()-4, ruta.length()).equals(".csv")) {
 
-                        String cabecera = lectorCSV.readLine();
-                        escritorCSVFallidos.append(cabecera).append("\n");
-                        String[] cabeceraSeparada = cabecera.split(";");
-                        if (comprobarCabeceraCSV(cabeceraSeparada)) {
+                        String fila = "";
+                        String rutaFallidos = ruta.substring(0, ruta.length()-4) + "FilasFallidas.csv";
+                        
+                        try (BufferedReader lectorCSV = new BufferedReader(new FileReader(ruta));
+                            FileWriter escritorCSVFallidos = new FileWriter(rutaFallidos)) {
 
-                            int contadorTotal = 1;
-                            int contadorFallos = 0;
-                            String filasFallidas = "";
+                            String cabecera = lectorCSV.readLine();
+                            escritorCSVFallidos.append(cabecera).append("\n");
+                            String[] cabeceraSeparada = cabecera.split(";");
+                            if (comprobarCabeceraCSV(cabeceraSeparada)) {
 
-                            // Creo la sentencia para insertar los valores
-                            String sentenciaSQL = "INSERT INTO " + nombreTablaSeleccionada + " (";
-                            for (String campo : cabeceraSeparada) sentenciaSQL += campo + ", ";
-                            sentenciaSQL = sentenciaSQL.substring(0, sentenciaSQL.length()-2) + ") VALUES (";
-                            for (int c = 0; c < cabeceraSeparada.length; c++) sentenciaSQL += "?, ";
-                            sentenciaSQL = sentenciaSQL.substring(0, sentenciaSQL.length()-2) + ");";
+                                int contadorTotal = 1;
+                                int contadorFallos = 0;
+                                String filasFallidas = "";
 
-                            // Creo el array con los tipos
-                            Map<String, String> mapaTipos = new HashMap<>();
-                            ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTablaSeleccionada);
-                            for (String[] campo : campos) mapaTipos.put(campo[0].toLowerCase(), campo[1]);
-                            String[] tipos = new String[cabeceraSeparada.length];
-                            for (int c = 0; c < cabeceraSeparada.length; c++) tipos[c] = mapaTipos.get(cabeceraSeparada[c].toLowerCase());
+                                // Creo la sentencia para insertar los valores
+                                String sentenciaSQL = "INSERT INTO " + nombreTablaSeleccionada + " (";
+                                for (String campo : cabeceraSeparada) sentenciaSQL += campo + ", ";
+                                sentenciaSQL = sentenciaSQL.substring(0, sentenciaSQL.length()-2) + ") VALUES (";
+                                for (int c = 0; c < cabeceraSeparada.length; c++) sentenciaSQL += "?, ";
+                                sentenciaSQL = sentenciaSQL.substring(0, sentenciaSQL.length()-2) + ");";
 
-                            while ((fila = lectorCSV.readLine()) != null) {  
+                                // Creo el array con los tipos
+                                Map<String, String> mapaTipos = new HashMap<>();
+                                ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTablaSeleccionada);
+                                for (String[] campo : campos) mapaTipos.put(campo[0].toLowerCase(), campo[1]);
+                                String[] tipos = new String[cabeceraSeparada.length];
+                                for (int c = 0; c < cabeceraSeparada.length; c++) tipos[c] = mapaTipos.get(cabeceraSeparada[c].toLowerCase());
 
-                                contadorTotal++;
-                                if (!Auxiliar.conexionSQL.insertarFila(sentenciaSQL, fila.split(";"), tipos)) {
+                                while ((fila = lectorCSV.readLine()) != null) {  
 
-                                    contadorFallos++;
-                                    escritorCSVFallidos.append(fila).append("\n");
-                                    filasFallidas += contadorTotal + ", ";
+                                    contadorTotal++;
+                                    String[] filaSeparada = fila.split(";");
+                                    String[] filaTrim = new String[cabeceraSeparada.length];
+                                    for (int f = 0; f < filaSeparada.length; f++) filaTrim[f] = filaSeparada[f].trim();
+                                    for (int f = filaSeparada.length; f < filaTrim.length; f++) filaTrim[f] = "";
+
+                                    if (!Auxiliar.conexionSQL.insertarFila(sentenciaSQL, filaTrim, tipos)) {
+
+                                        contadorFallos++;
+                                        escritorCSVFallidos.append(fila).append("\n");
+                                        filasFallidas += contadorTotal + ", ";
+                                    }
                                 }
-                            }
-                            JOptionPane.showMessageDialog(null, "Se han agregado " + (contadorTotal - contadorFallos - 1) + " filas y han fallado " + contadorFallos + " lineas" + ((contadorFallos == 0)? "." : ": " + filasFallidas.substring(0, filasFallidas.length()-2) + "."));
-                            panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
-                            panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
+                                JOptionPane.showMessageDialog(null, "Se han agregado " + (contadorTotal - contadorFallos - 1) + " filas y han fallado " + contadorFallos + " lineas" + ((contadorFallos == 0)? "." : ": " + filasFallidas.substring(0, filasFallidas.length()-2) + "."));
+                                panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
+                                panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
 
-                            if (contadorFallos > 0) {
+                                lectorCSV.close();
+                                escritorCSVFallidos.close();
 
-                                JOptionPane.showMessageDialog(null, "Se ha generado un CSV para que puedas rellenar las filas faltantes en esta ruta: " + rutaFallidos);
+                                if (contadorFallos > 0) {
 
-                            } else new File(rutaFallidos).delete();
+                                    JOptionPane.showMessageDialog(null, "Se ha generado un CSV para que puedas rellenar las filas faltantes en esta ruta: " + rutaFallidos);
 
-                            lectorCSV.close();
-                            escritorCSVFallidos.close();
-                        }                    
-                    } catch (IOException e) { e.printStackTrace(); }
-                    
-                } else JOptionPane.showMessageDialog(null, "El archivo seleccionado no es valido, debe ser un CSV.");
-			} 
+                                } else new File(rutaFallidos).delete();
+                            }                    
+                        } catch (IOException e) { e.printStackTrace(); }
+                        
+                    } else JOptionPane.showMessageDialog(null, "El archivo seleccionado no es valido, debe ser un CSV.");
+                } 
+            } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla a la que introducir los datos.");
 
             
 		});
@@ -302,21 +321,25 @@ class PanelGestionTablaBotones extends JPanel {
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonGenerarCSV, 0.305, 0.104);
         botonGenerarCSV.addActionListener(accion -> {
 
-            /// IMPLEMENTAR COMO GENERA LAS IMAGENES (SEGURAMENTE GUARDANDOLAS EN UNA CARPETA EN EL MISMO NIVEL, CON EL NOMBRE COMO ID DE CADA IMAGEN)
-            try (FileWriter escritorCSV = new FileWriter(nombreTablaSeleccionada + ".csv")) {
-                
-                ArrayList<String[]> cabecera = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTablaSeleccionada);
-                for (String[] campoCabecera : cabecera) escritorCSV.append(campoCabecera[0]).append(";");
-                escritorCSV.append("\n");
+            if (nombreTablaSeleccionada != "") {
 
-                ArrayList<String[]> datos = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(nombreTablaSeleccionada);
-                for (String[] fila : datos) {
-
-                    for (String dato : fila) escritorCSV.append(dato).append(";");
+                /// IMPLEMENTAR COMO GENERA LAS IMAGENES (SEGURAMENTE GUARDANDOLAS EN UNA CARPETA EN EL MISMO NIVEL, CON EL NOMBRE COMO ID DE CADA IMAGEN)
+                try (FileWriter escritorCSV = new FileWriter(nombreTablaSeleccionada + ".csv")) {
+                    
+                    ArrayList<String[]> cabecera = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTablaSeleccionada);
+                    for (String[] campoCabecera : cabecera) escritorCSV.append(campoCabecera[0]).append(";");
                     escritorCSV.append("\n");
-                }
 
-            } catch (IOException e) { e.printStackTrace(); }
+                    ArrayList<String[]> datos = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(nombreTablaSeleccionada);
+                    for (String[] fila : datos) {
+
+                        for (String dato : fila) escritorCSV.append(dato).append(";");
+                        escritorCSV.append("\n");
+                    }
+
+                } catch (IOException e) { e.printStackTrace(); }
+
+            } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para generar el CSV.");
 		});
         add(botonGenerarCSV);
     }

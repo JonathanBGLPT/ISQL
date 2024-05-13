@@ -123,6 +123,7 @@ public class ConexionGestionTablas {
                 String tipo = (String)(((JComboBox)panelAgregado.getComponent(3)).getSelectedItem());
                 if (!tipo.equals("Entero") || ((String)(((JComboBox)panelAgregado.getComponent(5)).getSelectedItem())).equals("-")) sentencia.execute("ALTER TABLE " + nombreTabla + " ADD COLUMN " + ((JTextField)panelAgregado.getComponent(1)).getText().trim().replaceAll("\\s+", "_") + " " + diccionario.get(tipo) + ";");
             }
+            if (obtenerCamposTabla(nombreTabla).size() == 1) eliminarTabla(nombreTabla);
             sentencia.close();
 
         } catch (SQLException e) { e.printStackTrace(); }
@@ -178,6 +179,20 @@ public class ConexionGestionTablas {
 
         try (Statement sentencia = conector.createStatement()) {
 
+            ArrayList<String> nombresTablas = obtenerNombreTablas();
+            for (String tabla : nombresTablas) {
+
+                int posicionDelCampo = -1;
+                ArrayList<String[]> campos = obtenerCamposTabla(tabla);
+                for (int c = 0; c < campos.size() && posicionDelCampo == -1; c++) posicionDelCampo = (campos.get(c)[2].equals(nombreTabla))? c : -1;
+
+                if (posicionDelCampo != -1) {
+
+                    Set<String> claveBorrada = new HashSet<>();
+                    claveBorrada.add(campos.get(posicionDelCampo)[0]);
+                    modificarTabla(tabla, new HashMap<>(), claveBorrada, new ArrayList<>());
+                }
+            }
             sentencia.execute("DROP TABLE " + nombreTabla + ";");
             sentencia.close();
 

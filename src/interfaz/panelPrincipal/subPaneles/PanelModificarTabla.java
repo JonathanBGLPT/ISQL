@@ -64,6 +64,7 @@ public class PanelModificarTabla extends JPanel {
                 Auxiliar.conexionSQL.modificarTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, nombresCambiados, camposBorrados, camposNuevos);
                 panelPrincipal.panelResumenTablas.actualizarPanelResumenTablas();
                 Auxiliar.habilitacionDeBotones(panelPrincipal, true);
+                panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
             }
 		});
@@ -160,7 +161,9 @@ public class PanelModificarTabla extends JPanel {
     @SuppressWarnings("rawtypes")
     private boolean comprobarNombresYClavesForaneas() {
 
-        boolean resultado = true;
+        boolean resultado = camposNuevos.size() + camposSinModificar.size() > 0;
+        if (!resultado) JOptionPane.showMessageDialog(null, "La tabla debe contenedor al menos un campo.");
+
         String nombresVacios = "";
         String nombresRepetidos = "";
         String clavesForaneasRepetidas = "";
@@ -180,7 +183,7 @@ public class PanelModificarTabla extends JPanel {
         for (int c1 = 0; c1 < nombresCampos.length; c1++) {
             for (int c2 = c1+1; c2 < nombresCampos.length; c2++) {
 
-                if (nombresCampos[c1] != null && nombresCampos[c2] != null && !nombresCampos[c1].equals("") && nombresCampos[c1].equals(nombresCampos[c2])) {
+                if (nombresCampos[c1] != null && nombresCampos[c2] != null && !nombresCampos[c1].equals("") && nombresCampos[c1].toUpperCase().equals(nombresCampos[c2].toUpperCase())) {
 
                     nombresRepetidos += "campos " + (c1+1) + " y " + (c2+1) + ", "; 
                     resultado = false;
