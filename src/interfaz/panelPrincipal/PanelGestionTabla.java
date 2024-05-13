@@ -92,7 +92,7 @@ public class PanelGestionTabla extends JPanel {
 
     public void elegirPanelDeGestiones (int opcion) {
 
-        panelPrincipal.panelGestionTabla.panelDeGestiones.removeAll();
+        panelDeGestiones.removeAll();
         
         switch (opcion) {
 
@@ -123,12 +123,6 @@ public class PanelGestionTabla extends JPanel {
 
             // Mostrar panel modificar datos
             case 4:
-
-                /// IMPLEMENTAR
-                break;
-
-            // Mostrar panel eliminar datos
-            case 5:
 
                 /// IMPLEMENTAR
                 break;
@@ -310,7 +304,12 @@ class PanelGestionTablaBotones extends JPanel {
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonEliminarDatos, 0.305, 0.052);
         botonEliminarDatos.addActionListener(accion -> {
 
-            /// IMPLEMENTAR
+            if (panelPrincipal.panelGestionTabla.nombreTablaSeleccionada != "" && panelPrincipal.panelGestionTabla.panelDeGestiones.getComponent(0) instanceof PanelMostarDatos) {
+
+                PanelMostarDatos panelMostrarDatos = (PanelMostarDatos)panelPrincipal.panelGestionTabla.panelDeGestiones.getComponent(0);
+                panelMostrarDatos.eliminarDatos();
+
+            } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para eliminar datos.");
 		});
         add(botonEliminarDatos);
 

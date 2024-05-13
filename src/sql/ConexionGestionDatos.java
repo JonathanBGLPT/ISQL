@@ -5,6 +5,8 @@ import java.text.*;
 import java.util.*;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 import interfaz.Auxiliar;
 
 public class ConexionGestionDatos {
@@ -72,7 +74,7 @@ public class ConexionGestionDatos {
 
                         if (!valores[v].equals("")) {
 
-                            sentenciaPreparada.setDouble(v+1, Double.parseDouble(valores[v]));
+                            sentenciaPreparada.setDouble(v+1, Double.parseDouble(valores[v].replace(",", ".")));
 
                         } else sentenciaPreparada.setNull(v+1, java.sql.Types.DOUBLE);
                         break;
@@ -104,7 +106,7 @@ public class ConexionGestionDatos {
             sentenciaPreparada.executeUpdate();
             resultado = true;
 
-        } catch (Exception e) { return false; }
+        } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage()); return false; }
 
         return resultado;
     }
@@ -135,5 +137,31 @@ public class ConexionGestionDatos {
             return new java.sql.Date(formato.parse(fecha).getTime());
 
         } catch (ParseException e) { return null; }
+    }
+
+    public void eliminarTodosLosDatos(String nombreTabla) {
+
+        try (Statement sentencia = conector.createStatement()) {
+
+            sentencia.execute("DELETE FROM " + nombreTabla + ";");
+            sentencia.close();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    public void eliminarListaDeDatos(String nombreTabla, ArrayList<Integer> listaIds) {
+
+        String sentenciaSQL = "DELETE FROM " + nombreTabla + " WHERE id_" + nombreTabla + " = ?;";
+
+        try (PreparedStatement sentenciaPreparada = conector.prepareStatement(sentenciaSQL)) {
+
+            for (Integer id : listaIds) {
+
+                sentenciaPreparada.setInt(1, id);
+                sentenciaPreparada.execute();
+            }
+            sentenciaPreparada.close();
+
+        } catch (SQLException e) { e.printStackTrace(); }
     }
 }

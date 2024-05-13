@@ -161,7 +161,7 @@ public class PanelAgregarDatos extends JPanel {
 
         for (int d = 0; d < datos.size(); d++) {
 
-            String dato = datos.get(d).getText();
+            String dato = datos.get(d).getText().trim();
             valores[d] = dato;
 
             if (!dato.equals("")) {

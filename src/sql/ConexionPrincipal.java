@@ -109,6 +109,16 @@ public class ConexionPrincipal {
 
         return gestionDatos.insertarFila(sentenciaSQL, valores, tipos);
     }
+
+    public void eliminarTodosLosDatos(String nombreTabla) {
+
+        gestionDatos.eliminarTodosLosDatos(nombreTabla);
+    }
+
+    public void eliminarListaDeDatos(String nombreTabla, ArrayList<Integer> listaIds) {
+
+        gestionDatos.eliminarListaDeDatos(nombreTabla, listaIds);
+    }
      /********************
      * GESTION CONSULTAS *
      *********************/
