@@ -1,6 +1,6 @@
 package interfaz.panelPrincipal;
 
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -75,7 +75,7 @@ public class PanelResumenTablas extends JPanel {
             String nombreTabla = nombreTablas.get(t);
             JPanel panelTabla = new JPanel();
             panelTabla.setLayout(new BoxLayout(panelTabla, BoxLayout.Y_AXIS));
-            panelTabla.setBackground((cambio)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY); 
+            panelTabla.setBackground((cambio)? Color.WHITE : Color.LIGHT_GRAY); 
             JLabel labelNombreTabla = new JLabel("  " + nombreTabla.toUpperCase() + ESPACIO_LABEL);
             labelNombreTabla.setFont(Auxiliar.fuenteNormal.deriveFont(Font.BOLD));
             panelTabla.add(labelNombreTabla);

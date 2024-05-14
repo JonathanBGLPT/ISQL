@@ -1,8 +1,9 @@
 package interfaz.panelPrincipal.subPaneles;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 import interfaz.Auxiliar;
 import interfaz.panelPrincipal.PanelPrincipal;
@@ -11,9 +12,13 @@ public class PanelMostarDatos extends JPanel {
     
     private PanelPrincipal panelPrincipal;
     private ArrayList<String[]> datosTabla;
+    private Map<Integer,JPanel> mapaFilasCambiadas;
     private JPanel panelContenedorDatos;
     private JPanel panelCabecera;
     
+    private ImageIcon checkSI;
+    private ImageIcon checkNO;
+
     public PanelMostarDatos (PanelPrincipal panelPrin, ArrayList<String[]> datos) {
 
         Auxiliar.calcularSize(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 1, 1);
@@ -21,8 +26,12 @@ public class PanelMostarDatos extends JPanel {
         setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
         setLayout(null);
 
+        checkSI = new ImageIcon(new ImageIcon(getClass().getResource("/checkSI.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH));
+        checkNO = new ImageIcon(new ImageIcon(getClass().getResource("/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH));
+
         panelPrincipal = panelPrin;
         datosTabla = datos;
+        mapaFilasCambiadas = new HashMap<>();
 
         // Declaracion del contenedor de datos
         panelContenedorDatos = new JPanel();
@@ -42,19 +51,19 @@ public class PanelMostarDatos extends JPanel {
             panelCabecera.add(seleccionarTodasLasFilasEstaSeleccionado);
     
             JButton seleccionarTodasLasFilas = new JButton();
-            seleccionarTodasLasFilas.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH)));
+            seleccionarTodasLasFilas.setIcon(checkNO);
             seleccionarTodasLasFilas.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.03), (int)(getSize().getWidth()*0.03)));
             seleccionarTodasLasFilas.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.03), (int)(getSize().getWidth()*0.03)));
             seleccionarTodasLasFilas.addActionListener(accion -> {
 
                 seleccionarTodasLasFilasEstaSeleccionado.setSelected(!seleccionarTodasLasFilasEstaSeleccionado.isSelected());
-                seleccionarTodasLasFilas.setIcon(new ImageIcon(new ImageIcon(getClass().getResource((seleccionarTodasLasFilasEstaSeleccionado.isSelected())? "/checkSI.png" : "/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH)));
+                seleccionarTodasLasFilas.setIcon((seleccionarTodasLasFilasEstaSeleccionado.isSelected())? checkSI : checkNO);
 
                 for (int f = 1; f < panelContenedorDatos.getComponentCount(); f++) {
 
                     JPanel panelFila = (JPanel)panelContenedorDatos.getComponent(f);
                     ((JCheckBox)panelFila.getComponent(1)).setSelected(seleccionarTodasLasFilasEstaSeleccionado.isSelected());
-                    ((JButton)panelFila.getComponent(2)).setIcon(new ImageIcon(new ImageIcon(getClass().getResource((seleccionarTodasLasFilasEstaSeleccionado.isSelected())? "/checkSI.png" : "/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH)));
+                    ((JButton)panelFila.getComponent(2)).setIcon((seleccionarTodasLasFilasEstaSeleccionado.isSelected())? checkSI : checkNO);
                 }
             });
             panelCabecera.add(seleccionarTodasLasFilas);
@@ -87,19 +96,20 @@ public class PanelMostarDatos extends JPanel {
         boolean datosValidos = !panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("") && datosTabla != null;
         for (int f = 0; datosValidos && f < datosTabla.size(); f++) {
 
+            Color colorFondo = (f % 2 == 0)? Color.WHITE : Color.LIGHT_GRAY;
             String[] fila = datosTabla.get(f);
             JPanel panelFila = new JPanel();
             panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
             panelFila.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
             panelFila.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
-            panelFila.setBackground((f % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
+            panelFila.setBackground(colorFondo);
 
             panelFila.add(Box.createHorizontalStrut(8));
             JCheckBox seleccionarFilaEstaSeleccionado = new JCheckBox();
             seleccionarFilaEstaSeleccionado.setVisible(false);
             panelFila.add(seleccionarFilaEstaSeleccionado);
             JButton seleccionarFila = new JButton();
-            seleccionarFila.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH)));
+            seleccionarFila.setIcon(checkNO);
             seleccionarFila.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.025), (int)(getSize().getWidth()*0.025)));
             seleccionarFila.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.025), (int)(getSize().getWidth()*0.025)));
             seleccionarFila.addActionListener(accion -> {
@@ -108,25 +118,45 @@ public class PanelMostarDatos extends JPanel {
                 if (!seleccionarFilaEstaSeleccionado.isSelected()) {
 
                     ((JCheckBox)panelCabecera.getComponent(1)).setSelected(false);
-                    ((JButton)panelCabecera.getComponent(2)).setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH)));
+                    ((JButton)panelCabecera.getComponent(2)).setIcon(checkNO);
                 }
-                seleccionarFila.setIcon(new ImageIcon(new ImageIcon(getClass().getResource((seleccionarFilaEstaSeleccionado.isSelected())? "/checkSI.png" : "/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH)));
+                seleccionarFila.setIcon((seleccionarFilaEstaSeleccionado.isSelected())? checkSI : checkNO);
             });
             panelFila.add(seleccionarFila);
             panelFila.add(Box.createHorizontalStrut(8));
 
-            for (String dato : fila) {
+            JLabel campoId = new JLabel("<html>&#8203;" + fila[0] + "</html>");
+            campoId.setFont(Auxiliar.fuentePequenia);
+            campoId.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+            campoId.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+            panelFila.add(campoId);
 
-                if (dato.length() > 16) dato = dato.substring(0, 16) + "...";
-                JLabel campo = new JLabel("<html>&#8203;" + dato + "</html>");
+            for (int d = 1; d < fila.length; d++) {
+
+                String dato = fila[d];
+                JTextField campo = new JTextField(dato);
                 campo.setFont(Auxiliar.fuentePequenia);
+                campo.setBackground(colorFondo);
                 if (dato.equals("")) {
                     
                     campo.setOpaque(true);
-                    campo.setBackground(java.awt.Color.RED);
+                    campo.setBackground(Color.RED);
                 }
                 campo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 campo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+                campo.getDocument().addDocumentListener(new DocumentListener() {
+
+                public void insertUpdate(DocumentEvent e) { agregarACambios(); }
+                public void removeUpdate(DocumentEvent e) { agregarACambios(); }
+                public void changedUpdate(DocumentEvent e) { agregarACambios(); }
+
+                private void agregarACambios() {
+                    
+                    mapaFilasCambiadas.put(Integer.parseInt(fila[0]), panelFila);
+                    seleccionarFilaEstaSeleccionado.setSelected(true);
+                    seleccionarFila.setIcon(checkSI);
+                }
+            });
                 panelFila.add(campo);
             }
             panelContenedorDatos.add(panelFila);
@@ -160,7 +190,7 @@ public class PanelMostarDatos extends JPanel {
         } else {
 
             int numeroDeEliminados = 0;
-            String idsAEliminar = "\n";
+            String idsAEliminar = "";
             ArrayList<Integer> listaIds = new ArrayList<>();
             for (int f = 1; f < panelContenedorDatos.getComponentCount(); f++) {
 
@@ -174,13 +204,36 @@ public class PanelMostarDatos extends JPanel {
                     idsAEliminar += id + ((numeroDeEliminados % 10 == 0)? ", \n" : ", ");
                 }
             }
-            int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar los datos de la tabla '" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + "' con ids: " + idsAEliminar.substring(0, idsAEliminar.length()-2) + "?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (idsAEliminar.length() > 0) {
+
+                int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar los datos de la tabla '" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + "' con ids:\n" + idsAEliminar.substring(0, idsAEliminar.length()-2) + "?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (respuesta == JOptionPane.YES_OPTION) {
+
+                    Auxiliar.conexionSQL.eliminarListaDeDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, listaIds);
+                    panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
+                    panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
+                }
+            } else JOptionPane.showMessageDialog(null, "No se ha marcado ningún dato para eliminar.");
+        }
+    }
+
+    public void actualizarDatos () {
+
+        if (mapaFilasCambiadas.size() > 0) {
+
+            String filasCambiadas = "";
+            for (Integer id : mapaFilasCambiadas.keySet()) {
+
+                if (((JCheckBox)mapaFilasCambiadas.get(id).getComponent(1)).isSelected()) filasCambiadas += id + ", ";
+            }
+            int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea modificar los datos de la tabla '" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + "' con ids:\n" + filasCambiadas.substring(0, filasCambiadas.length()-2) + "?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (respuesta == JOptionPane.YES_OPTION) {
 
-                Auxiliar.conexionSQL.eliminarListaDeDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, listaIds);
+                Auxiliar.conexionSQL.actualizarListaDeDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, mapaFilasCambiadas);
                 panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
                 panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
-            };
-        }
+            }
+
+        } else JOptionPane.showMessageDialog(null, "No se ha modificado ningún dato.");
     }
 }

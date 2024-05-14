@@ -1,14 +1,12 @@
 package interfaz;
 
 import java.awt.*;
-
 import javax.swing.JButton;
-
 import sql.ConexionPrincipal;
 
 public class Auxiliar {
     
-  public static ConexionPrincipal conexionSQL;
+    public static ConexionPrincipal conexionSQL;
 
   public static Color colorAzulPalido = new Color(150, 200, 220);
   public static Color coloAzulOscuro = new Color(11, 38, 57);
@@ -55,5 +53,18 @@ public class Auxiliar {
 
       } else if (componente instanceof Container) habilitacionDeBotones((Container)componente, activar);
     }
+  }
+
+  public static boolean comprobarFechaNumeros (String fecha) {
+
+    boolean resultado = true;
+
+    for (int c = 0; resultado && c < fecha.length(); c++) {
+
+      char caracter = fecha.charAt(c);
+      resultado = caracter == '-' || caracter == '/' || (caracter >= 48 && caracter <= 57);
+    }
+
+    return resultado;
   }
 }

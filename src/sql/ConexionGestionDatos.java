@@ -4,8 +4,7 @@ import java.sql.*;
 import java.text.*;
 import java.util.*;
 import java.util.Date;
-
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import interfaz.Auxiliar;
 
@@ -90,7 +89,7 @@ public class ConexionGestionDatos {
 
                     case "Fecha":
 
-                        if (!valores[v].equals("")) {
+                        if (!valores[v].equals("") && Auxiliar.comprobarFechaNumeros(valores[v])) {
 
                             sentenciaPreparada.setDate(v+1, convertirFechaAFormatoSQL(valores[v]));
 
@@ -109,34 +108,6 @@ public class ConexionGestionDatos {
         } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage()); return false; }
 
         return resultado;
-    }
-
-    private java.sql.Date convertirFechaAFormatoSQL(String fecha) {
-
-        SimpleDateFormat formato;
-        if (fecha.contains("/")) {
-
-            if (fecha.indexOf('/') == 4) {
-
-                formato = new SimpleDateFormat("yyyy/MM/dd");
-
-            } else formato = new SimpleDateFormat("dd/MM/yyyy");
-
-        } else if (fecha.contains("-")) {
-
-            if (fecha.indexOf('-') == 4) {
-
-                formato = new SimpleDateFormat("yyyy-MM-dd");
-
-            } else formato = new SimpleDateFormat("dd-MM-yyyy");
-
-        } else return null;
-
-        try {
-
-            return new java.sql.Date(formato.parse(fecha).getTime());
-
-        } catch (ParseException e) { return null; }
     }
 
     public void eliminarTodosLosDatos(String nombreTabla) {
@@ -163,5 +134,127 @@ public class ConexionGestionDatos {
             sentenciaPreparada.close();
 
         } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    public void actualizarListaDeDatos(String nombreTabla, Map<Integer,JPanel> filasCambiadas) {
+
+        ArrayList<Integer> idsConErrores = new ArrayList<>();
+        ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTabla);
+
+        String sentenciaSQL = "UPDATE " + nombreTabla + " SET ";
+        for (int c = 1; c < campos.size(); c++) sentenciaSQL += campos.get(c)[0] + " = ?, ";
+        sentenciaSQL = sentenciaSQL.substring(0, sentenciaSQL.length()-2) + " WHERE id_" + nombreTabla + " = ?;";
+        
+        try (PreparedStatement sentenciaPreparada = conector.prepareStatement(sentenciaSQL)) {
+
+            for (int id : filasCambiadas.keySet()) {
+
+                int c = 5;
+                boolean valido = true;
+                JPanel panelFila = filasCambiadas.get(id);
+                if (((JCheckBox)panelFila.getComponent(1)).isSelected()) {
+
+                    try {
+
+                        while (valido && c < panelFila.getComponentCount()) {
+
+        
+                            String dato = ((JTextField)panelFila.getComponent(c)).getText().trim();
+                            switch (campos.get(c-4)[1]) {
+    
+                                case "Entero":
+            
+                                    if (!dato.equals("")) {
+            
+                                        sentenciaPreparada.setInt(c-4, Integer.parseInt(dato));
+            
+                                    } else sentenciaPreparada.setNull(c-4, java.sql.Types.INTEGER);
+                                    break;
+            
+                                case "Decimal":
+            
+                                    if (!dato.equals("")) {
+            
+                                        sentenciaPreparada.setDouble(c-4, Double.parseDouble(dato.replace(",", ".")));
+            
+                                    } else sentenciaPreparada.setNull(c-4, java.sql.Types.DOUBLE);
+                                    break;
+            
+                                case "Texto":
+            
+                                    if (!dato.equals("")) {
+            
+                                        sentenciaPreparada.setString(c-4, dato);
+            
+                                    } else sentenciaPreparada.setNull(c-4, java.sql.Types.VARCHAR);
+                                    break;
+            
+                                case "Fecha":
+            
+                                    if (!dato.equals("")) {
+            
+                                        if (!Auxiliar.comprobarFechaNumeros(dato)) throw new IllegalArgumentException();
+                                        sentenciaPreparada.setDate(c-4, convertirFechaAFormatoSQL(dato));
+            
+                                    } else sentenciaPreparada.setNull(c-4, java.sql.Types.DATE);
+                                    break;
+            
+                                case "Imagen":
+            
+                                    /// IMPLEMENTAR
+                                    break;
+                            }
+                            c++;
+                        }
+                        sentenciaPreparada.setInt(c-4, id);
+                        if (valido) sentenciaPreparada.execute();
+
+                    } catch (Exception e) { 
+        
+                        idsConErrores.add(id);
+                        valido = false;
+                    }
+                }
+            }
+            sentenciaPreparada.close();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+
+        String idsErroneos = "";
+        for (int id : idsConErrores) idsErroneos += id + ", ";
+        if (idsErroneos.length() == 0) {
+
+            JOptionPane.showMessageDialog(null, "Todos los datos se han actualizado correctamente."); 
+
+        } else JOptionPane.showMessageDialog(null, "No se han podido actualizar los datos correspondientes a los siguientes ids:\n" + idsErroneos.substring(0, idsErroneos.length()-2) + "."); 
+    }
+
+    private java.sql.Date convertirFechaAFormatoSQL(String fecha) {
+
+        SimpleDateFormat formato;
+
+        if (fecha.contains("/")) {
+
+            if (fecha.indexOf('/') == 4) {
+
+                formato = new SimpleDateFormat("yyyy/MM/dd");
+
+            } else formato = new SimpleDateFormat("dd/MM/yyyy");
+
+        } else if (fecha.contains("-")) {
+
+            if (fecha.indexOf('-') == 4) {
+
+                formato = new SimpleDateFormat("yyyy-MM-dd");
+
+            } else formato = new SimpleDateFormat("dd-MM-yyyy");
+
+        } else return null;
+
+        try {
+
+            return new java.sql.Date(formato.parse(fecha).getTime());
+
+        } catch (ParseException e) { return null; }
     }
 }

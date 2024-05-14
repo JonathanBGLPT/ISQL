@@ -176,7 +176,7 @@ public class PanelCrearTabla extends JPanel {
         panelCampo.setLayout(new BoxLayout(panelCampo, BoxLayout.X_AXIS));
         panelCampo.setAlignmentX(Component.LEFT_ALIGNMENT);
         panelCampo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelCampo.setBackground((campos.size() % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
+        panelCampo.setBackground((campos.size() % 2 == 0)? Color.WHITE : Color.LIGHT_GRAY);
 
         // Numero del campo
         JLabel numeroDelCampo = new JLabel((campos.size()+1) + ((campos.size() > 8)? " " : "   "));
@@ -235,7 +235,7 @@ public class PanelCrearTabla extends JPanel {
             for (int c = campos.size()-1; c >= Integer.parseInt(numeroDelCampo.getText().trim()); c--) {
 
                 ((JLabel)campos.get(c).getComponent(0)).setText(((JLabel)campos.get(c-1).getComponent(0)).getText());
-                campos.get(c).setBackground((campos.get(c).getBackground() == java.awt.Color.LIGHT_GRAY)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
+                campos.get(c).setBackground((campos.get(c).getBackground() == Color.LIGHT_GRAY)? Color.WHITE : Color.LIGHT_GRAY);
             }
             campos.remove(panelCampo);
             panelContenedorCampos.remove(panelCampo);

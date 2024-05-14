@@ -120,12 +120,6 @@ public class PanelGestionTabla extends JPanel {
 
                 panelDeGestiones.add(new PanelAgregarDatos(panelPrincipal));
                 break;
-
-            // Mostrar panel modificar datos
-            case 4:
-
-                /// IMPLEMENTAR
-                break;
         }
         panelPrincipal.panelGestionTabla.actualizarPanelGestionTabla();
     }
@@ -293,7 +287,12 @@ class PanelGestionTablaBotones extends JPanel {
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, botonModificarDatos, 0.305, 0);
         botonModificarDatos.addActionListener(accion -> {
 
-            /// IMPLEMENTAR
+            if (panelPrincipal.panelGestionTabla.nombreTablaSeleccionada != "" && panelPrincipal.panelGestionTabla.panelDeGestiones.getComponent(0) instanceof PanelMostarDatos) {
+
+                PanelMostarDatos panelMostrarDatos = (PanelMostarDatos)panelPrincipal.panelGestionTabla.panelDeGestiones.getComponent(0);
+                panelMostrarDatos.actualizarDatos();
+
+            } else JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para modificar datos.");
 		});
         add(botonModificarDatos);
 

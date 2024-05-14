@@ -209,7 +209,7 @@ public class PanelModificarTabla extends JPanel {
         panelCampo.setLayout(new BoxLayout(panelCampo, BoxLayout.X_AXIS));
         panelCampo.setAlignmentX(Component.LEFT_ALIGNMENT);
         panelCampo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelCampo.setBackground(((camposSinModificar.size() + camposNuevos.size()) % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
+        panelCampo.setBackground(((camposSinModificar.size() + camposNuevos.size()) % 2 == 0)? Color.WHITE : Color.LIGHT_GRAY);
 
         // Numero del campo
         JLabel numeroDelCampo = new JLabel(((camposSinModificar.size() + camposNuevos.size())+1) + (((camposSinModificar.size() + camposNuevos.size()) > 8)? " " : "   "));
@@ -273,7 +273,7 @@ public class PanelModificarTabla extends JPanel {
 
                 JPanel panelCampoAux = (JPanel)panelContenedorCampos.getComponent(c);
                 ((JLabel)panelCampoAux.getComponent(0)).setText((c+1) + (((c+1) > 8)? " " : "   "));
-                panelCampoAux.setBackground(((c) % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
+                panelCampoAux.setBackground(((c) % 2 == 0)? Color.WHITE : Color.LIGHT_GRAY);
             }
             if (!campoNuevo) {
 

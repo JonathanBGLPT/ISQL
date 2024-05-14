@@ -119,6 +119,11 @@ public class ConexionPrincipal {
 
         gestionDatos.eliminarListaDeDatos(nombreTabla, listaIds);
     }
+
+    public void actualizarListaDeDatos(String nombreTabla, Map<Integer,JPanel> filasCambiadas) {
+
+        gestionDatos.actualizarListaDeDatos(nombreTabla, filasCambiadas);
+    }
      /********************
      * GESTION CONSULTAS *
      *********************/

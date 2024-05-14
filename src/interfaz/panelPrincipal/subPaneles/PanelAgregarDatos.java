@@ -196,7 +196,7 @@ public class PanelAgregarDatos extends JPanel {
 
                     case "Fecha":
 
-                        if (!comprobarFechaValida(dato)) {
+                        if (!Auxiliar.comprobarFechaNumeros(dato) || !comprobarFechaValida(dato)) {
 
                             resultado = false;
                             JOptionPane.showMessageDialog(null, "El campo '" + campos.get(d)[0] + "' no tiene un formato de fecha valido.");
