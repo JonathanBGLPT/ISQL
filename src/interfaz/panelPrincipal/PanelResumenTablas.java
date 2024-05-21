@@ -39,27 +39,30 @@ public class PanelResumenTablas extends JPanel {
         botonCrearTabla.addActionListener(accion -> {
 
             String nombreTabla = null;
-			boolean nombreValido = false;
-            while (!nombreValido) {
+            boolean nombreNoRepetido = false;
+            boolean nombreValidoLogitud = false;
+            ArrayList<String> nombreTablas = Auxiliar.conexionSQL.obtenerNombreTablas();
+
+            while (!nombreNoRepetido || !nombreValidoLogitud) {
 
                 nombreTabla = JOptionPane.showInputDialog(null, "Ingrese el nombre de la nueva tabla:");
-                nombreValido = nombreTabla == null || (nombreTabla.length() > 0 && nombreTabla.length() <= 16);
-                if (nombreTabla != null && (nombreTabla.length() == 0 || nombreTabla.length() > 16)) JOptionPane.showMessageDialog(null, "El nombre de la tabla debe contener entre 1 y 16 caracteres.");
+                if (nombreTabla != null) {
+
+                    nombreValidoLogitud = nombreTabla.length() > 0 && nombreTabla.length() <= 16;
+                    if (!nombreValidoLogitud) JOptionPane.showMessageDialog(null, "El nombre de la tabla debe contener entre 1 y 16 caracteres.");
+
+                    nombreNoRepetido = true;
+                    for (int t = 0; t < nombreTablas.size() && nombreNoRepetido; t++) nombreNoRepetido = !nombreTablas.get(t).equals(nombreTabla);
+                    if (!nombreNoRepetido) JOptionPane.showMessageDialog(null, "La tabla introducida ya existe.");
+
+                } else break;
             }
 
 			if (nombreTabla != null) {
 
-                ArrayList<String> nombreTablas = Auxiliar.conexionSQL.obtenerNombreTablas();
-				boolean valido = true;
-				for (int t = 0; t < nombreTablas.size() && valido; t++) valido = !(nombreTablas.get(t).equals(nombreTabla));
-
-				if (valido) {
-
-                    Auxiliar.habilitacionDeBotones(panelPrincipal, false);
-                    panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = nombreTabla;
-                    panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(1);
-
-				} else JOptionPane.showMessageDialog(null, "La tabla introducida ya existe.");
+                Auxiliar.habilitacionDeBotones(panelPrincipal, false);
+                panelPrincipal.panelGestionTabla.nombreTablaSeleccionada = nombreTabla;
+                panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(1);
 			}
 		});
         add(botonCrearTabla);
@@ -109,6 +112,7 @@ public class PanelResumenTablas extends JPanel {
         Auxiliar.calcularSize(getSize(), panelScroll, 0.95, 0.925);
         Auxiliar.calcularLocation(getSize(), panelScroll, 0.025, 0.075);
         panelScroll.getVerticalScrollBar().setUnitIncrement(20);
+        panelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         panelScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panelScroll.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
         add(panelScroll);

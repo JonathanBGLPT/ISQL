@@ -105,7 +105,7 @@ public class ConexionGestionDatos {
             sentenciaPreparada.executeUpdate();
             resultado = true;
 
-        } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage()); return false; }
+        } catch (Exception e) { return false; }
 
         return resultado;
     }

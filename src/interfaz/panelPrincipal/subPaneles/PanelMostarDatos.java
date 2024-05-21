@@ -42,7 +42,10 @@ public class PanelMostarDatos extends JPanel {
         panelContenedorCampos.setLayout(new BoxLayout(panelContenedorCampos, BoxLayout.Y_AXIS));
         ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
         panelCabecera = new JPanel();
+        panelCabecera.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
+        panelCabecera.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
         panelCabecera.setLayout(new BoxLayout(panelCabecera, BoxLayout.X_AXIS));
+        panelCabecera.setAlignmentX(Component.LEFT_ALIGNMENT);
         if (!panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("")) {
 
             panelCabecera.add(Box.createHorizontalStrut(5));
@@ -75,6 +78,7 @@ public class PanelMostarDatos extends JPanel {
                 nombreCampo.setHorizontalAlignment(JLabel.CENTER);
                 nombreCampo.setFont(Auxiliar.fuentePequenia);
                 nombreCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+                nombreCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 nombreCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
                 panelCabecera.add(nombreCampo);
             }
@@ -91,6 +95,8 @@ public class PanelMostarDatos extends JPanel {
         JPanel panelFilaVacia = new JPanel();
         panelFilaVacia.setLayout(new BoxLayout(panelFilaVacia, BoxLayout.X_AXIS));
         panelFilaVacia.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), 0));
+        panelContenedorDatos.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos.size()-1))));
+        panelContenedorDatos.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos.size()-1))));
         panelContenedorDatos.add(panelFilaVacia);
 
         boolean datosValidos = !panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("") && datosTabla != null;
@@ -100,8 +106,9 @@ public class PanelMostarDatos extends JPanel {
             String[] fila = datosTabla.get(f);
             JPanel panelFila = new JPanel();
             panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
-            panelFila.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
-            panelFila.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
+            panelFila.setAlignmentX(Component.LEFT_ALIGNMENT);
+            panelFila.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05)));
+            panelFila.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05)));
             panelFila.setBackground(colorFondo);
 
             panelFila.add(Box.createHorizontalStrut(8));
@@ -128,6 +135,8 @@ public class PanelMostarDatos extends JPanel {
             JLabel campoId = new JLabel("<html>&#8203;" + fila[0] + "</html>");
             campoId.setFont(Auxiliar.fuentePequenia);
             campoId.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+            campoId.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+            campoId.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
             campoId.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
             panelFila.add(campoId);
 
@@ -143,6 +152,8 @@ public class PanelMostarDatos extends JPanel {
                     campo.setBackground(Color.RED);
                 }
                 campo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+                campo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+                campo.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 campo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
                 campo.getDocument().addDocumentListener(new DocumentListener() {
 

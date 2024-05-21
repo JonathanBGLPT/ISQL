@@ -5,4 +5,3 @@ Descargar imagen si haces clic en mostrarDatos
 * OPCIONALES *
 **************
 Hacer que mostrarResumenTablas se pueda desplazar horizontalmente
-Hacer que el final del scroll Horizontal de mostrarDatos() no se descuadre

@@ -218,7 +218,9 @@ public class PanelModificarTabla extends JPanel {
 
         // Nombre 
         JTextField nombreDelCampo = new JTextField();
-        nombreDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.4), (int)(getSize().getHeight()*0.05)));
+        nombreDelCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.355), (int)(getSize().getHeight()*0.05)));
+        nombreDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.355), (int)(getSize().getHeight()*0.05)));
+        nombreDelCampo.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.355), (int)(getSize().getHeight()*0.05)));
         nombreDelCampo.setFont(Auxiliar.fuenteNormal);
         ((PlainDocument)nombreDelCampo.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override

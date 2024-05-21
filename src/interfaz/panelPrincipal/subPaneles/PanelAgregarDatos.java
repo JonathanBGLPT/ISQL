@@ -91,10 +91,14 @@ public class PanelAgregarDatos extends JPanel {
 
             if (comprobarDatosCorrectos()) {
 
-                Auxiliar.conexionSQL.insertarFila(sentenciaSQL, valores, tipos);
-                resetearCamposIntroducirDatos(panelContenedorCampos);
-                revalidate();
-                repaint();
+                if (Auxiliar.conexionSQL.insertarFila(sentenciaSQL, valores, tipos)) {
+
+                    resetearCamposIntroducirDatos(panelContenedorCampos);
+                    revalidate();
+                    repaint();
+
+                } else JOptionPane.showMessageDialog(null, "No se pueden introducir los datos debido a que una clave foranea no existe.");
+                
             }
 		});
         add(botonAgregarFila); 

@@ -3,12 +3,17 @@ package interfaz.panelPrincipal;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import interfaz.Auxiliar;
+
+import interfaz.panelPrincipal.subPaneles.PanelConsultaSimple;
 
 public class PanelConsultas extends JPanel {
     
     private PanelPrincipal panelPrincipal;
+
+    public JPanel panelDeConsultas;
 
     public PanelConsultas (PanelPrincipal panelPrin) {
 
@@ -32,7 +37,7 @@ public class PanelConsultas extends JPanel {
         add(textoConsultas);
 
         // Panel de consultas
-        JPanel panelDeConsultas = new JPanel();
+        panelDeConsultas = new JPanel();
         Auxiliar.calcularSize(getSize(), panelDeConsultas, 0.98, 0.82);
         Auxiliar.calcularLocation(getSize(), panelDeConsultas, 0.01, 0.07);
         panelDeConsultas.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
@@ -46,7 +51,11 @@ public class PanelConsultas extends JPanel {
         Auxiliar.calcularLocation(getSize(), botonAConsultaSimple, 0.03, 0.9);
         botonAConsultaSimple.addActionListener(accion -> {
 
-            /// IMPLEMENTAR
+            if (!panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("")) {
+
+                elegirPanelConsulta(1);
+
+            } else JOptionPane.showMessageDialog(null,  "Debes seleccionar una tabla para consultar.");
 		});
         add(botonAConsultaSimple);
 
@@ -61,6 +70,45 @@ public class PanelConsultas extends JPanel {
 		});
         add(botonAConsultaGPT);
 
+        revalidate();
+        repaint();
+    }
+
+    public void elegirPanelConsulta(int opcion) {
+
+        panelDeConsultas.removeAll();
+
+        switch (opcion) {
+
+            // Salir de la consulta
+            case 0:
+
+                Auxiliar.habilitacionDeBotones(panelPrincipal, true);
+
+            break;
+
+            // Mostrar consulta simple
+            case 1:
+
+                Auxiliar.habilitacionDeBotones(panelPrincipal, false);
+                panelDeConsultas.add(new PanelConsultaSimple(panelPrincipal));
+
+            break;
+
+            // Mostrar consulta GPT
+            case 2:
+
+                /// IMPLEMENTAR
+
+            break;
+
+            // Mostrar resultado consulta
+            case 3:
+
+                /// IMPLEMENTAR
+
+            break;
+        }
         revalidate();
         repaint();
     }
