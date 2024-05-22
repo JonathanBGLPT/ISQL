@@ -10,8 +10,14 @@ import interfaz.panelPrincipal.PanelPrincipal;
 public class PanelConsultaSimple extends JPanel {
     
     private static final String ESPACIO_LABEL = "                                                                                                                                ";
+    private static final String[] OPCIONES_ENTEROS_REALES_FECHAS = {"-", "=", "<", "<=", ">=", "rango"};
+    private static final String[] OPCIONES_TEXTOS = {"-", "igual", "contenga", "empiece", "acabe en"};
+
     private PanelPrincipal panelPrincipal;
     private JPanel panelContenedorFiltros;
+
+    private ImageIcon checkSI;
+    private ImageIcon checkNO;
 
     public PanelConsultaSimple (PanelPrincipal panelPrin) {
 
@@ -21,7 +27,9 @@ public class PanelConsultaSimple extends JPanel {
         setLayout(null);
 
         panelPrincipal = panelPrin;
-        
+        checkSI = new ImageIcon(new ImageIcon(getClass().getResource("/checkSI.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.04), (int)(Auxiliar.dimensionVentana.getHeight()*0.04), Image.SCALE_SMOOTH));
+        checkNO = new ImageIcon(new ImageIcon(getClass().getResource("/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.04), (int)(Auxiliar.dimensionVentana.getHeight()*0.04), Image.SCALE_SMOOTH));
+
         // Boton para cancelar la consulta
         JButton botonCancelarConsulta = new JButton("Cancelar");
         botonCancelarConsulta.setFont(Auxiliar.fuenteNormal);
@@ -121,35 +129,91 @@ public class PanelConsultaSimple extends JPanel {
                 panelFila.setBackground(null);
                 panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
                 panelFila.setAlignmentX(Component.LEFT_ALIGNMENT);
+                panelFila.setBorder(BorderFactory.createEmptyBorder(4, 5, 4, 0));
                 panelFila.setPreferredSize(new Dimension(getWidth(),(int)(getHeight()*0.05)));
                 panelFila.setMaximumSize(new Dimension(getWidth(),(int)(getHeight()*0.05)));
                 panelTabla.add(panelFila);
 
-                JLabel labelNombreCampo = new JLabel(campo[0]);
+                // Check para decidir si se muestra el campo o no
+                JCheckBox seleccionarFilaEstaSeleccionado = new JCheckBox();
+                seleccionarFilaEstaSeleccionado.setSelected(true);
+                seleccionarFilaEstaSeleccionado.setVisible(false);
+                panelFila.add(seleccionarFilaEstaSeleccionado);
+                JButton seleccionarFila = new JButton();
+                seleccionarFila.setIcon(checkSI);
+                seleccionarFila.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
+                seleccionarFila.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
+                seleccionarFila.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
+                seleccionarFila.addActionListener(accion -> {
+    
+                    seleccionarFilaEstaSeleccionado.setSelected(!seleccionarFilaEstaSeleccionado.isSelected());
+                    seleccionarFila.setIcon((seleccionarFilaEstaSeleccionado.isSelected())? checkSI : checkNO);
+                });
+                panelFila.add(seleccionarFila);
+                panelFila.add(Box.createHorizontalStrut(8));
+                
+                // Nombre del campo
+                JLabel labelNombreCampo = new JLabel("<html>&#8203;" + campo[0] + "</html>");
+                labelNombreCampo.setPreferredSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
+                labelNombreCampo.setMinimumSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
+                labelNombreCampo.setMaximumSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
                 labelNombreCampo.setFont(Auxiliar.fuenteNormal);
                 panelFila.add(labelNombreCampo);
 
-                switch (campo[1]) {
+                // Tipo de filtro a aplicar
+                JComboBox<String> comboTipoFiltro = new JComboBox<>(campo[1].equals("Texto")? OPCIONES_TEXTOS : OPCIONES_ENTEROS_REALES_FECHAS);
+                comboTipoFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
+                comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
+                comboTipoFiltro.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
+                comboTipoFiltro.setFont(Auxiliar.fuenteNormal);
+                panelFila.add(comboTipoFiltro);
+                panelFila.add(Box.createHorizontalStrut(8));
 
-                    case "Entero":
+                if (campo[1].equals("Texto")) {
 
-                        
-                        break;
+                    comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.225), (int)(getSize().getHeight()*0.05)));
 
-                    case "Decimal":
+                    JTextField valorDelFiltro = new JTextField();
+                    valorDelFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro.setFont(Auxiliar.fuenteNormal);
+                    panelFila.add(valorDelFiltro);
 
-                        
-                        break;
+                } else {
 
-                    case "Texto":
+                    JTextField valorDelFiltro1 = new JTextField();
+                    valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro1.setFont(Auxiliar.fuenteNormal);
+                    panelFila.add(valorDelFiltro1);
 
-                        
-                        break;
+                    JTextField valorDelFiltro2 = new JTextField();
+                    valorDelFiltro2.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro2.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro2.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                    valorDelFiltro2.setFont(Auxiliar.fuenteNormal);
 
-                    case "Fecha":
+                    comboTipoFiltro.addActionListener(accion -> {
 
-                        
-                        break;
+                        if (((String)comboTipoFiltro.getSelectedItem()).equals("rango")) {
+
+                            valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                            valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                            valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                            panelFila.add(valorDelFiltro2);
+
+                        } else {
+
+                            valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                            valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                            valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                            panelFila.remove(valorDelFiltro2);
+                        }
+                        revalidate();
+                        repaint();
+                    });
                 }
             }
         }

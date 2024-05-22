@@ -26,8 +26,8 @@ public class PanelCrearTabla extends JPanel {
         // Boton cancelar
         JButton botonCancelar = new JButton("Cancelar");
         botonCancelar.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonCancelar, 0.3, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonCancelar, 0.36, 0.92);
+        Auxiliar.calcularSize(getSize(), botonCancelar, 0.275, 0.07);
+        Auxiliar.calcularLocation(getSize(), botonCancelar, 0.35, 0.92);
         botonCancelar.addActionListener(accion -> {
 
             int respuesta = JOptionPane.showConfirmDialog(null, "¿Deseas cancelar la creación de la tabla?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -44,8 +44,8 @@ public class PanelCrearTabla extends JPanel {
         // Boton finalizar 
         JButton botonFinalizar = new JButton("Finalizar creación");
         botonFinalizar.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonFinalizar, 0.3, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonFinalizar, 0.69, 0.92);
+        Auxiliar.calcularSize(getSize(), botonFinalizar, 0.35, 0.07);
+        Auxiliar.calcularLocation(getSize(), botonFinalizar, 0.64, 0.92);
         botonFinalizar.addActionListener(accion -> {
 
             if (comprobarNombresYClavesForaneas()) {
@@ -109,8 +109,8 @@ public class PanelCrearTabla extends JPanel {
         // Boton crear nuevo campo
         JButton botonCrearCampo = new JButton("Crear campo");
         botonCrearCampo.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonCrearCampo, 0.3, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonCrearCampo, 0.03, 0.92);
+        Auxiliar.calcularSize(getSize(), botonCrearCampo, 0.325, 0.07);
+        Auxiliar.calcularLocation(getSize(), botonCrearCampo, 0.01, 0.92);
         botonCrearCampo.addActionListener(accion -> {
 
             crearCampoNuevo(panelContenedorCampos);
@@ -185,7 +185,7 @@ public class PanelCrearTabla extends JPanel {
 
         // Nombre 
         JTextField nombreDelCampo = new JTextField();
-        nombreDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.4), (int)(getSize().getHeight()*0.05)));
+        nombreDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.5), (int)(getSize().getHeight()*0.05)));
         nombreDelCampo.setFont(Auxiliar.fuenteNormal);
         ((PlainDocument)nombreDelCampo.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
@@ -208,7 +208,7 @@ public class PanelCrearTabla extends JPanel {
         // Tipo de dato
         String[] tiposDeDatos = {"Entero", "Decimal", "Texto", "Fecha", "Imagen"};
         JComboBox<String> comboElegirTipoDeDato = new JComboBox<>(tiposDeDatos);
-        comboElegirTipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
+        comboElegirTipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
         comboElegirTipoDeDato.setFont(Auxiliar.fuenteNormal);
         comboElegirTipoDeDato.addActionListener(accion2 -> {
 

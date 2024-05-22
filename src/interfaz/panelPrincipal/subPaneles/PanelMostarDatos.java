@@ -48,7 +48,7 @@ public class PanelMostarDatos extends JPanel {
         panelCabecera.setAlignmentX(Component.LEFT_ALIGNMENT);
         if (!panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("")) {
 
-            panelCabecera.add(Box.createHorizontalStrut(5));
+            panelCabecera.add(Box.createHorizontalStrut(6));
             JCheckBox seleccionarTodasLasFilasEstaSeleccionado = new JCheckBox();
             seleccionarTodasLasFilasEstaSeleccionado.setVisible(false);
             panelCabecera.add(seleccionarTodasLasFilasEstaSeleccionado);
@@ -70,7 +70,7 @@ public class PanelMostarDatos extends JPanel {
                 }
             });
             panelCabecera.add(seleccionarTodasLasFilas);
-            panelCabecera.add(Box.createHorizontalStrut(5));
+            panelCabecera.add(Box.createHorizontalStrut(6));
 
             for (String[] campo : campos) {
 
@@ -95,8 +95,8 @@ public class PanelMostarDatos extends JPanel {
         JPanel panelFilaVacia = new JPanel();
         panelFilaVacia.setLayout(new BoxLayout(panelFilaVacia, BoxLayout.X_AXIS));
         panelFilaVacia.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), 0));
-        panelContenedorDatos.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos.size()-1))));
-        panelContenedorDatos.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos.size()-1))));
+        panelContenedorDatos.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos == null? 1: datos.size()))));
+        panelContenedorDatos.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos == null? 1: datos.size()))));
         panelContenedorDatos.add(panelFilaVacia);
 
         boolean datosValidos = !panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("") && datosTabla != null;
@@ -108,6 +108,7 @@ public class PanelMostarDatos extends JPanel {
             panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
             panelFila.setAlignmentX(Component.LEFT_ALIGNMENT);
             panelFila.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05)));
+            panelFila.setMinimumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05)));
             panelFila.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05)));
             panelFila.setBackground(colorFondo);
 

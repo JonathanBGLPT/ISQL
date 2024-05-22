@@ -35,8 +35,8 @@ public class PanelModificarTabla extends JPanel {
         // Boton cancelar
         JButton botonCancelar = new JButton("Cancelar");
         botonCancelar.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonCancelar, 0.275, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonCancelar, 0.335, 0.92);
+        Auxiliar.calcularSize(getSize(), botonCancelar, 0.245, 0.07);
+        Auxiliar.calcularLocation(getSize(), botonCancelar, 0.34, 0.92);
         botonCancelar.addActionListener(accion -> {
 
             int respuesta = JOptionPane.showConfirmDialog(null, "¿Deseas cancelar la modificación de la tabla?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -51,8 +51,8 @@ public class PanelModificarTabla extends JPanel {
         // Boton finalizar 
         JButton botonFinalizar = new JButton("Finalizar modificación");
         botonFinalizar.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonFinalizar, 0.35, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonFinalizar, 0.64, 0.92);
+        Auxiliar.calcularSize(getSize(), botonFinalizar, 0.395, 0.07);
+        Auxiliar.calcularLocation(getSize(), botonFinalizar, 0.595, 0.92);
         botonFinalizar.addActionListener(accion -> {
 
             if (comprobarNombresYClavesForaneas()) {
@@ -91,7 +91,7 @@ public class PanelModificarTabla extends JPanel {
         cabeceraTipoDato.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraTipoDato.setFont(Auxiliar.fuentePequenia);
         cabeceraTipoDato.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
-        Auxiliar.calcularSize(getSize(), cabeceraTipoDato, 0.17, 0.05);
+        Auxiliar.calcularSize(getSize(), cabeceraTipoDato, 0.19, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraTipoDato, 0.425, 0.01);
         add(cabeceraTipoDato);
 
@@ -99,8 +99,8 @@ public class PanelModificarTabla extends JPanel {
         cabeceraClaveForanea.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraClaveForanea.setFont(Auxiliar.fuentePequenia);
         cabeceraClaveForanea.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
-        Auxiliar.calcularSize(getSize(), cabeceraClaveForanea, 0.27, 0.05);
-        Auxiliar.calcularLocation(getSize(), cabeceraClaveForanea, 0.595, 0.01);
+        Auxiliar.calcularSize(getSize(), cabeceraClaveForanea, 0.25, 0.05);
+        Auxiliar.calcularLocation(getSize(), cabeceraClaveForanea, 0.615, 0.01);
         add(cabeceraClaveForanea);
 
         JLabel cabeceraBorrar = new JLabel("Borrar");
@@ -111,8 +111,6 @@ public class PanelModificarTabla extends JPanel {
         Auxiliar.calcularLocation(getSize(), cabeceraBorrar, 0.865, 0.01);
         add(cabeceraBorrar);
 
-    
-
         // Panel para gestionar los campos
         JPanel panelContenedorCampos = new JPanel();
         Auxiliar.calcularSize(getSize(), panelContenedorCampos, 0.98, 0.85);
@@ -121,8 +119,8 @@ public class PanelModificarTabla extends JPanel {
         // Boton crear nuevo campo
         JButton botonCrearCampo = new JButton("Crear campo");
         botonCrearCampo.setFont(Auxiliar.fuenteNormal);
-        Auxiliar.calcularSize(getSize(), botonCrearCampo, 0.275, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonCrearCampo, 0.03, 0.92);
+        Auxiliar.calcularSize(getSize(), botonCrearCampo, 0.325, 0.07);
+        Auxiliar.calcularLocation(getSize(), botonCrearCampo, 0.01, 0.92);
         botonCrearCampo.addActionListener(accion -> {
 
             crearCampo(panelContenedorCampos, true);
@@ -244,7 +242,7 @@ public class PanelModificarTabla extends JPanel {
         // Tipo de dato
         String[] tiposDeDatos = {"Entero", "Decimal", "Texto", "Fecha", "Imagen"};
         JComboBox<String> comboElegirTipoDeDato = new JComboBox<>(tiposDeDatos);
-        comboElegirTipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
+        comboElegirTipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
         comboElegirTipoDeDato.setFont(Auxiliar.fuenteNormal);
         comboElegirTipoDeDato.addActionListener(accion2 -> {
 

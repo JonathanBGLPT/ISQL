@@ -18,8 +18,8 @@ public class PanelConsultas extends JPanel {
     public PanelConsultas (PanelPrincipal panelPrin) {
 
         setBackground(null);
-        Auxiliar.calcularSize(Auxiliar.dimensionVentana, this, 0.325, 0.95);
-        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, this, 0.665, 0.01);
+        Auxiliar.calcularSize(Auxiliar.dimensionVentana, this, 0.355, 0.95);
+        Auxiliar.calcularLocation(Auxiliar.dimensionVentana, this, 0.615, 0.01);
         setLayout(null);
 
         panelPrincipal = panelPrin;
@@ -47,8 +47,8 @@ public class PanelConsultas extends JPanel {
         // Realizar consulta simple
         JButton botonAConsultaSimple = new JButton("<html>Realizar consulta<br><center>simple</center></html>");
         botonAConsultaSimple.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(getSize(), botonAConsultaSimple, 0.45, 0.1);
-        Auxiliar.calcularLocation(getSize(), botonAConsultaSimple, 0.03, 0.9);
+        Auxiliar.calcularSize(getSize(), botonAConsultaSimple, 0.48, 0.1);
+        Auxiliar.calcularLocation(getSize(), botonAConsultaSimple, 0.01, 0.9);
         botonAConsultaSimple.addActionListener(accion -> {
 
             if (!panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("")) {
@@ -62,7 +62,7 @@ public class PanelConsultas extends JPanel {
         // Realizar consulta chatGPT
         JButton botonAConsultaGPT = new JButton("<html>Realizar consulta<br><center>con ChatGPT</center></html>");
         botonAConsultaGPT.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(getSize(), botonAConsultaGPT, 0.45, 0.1);
+        Auxiliar.calcularSize(getSize(), botonAConsultaGPT, 0.48, 0.1);
         Auxiliar.calcularLocation(getSize(), botonAConsultaGPT, 0.51, 0.9);
         botonAConsultaGPT.addActionListener(accion -> {
 
