@@ -34,6 +34,7 @@ public class PanelModificarTabla extends JPanel {
         
         // Boton cancelar
         JButton botonCancelar = new JButton("Cancelar");
+        botonCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCancelar.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonCancelar, 0.245, 0.07);
         Auxiliar.calcularLocation(getSize(), botonCancelar, 0.34, 0.92);
@@ -50,6 +51,7 @@ public class PanelModificarTabla extends JPanel {
 
         // Boton finalizar 
         JButton botonFinalizar = new JButton("Finalizar modificación");
+        botonFinalizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonFinalizar.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonFinalizar, 0.395, 0.07);
         Auxiliar.calcularLocation(getSize(), botonFinalizar, 0.595, 0.92);
@@ -118,6 +120,7 @@ public class PanelModificarTabla extends JPanel {
 
         // Boton crear nuevo campo
         JButton botonCrearCampo = new JButton("Crear campo");
+        botonCrearCampo.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCrearCampo.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonCrearCampo, 0.325, 0.07);
         Auxiliar.calcularLocation(getSize(), botonCrearCampo, 0.01, 0.92);
@@ -238,10 +241,12 @@ public class PanelModificarTabla extends JPanel {
         clavesForaneas.add(0, "-");
         clavesForaneas.remove("" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
         JComboBox<String> comboClavesForaneas = new JComboBox<>(clavesForaneas.toArray(new String[0]));
+        comboClavesForaneas.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // Tipo de dato
         String[] tiposDeDatos = {"Entero", "Decimal", "Texto", "Fecha", "Imagen"};
         JComboBox<String> comboElegirTipoDeDato = new JComboBox<>(tiposDeDatos);
+        comboElegirTipoDeDato.setCursor(new Cursor(Cursor.HAND_CURSOR));
         comboElegirTipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
         comboElegirTipoDeDato.setFont(Auxiliar.fuenteNormal);
         comboElegirTipoDeDato.addActionListener(accion2 -> {
@@ -263,6 +268,7 @@ public class PanelModificarTabla extends JPanel {
 
         // Eliminar
         JButton botonEliminarCampo = new JButton();
+        botonEliminarCampo.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonEliminarCampo.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/removeBin.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()* 0.04), (int)(Auxiliar.dimensionVentana.getHeight()* 0.04), Image.SCALE_SMOOTH)));
         botonEliminarCampo.setBorderPainted(false);
         botonEliminarCampo.setContentAreaFilled(false);

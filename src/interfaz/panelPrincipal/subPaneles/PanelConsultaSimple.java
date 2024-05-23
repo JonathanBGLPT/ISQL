@@ -1,7 +1,7 @@
 package interfaz.panelPrincipal.subPaneles;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import javax.swing.*;
 
 import interfaz.Auxiliar;
@@ -32,6 +32,7 @@ public class PanelConsultaSimple extends JPanel {
 
         // Boton para cancelar la consulta
         JButton botonCancelarConsulta = new JButton("Cancelar");
+        botonCancelarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCancelarConsulta.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonCancelarConsulta, 0.485, 0.07);
         Auxiliar.calcularLocation(getSize(), botonCancelarConsulta, 0.01, 0.92);
@@ -43,6 +44,7 @@ public class PanelConsultaSimple extends JPanel {
 
         // Boton para realizar la consulta
         JButton botonRealizarConsulta = new JButton("Consultar");
+        botonRealizarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonRealizarConsulta.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonRealizarConsulta, 0.485, 0.07);
         Auxiliar.calcularLocation(getSize(), botonRealizarConsulta, 0.505, 0.92);
@@ -74,6 +76,7 @@ public class PanelConsultaSimple extends JPanel {
         
         ArrayList<String> nombreTablas = obtenerTablasRelacionadas();
         JComboBox<String> botonAgregarTabla = new JComboBox<>(nombreTablas.toArray(new String[0]));
+        botonAgregarTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAgregarTabla.setRenderer(new ComboBoxRenderer());
         botonAgregarTabla.setFont(Auxiliar.fuenteNormal);
         botonAgregarTabla.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -140,6 +143,7 @@ public class PanelConsultaSimple extends JPanel {
                 seleccionarFilaEstaSeleccionado.setVisible(false);
                 panelFila.add(seleccionarFilaEstaSeleccionado);
                 JButton seleccionarFila = new JButton();
+                seleccionarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 seleccionarFila.setIcon(checkSI);
                 seleccionarFila.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
                 seleccionarFila.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
@@ -162,6 +166,7 @@ public class PanelConsultaSimple extends JPanel {
 
                 // Tipo de filtro a aplicar
                 JComboBox<String> comboTipoFiltro = new JComboBox<>(campo[1].equals("Texto")? OPCIONES_TEXTOS : OPCIONES_ENTEROS_REALES_FECHAS);
+                comboTipoFiltro.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 comboTipoFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
                 comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
                 comboTipoFiltro.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
@@ -173,6 +178,7 @@ public class PanelConsultaSimple extends JPanel {
 
                     comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.225), (int)(getSize().getHeight()*0.05)));
 
+                    // Texto a filtrar
                     JTextField valorDelFiltro = new JTextField();
                     valorDelFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
                     valorDelFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
@@ -182,6 +188,7 @@ public class PanelConsultaSimple extends JPanel {
 
                 } else {
 
+                    // Primer valor a filtrar
                     JTextField valorDelFiltro1 = new JTextField();
                     valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
                     valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
@@ -189,6 +196,7 @@ public class PanelConsultaSimple extends JPanel {
                     valorDelFiltro1.setFont(Auxiliar.fuenteNormal);
                     panelFila.add(valorDelFiltro1);
 
+                    // Segundo valor a filtrar si el tipo de filtro es 'rango'
                     JTextField valorDelFiltro2 = new JTextField();
                     valorDelFiltro2.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
                     valorDelFiltro2.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
@@ -229,6 +237,15 @@ public class PanelConsultaSimple extends JPanel {
 
             if (!campo[2].equals("")) resultado.add(campo[2]);
         }
+        return resultado;
+    }
+
+    private Map<String,String[]> obtenerFiltroAplicar() {
+
+        Map<String,String[]> resultado = new HashMap<>();
+
+
+
         return resultado;
     }
 

@@ -1,10 +1,7 @@
 package interfaz.panelPrincipal;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import java.awt.Cursor;
+import javax.swing.*;
 import interfaz.Auxiliar;
 
 import interfaz.panelPrincipal.subPaneles.PanelConsultaSimple;
@@ -46,6 +43,7 @@ public class PanelConsultas extends JPanel {
 
         // Realizar consulta simple
         JButton botonAConsultaSimple = new JButton("<html>Realizar consulta<br><center>simple</center></html>");
+        botonAConsultaSimple.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAConsultaSimple.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAConsultaSimple, 0.48, 0.1);
         Auxiliar.calcularLocation(getSize(), botonAConsultaSimple, 0.01, 0.9);
@@ -61,6 +59,7 @@ public class PanelConsultas extends JPanel {
 
         // Realizar consulta chatGPT
         JButton botonAConsultaGPT = new JButton("<html>Realizar consulta<br><center>con ChatGPT</center></html>");
+        botonAConsultaGPT.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAConsultaGPT.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAConsultaGPT, 0.48, 0.1);
         Auxiliar.calcularLocation(getSize(), botonAConsultaGPT, 0.51, 0.9);

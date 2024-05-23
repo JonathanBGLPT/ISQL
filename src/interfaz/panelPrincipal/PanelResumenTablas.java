@@ -33,6 +33,7 @@ public class PanelResumenTablas extends JPanel {
 
         // Boton para crear una nueva tabla
         JButton botonCrearTabla = new JButton("Crear tabla");
+        botonCrearTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCrearTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonCrearTabla, 0.55, 0.05);
         Auxiliar.calcularLocation(getSize(), botonCrearTabla, 0.425, 0.02);
@@ -77,6 +78,7 @@ public class PanelResumenTablas extends JPanel {
             
             String nombreTabla = nombreTablas.get(t);
             JPanel panelTabla = new JPanel();
+            panelTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
             panelTabla.setLayout(new BoxLayout(panelTabla, BoxLayout.Y_AXIS));
             panelTabla.setBackground((cambio)? Color.WHITE : Color.LIGHT_GRAY); 
             JLabel labelNombreTabla = new JLabel("  " + nombreTabla.toUpperCase() + ESPACIO_LABEL);

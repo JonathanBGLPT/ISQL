@@ -54,6 +54,7 @@ public class PanelMostarDatos extends JPanel {
             panelCabecera.add(seleccionarTodasLasFilasEstaSeleccionado);
     
             JButton seleccionarTodasLasFilas = new JButton();
+            seleccionarTodasLasFilas.setCursor(new Cursor(Cursor.HAND_CURSOR));
             seleccionarTodasLasFilas.setIcon(checkNO);
             seleccionarTodasLasFilas.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.03), (int)(getSize().getWidth()*0.03)));
             seleccionarTodasLasFilas.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.03), (int)(getSize().getWidth()*0.03)));
@@ -117,6 +118,7 @@ public class PanelMostarDatos extends JPanel {
             seleccionarFilaEstaSeleccionado.setVisible(false);
             panelFila.add(seleccionarFilaEstaSeleccionado);
             JButton seleccionarFila = new JButton();
+            seleccionarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
             seleccionarFila.setIcon(checkNO);
             seleccionarFila.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.025), (int)(getSize().getWidth()*0.025)));
             seleccionarFila.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.025), (int)(getSize().getWidth()*0.025)));

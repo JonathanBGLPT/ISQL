@@ -1,6 +1,6 @@
 package interfaz.panelPrincipal;
 
-import java.awt.Image;
+import java.awt.*;
 import java.io.*;
 import java.util.*;
 
@@ -46,6 +46,7 @@ public class PanelGestionTabla extends JPanel {
 
         // Boton editar nombre de la tabla
         JButton botonCambiarNombreTabla = new JButton();
+        botonCambiarNombreTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCambiarNombreTabla.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/editPencil.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()* 0.04), (int)(Auxiliar.dimensionVentana.getHeight()* 0.04), Image.SCALE_SMOOTH)));
         botonCambiarNombreTabla.setSize((int)(getSize().getWidth()*0.05), (int)(getSize().getWidth()*0.05));
         Auxiliar.calcularLocation(getSize(), botonCambiarNombreTabla, 0.94, 0.03);
@@ -139,6 +140,7 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para modificar la tabla
         JButton botonModificarTabla = new JButton("Modificar tabla");
+        botonModificarTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonModificarTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonModificarTabla, 0.325, 0.325);
         Auxiliar.calcularLocation(getSize(), botonModificarTabla, 0, 0);
@@ -155,6 +157,7 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para eliminar la tabla
         JButton botonEliminarTabla = new JButton("Eliminar tabla");
+        botonEliminarTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonEliminarTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonEliminarTabla, 0.315, 0.325);
         Auxiliar.calcularLocation(getSize(), botonEliminarTabla, 0.3375, 0);
@@ -180,6 +183,7 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para agregar datos de forma manual
         JButton botonAgregarDatosManual = new JButton("<html>Agregar datos<br><center>manualmente</center></html>");
+        botonAgregarDatosManual.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAgregarDatosManual.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAgregarDatosManual, 0.325, 0.64);
         Auxiliar.calcularLocation(getSize(), botonAgregarDatosManual, 0, 0.36);
@@ -196,6 +200,7 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para agregar datos desde un CSV
         JButton botonAgregarDatosDesdeCSV = new JButton("<html>Agregar datos<br><center>desde CSV</center></html>");
+        botonAgregarDatosDesdeCSV.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAgregarDatosDesdeCSV.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAgregarDatosDesdeCSV, 0.315, 0.64);
         Auxiliar.calcularLocation(getSize(), botonAgregarDatosDesdeCSV, 0.3375, 0.36);
@@ -282,6 +287,7 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para modificar datos existentes
         JButton botonModificarDatos = new JButton("Modificar datos");
+        botonModificarDatos.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonModificarDatos.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonModificarDatos, 0.335, 0.315);
         Auxiliar.calcularLocation(getSize(), botonModificarDatos, 0.665, 0);
@@ -298,6 +304,7 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para eliminar datos
         JButton botonEliminarDatos = new JButton("Eliminar datos");
+        botonEliminarDatos.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonEliminarDatos.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonEliminarDatos, 0.335, 0.315);
         Auxiliar.calcularLocation(getSize(), botonEliminarDatos, 0.665, 0.3425);
@@ -314,6 +321,7 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para generar CSV
         JButton botonGenerarCSV = new JButton("Generar CSV");
+        botonGenerarCSV.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonGenerarCSV.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonGenerarCSV, 0.335, 0.315);
         Auxiliar.calcularLocation(getSize(), botonGenerarCSV, 0.665, 0.685);

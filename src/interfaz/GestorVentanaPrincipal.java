@@ -26,12 +26,55 @@ public class GestorVentanaPrincipal extends JFrame {
         
         panelGestionBBDD.setVisible(true);
 
+        // Listeners para que la pantalla no se 'despinte'
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                revalidate();
+                repaint();
+            }
+        
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                revalidate();
+                repaint();
+            }
+        
+            @Override
+            public void componentShown(ComponentEvent e) {
+                revalidate();
+                repaint();
+            }
+        
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                revalidate();
+                repaint();
+            }
+        });
+
+        addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                revalidate();
+                repaint();
+            }
+        
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                revalidate();
+                repaint();
+            }
+        });
+
         addWindowStateListener(new WindowStateListener() {
             @Override
             public void windowStateChanged(WindowEvent e) {
                 
-                if ((e.getNewState() & JFrame.NORMAL) == JFrame.NORMAL) {
-                    
+                if ((e.getNewState() & JFrame.NORMAL) == JFrame.NORMAL ||
+                    (e.getNewState() & JFrame.ICONIFIED) == 0 ||
+                    (e.getNewState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH) {
+                        
                     revalidate();
                     repaint();
                 }

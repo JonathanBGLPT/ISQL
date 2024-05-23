@@ -66,6 +66,7 @@ public class PanelAgregarDatos extends JPanel {
 
         // Boton salir
         JButton botonSalir = new JButton("Salir");
+        botonSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonSalir.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonSalir, 0.485, 0.07);
         Auxiliar.calcularLocation(getSize(), botonSalir, 0.01, 0.92);
@@ -84,6 +85,7 @@ public class PanelAgregarDatos extends JPanel {
 
         // Boton agregar fila 
         JButton botonAgregarFila = new JButton("Agregar datos");
+        botonAgregarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAgregarFila.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonAgregarFila, 0.485, 0.07);
         Auxiliar.calcularLocation(getSize(), botonAgregarFila, 0.505, 0.92);

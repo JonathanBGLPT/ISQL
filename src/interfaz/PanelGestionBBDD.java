@@ -1,7 +1,7 @@
 package interfaz;
 
 import java.io.File;
-import java.awt.Image;
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -28,6 +28,7 @@ public class PanelGestionBBDD extends JPanel {
 
         // Boton para crear una nueva BBDD
         JButton botonCrearBBDD = new JButton("Crear una Base de Datos");
+        botonCrearBBDD.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCrearBBDD.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonCrearBBDD, 0.3, 0.1);
         Auxiliar.calcularLocation(getSize(), botonCrearBBDD, 0.35, 0.5);
@@ -53,6 +54,7 @@ public class PanelGestionBBDD extends JPanel {
 
         // Boton para abrir una BBDD existente
         JButton botonAbrirBBDD = new JButton("Abrir una Base de Datos");
+        botonAbrirBBDD.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAbrirBBDD.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAbrirBBDD, 0.3, 0.1);
         Auxiliar.calcularLocation(getSize(), botonAbrirBBDD, 0.35, 0.65);
@@ -79,6 +81,7 @@ public class PanelGestionBBDD extends JPanel {
 
         // Boton para borrar una BBDD existente
         JButton botonBorrarBBDD = new JButton("Borrar una Base de Datos");
+        botonBorrarBBDD.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonBorrarBBDD.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonBorrarBBDD, 0.3, 0.1);
         Auxiliar.calcularLocation(getSize(), botonBorrarBBDD, 0.35, 0.8);
