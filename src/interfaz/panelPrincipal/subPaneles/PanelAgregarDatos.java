@@ -152,7 +152,6 @@ public class PanelAgregarDatos extends JPanel {
             panelCampo.add(valorDelCampo);
             datos.add(valorDelCampo);
 
-            /// IMPLEMENTAR SI ES TIPO IMAGEN
             
             panelContenedorCampos.add(panelCampo);
             revalidate();
@@ -207,11 +206,6 @@ public class PanelAgregarDatos extends JPanel {
                             resultado = false;
                             JOptionPane.showMessageDialog(null, "El campo '" + campos.get(d)[0] + "' no tiene un formato de fecha valido.");
                         }
-                        break;
-
-                    case "Imagen":
-
-                        /// IMPLEMENTAR
                         break;
                 }
 

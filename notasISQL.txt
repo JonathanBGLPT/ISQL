@@ -1,7 +1,2 @@
-Mirar como hago para subir imagenes (seguramente hacer que se tengan que subir a mano y o que el CSV contenga la ruta de foto, y si no existe simplemente ignorarlo)
-Descargar imagen si haces clic en mostrarDatos
-
-**************
-* OPCIONALES *
-**************
-Hacer que mostrarResumenTablas se pueda desplazar horizontalmente
+No puedo actualizar datos de una consulta
+Al borrar/actualizar datos de una consulta el mapenl se cambia por el de mostrarTodosLosDatos

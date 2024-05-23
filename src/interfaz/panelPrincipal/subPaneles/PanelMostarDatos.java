@@ -19,7 +19,7 @@ public class PanelMostarDatos extends JPanel {
     private ImageIcon checkSI;
     private ImageIcon checkNO;
 
-    public PanelMostarDatos (PanelPrincipal panelPrin, ArrayList<String[]> datos) {
+    public PanelMostarDatos (PanelPrincipal panelPrin, ArrayList<String[]> datos, ArrayList<String> columnasEliminadas) {
 
         Auxiliar.calcularSize(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 1, 1);
         Auxiliar.calcularLocation(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 0, 0);
@@ -33,6 +33,12 @@ public class PanelMostarDatos extends JPanel {
         datosTabla = datos;
         mapaFilasCambiadas = new HashMap<>();
 
+        Set<String> setColumnasEliminadas = new HashSet<>();
+        if (columnasEliminadas != null) {
+
+            for (String columna : columnasEliminadas) setColumnasEliminadas.add(columna);
+        }
+
         // Declaracion del contenedor de datos
         panelContenedorDatos = new JPanel();
         panelContenedorDatos.setLayout(new BoxLayout(panelContenedorDatos, BoxLayout.Y_AXIS));
@@ -42,8 +48,8 @@ public class PanelMostarDatos extends JPanel {
         panelContenedorCampos.setLayout(new BoxLayout(panelContenedorCampos, BoxLayout.Y_AXIS));
         ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
         panelCabecera = new JPanel();
-        panelCabecera.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
-        panelCabecera.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
+        panelCabecera.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*(campos.size()-setColumnasEliminadas.size()) + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
+        panelCabecera.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*(campos.size()-setColumnasEliminadas.size()) + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
         panelCabecera.setLayout(new BoxLayout(panelCabecera, BoxLayout.X_AXIS));
         panelCabecera.setAlignmentX(Component.LEFT_ALIGNMENT);
         if (!panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("")) {
@@ -81,7 +87,7 @@ public class PanelMostarDatos extends JPanel {
                 nombreCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 nombreCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 nombreCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
-                panelCabecera.add(nombreCampo);
+                if (!setColumnasEliminadas.contains(campo[0])) panelCabecera.add(nombreCampo);
             }
         }
         JScrollPane panelMostarCampos = new JScrollPane(panelCabecera);
@@ -96,8 +102,8 @@ public class PanelMostarDatos extends JPanel {
         JPanel panelFilaVacia = new JPanel();
         panelFilaVacia.setLayout(new BoxLayout(panelFilaVacia, BoxLayout.X_AXIS));
         panelFilaVacia.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), 0));
-        panelContenedorDatos.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos == null? 1: datos.size()))));
-        panelContenedorDatos.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*campos.size() + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos == null? 1: datos.size()))));
+        panelContenedorDatos.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*(campos.size()-setColumnasEliminadas.size()) + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos == null? 1: datos.size()))));
+        panelContenedorDatos.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*(campos.size()-setColumnasEliminadas.size()) + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.05*(datos == null? 1: datos.size()))));
         panelContenedorDatos.add(panelFilaVacia);
 
         boolean datosValidos = !panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("") && datosTabla != null;

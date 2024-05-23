@@ -1,16 +1,20 @@
 package interfaz.panelPrincipal;
 
 import java.awt.Cursor;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import interfaz.Auxiliar;
 
 import interfaz.panelPrincipal.subPaneles.PanelConsultaSimple;
+import interfaz.panelPrincipal.subPaneles.PanelMostarDatos;
 
 public class PanelConsultas extends JPanel {
     
     private PanelPrincipal panelPrincipal;
 
     public JPanel panelDeConsultas;
+    public ArrayList<String> columnasEliminadas;
 
     public PanelConsultas (PanelPrincipal panelPrin) {
 
@@ -42,11 +46,11 @@ public class PanelConsultas extends JPanel {
         add(panelDeConsultas);
 
         // Realizar consulta simple
-        JButton botonAConsultaSimple = new JButton("<html>Realizar consulta<br><center>simple</center></html>");
+        JButton botonAConsultaSimple = new JButton("Realizar consulta simple");
         botonAConsultaSimple.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAConsultaSimple.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(getSize(), botonAConsultaSimple, 0.48, 0.1);
-        Auxiliar.calcularLocation(getSize(), botonAConsultaSimple, 0.01, 0.9);
+        Auxiliar.calcularSize(getSize(), botonAConsultaSimple, 0.735, 0.1);
+        Auxiliar.calcularLocation(getSize(), botonAConsultaSimple, 0.127, 0.9);
         botonAConsultaSimple.addActionListener(accion -> {
 
             if (!panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("")) {
@@ -55,19 +59,7 @@ public class PanelConsultas extends JPanel {
 
             } else JOptionPane.showMessageDialog(null,  "Debes seleccionar una tabla para consultar.");
 		});
-        add(botonAConsultaSimple);
-
-        // Realizar consulta chatGPT
-        JButton botonAConsultaGPT = new JButton("<html>Realizar consulta<br><center>con ChatGPT</center></html>");
-        botonAConsultaGPT.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        botonAConsultaGPT.setFont(Auxiliar.fuenteGrande);
-        Auxiliar.calcularSize(getSize(), botonAConsultaGPT, 0.48, 0.1);
-        Auxiliar.calcularLocation(getSize(), botonAConsultaGPT, 0.51, 0.9);
-        botonAConsultaGPT.addActionListener(accion -> {
-
-            /// IMPLEMENTAR
-		});
-        add(botonAConsultaGPT);
+        add(botonAConsultaSimple);;
 
         revalidate();
         repaint();
@@ -75,13 +67,12 @@ public class PanelConsultas extends JPanel {
 
     public void elegirPanelConsulta(int opcion) {
 
-        panelDeConsultas.removeAll();
-
         switch (opcion) {
 
             // Salir de la consulta
             case 0:
 
+                panelDeConsultas.removeAll();
                 Auxiliar.habilitacionDeBotones(panelPrincipal, true);
 
             break;
@@ -89,22 +80,20 @@ public class PanelConsultas extends JPanel {
             // Mostrar consulta simple
             case 1:
 
+                panelDeConsultas.removeAll();
                 Auxiliar.habilitacionDeBotones(panelPrincipal, false);
                 panelDeConsultas.add(new PanelConsultaSimple(panelPrincipal));
 
             break;
 
-            // Mostrar consulta GPT
+            // Mostrar resultado consulta
             case 2:
 
-                /// IMPLEMENTAR
-
-            break;
-
-            // Mostrar resultado consulta
-            case 3:
-
-                /// IMPLEMENTAR
+                Auxiliar.habilitacionDeBotones(panelPrincipal, true);
+                Auxiliar.habilitacionDeBotones(panelDeConsultas, false);
+                Auxiliar.botonesActivados = true;
+                panelPrincipal.panelGestionTabla.panelDeGestiones.removeAll();
+                panelPrincipal.panelGestionTabla.panelDeGestiones.add(new PanelMostarDatos(panelPrincipal, panelPrincipal.panelGestionTabla.datosMostrarTabla, columnasEliminadas));
 
             break;
         }

@@ -158,7 +158,6 @@ public class ConexionGestionTablas {
         diccionario.put("Decimal", "REAL");
         diccionario.put("Texto", "TEXT");
         diccionario.put("Fecha", "DATE");
-        diccionario.put("Imagen", "BLOB");
 
         return diccionario;
     }
@@ -170,7 +169,6 @@ public class ConexionGestionTablas {
         diccionario.put("REAL", "Decimal");
         diccionario.put("TEXT", "Texto");
         diccionario.put("DATE", "Fecha");
-        diccionario.put("BLOB", "Imagen");
 
         return diccionario;
     }

@@ -210,7 +210,7 @@ public class PanelCrearTabla extends JPanel {
         comboClavesForaneas.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         // Tipo de dato
-        String[] tiposDeDatos = {"Entero", "Decimal", "Texto", "Fecha", "Imagen"};
+        String[] tiposDeDatos = {"Entero", "Decimal", "Texto", "Fecha"};
         JComboBox<String> comboElegirTipoDeDato = new JComboBox<>(tiposDeDatos);
         comboElegirTipoDeDato.setCursor(new Cursor(Cursor.HAND_CURSOR));
         comboElegirTipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));

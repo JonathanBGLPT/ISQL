@@ -1,7 +1,8 @@
 package interfaz;
 
 import java.awt.*;
-import javax.swing.JButton;
+import javax.swing.*;
+
 import sql.ConexionPrincipal;
 
 public class Auxiliar {
@@ -47,9 +48,9 @@ public class Auxiliar {
     Component[] componentes = contenedor.getComponents();
     for (Component componente : componentes) {
 
-      if (componente instanceof JButton) {
+      if (componente instanceof JButton || componente instanceof JComboBox || componente instanceof JTextField) {
 
-        ((JButton)componente).setEnabled(activar);
+        componente.setEnabled(activar);
 
       } else if (componente instanceof Container) habilitacionDeBotones((Container)componente, activar);
     }

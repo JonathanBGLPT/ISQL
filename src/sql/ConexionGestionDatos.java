@@ -35,11 +35,7 @@ public class ConexionGestionDatos {
 
                         fila[c] = (dato == null)? "" : new SimpleDateFormat("dd/MM/yyyy").format(new Date(Long.parseLong(dato)));
 
-                    } else if (campos.get(c)[1].equals("Imagen")) {
-
-                        /// IMPLEMENTAR COMO DEVUELVO LAS IMAGENES
-
-                    } else fila[c] = (dato == null)? "" : dato;
+                    }  else fila[c] = (dato == null)? "" : dato;
                 }
                 resultado.add(fila);
             }
@@ -94,11 +90,6 @@ public class ConexionGestionDatos {
                             sentenciaPreparada.setDate(v+1, convertirFechaAFormatoSQL(valores[v]));
 
                         } else sentenciaPreparada.setNull(v+1, java.sql.Types.DATE);
-                        break;
-
-                    case "Imagen":
-
-                        /// IMPLEMENTAR
                         break;
                 }
             }
@@ -197,11 +188,6 @@ public class ConexionGestionDatos {
                                         sentenciaPreparada.setDate(c-4, convertirFechaAFormatoSQL(dato));
             
                                     } else sentenciaPreparada.setNull(c-4, java.sql.Types.DATE);
-                                    break;
-            
-                                case "Imagen":
-            
-                                    /// IMPLEMENTAR
                                     break;
                             }
                             c++;

@@ -127,4 +127,9 @@ public class ConexionPrincipal {
      /********************
      * GESTION CONSULTAS *
      *********************/
+
+     public ArrayList<String[]> obtenerConsultaFiltrada(String nombreTabla, ArrayList<String[]> filtros) {
+
+        return gestionConsultas.obtenerConsultaFiltrada(nombreTabla, filtros);
+     }
 }

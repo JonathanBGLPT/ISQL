@@ -94,13 +94,14 @@ public class PanelGestionTabla extends JPanel {
     public void elegirPanelDeGestiones (int opcion) {
 
         panelDeGestiones.removeAll();
-        
+        panelPrincipal.panelConsultas.panelDeConsultas.removeAll();
+
         switch (opcion) {
 
             // Mostrar datos de la tabla
             case 0: 
 
-                panelDeGestiones.add(new PanelMostarDatos(panelPrincipal, datosMostrarTabla));
+                panelDeGestiones.add(new PanelMostarDatos(panelPrincipal, datosMostrarTabla, null));
                 break;
             
             // Mostrar panel crear tabla
@@ -329,7 +330,6 @@ class PanelGestionTablaBotones extends JPanel {
 
             if (nombreTablaSeleccionada != "") {
 
-                /// IMPLEMENTAR COMO GENERA LAS IMAGENES (SEGURAMENTE GUARDANDOLAS EN UNA CARPETA EN EL MISMO NIVEL, CON EL NOMBRE COMO ID DE CADA IMAGEN)
                 try (FileWriter escritorCSV = new FileWriter(nombreTablaSeleccionada + ".csv")) {
                     
                     ArrayList<String[]> cabecera = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTablaSeleccionada);

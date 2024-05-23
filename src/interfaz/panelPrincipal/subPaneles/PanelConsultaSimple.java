@@ -1,6 +1,7 @@
 package interfaz.panelPrincipal.subPaneles;
 
 import java.awt.*;
+import java.text.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -10,11 +11,12 @@ import interfaz.panelPrincipal.PanelPrincipal;
 public class PanelConsultaSimple extends JPanel {
     
     private static final String ESPACIO_LABEL = "                                                                                                                                ";
-    private static final String[] OPCIONES_ENTEROS_REALES_FECHAS = {"-", "=", "<", "<=", ">=", "rango"};
+    private static final String[] OPCIONES_ENTEROS_REALES_FECHAS = {"-", "=", "<", ">", "<=", ">=", "rango"};
     private static final String[] OPCIONES_TEXTOS = {"-", "igual", "contenga", "empiece", "acabe en"};
 
     private PanelPrincipal panelPrincipal;
     private JPanel panelContenedorFiltros;
+    private ArrayList<String> columnasEliminadas;
 
     private ImageIcon checkSI;
     private ImageIcon checkNO;
@@ -29,6 +31,7 @@ public class PanelConsultaSimple extends JPanel {
         panelPrincipal = panelPrin;
         checkSI = new ImageIcon(new ImageIcon(getClass().getResource("/checkSI.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.04), (int)(Auxiliar.dimensionVentana.getHeight()*0.04), Image.SCALE_SMOOTH));
         checkNO = new ImageIcon(new ImageIcon(getClass().getResource("/checkNO.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.04), (int)(Auxiliar.dimensionVentana.getHeight()*0.04), Image.SCALE_SMOOTH));
+        columnasEliminadas = new ArrayList<>();
 
         // Boton para cancelar la consulta
         JButton botonCancelarConsulta = new JButton("Cancelar");
@@ -50,14 +53,20 @@ public class PanelConsultaSimple extends JPanel {
         Auxiliar.calcularLocation(getSize(), botonRealizarConsulta, 0.505, 0.92);
         botonRealizarConsulta.addActionListener(accion -> {
 
-            /// IMPLEMENTAR
+           ArrayList<String[]> filtros = obtenerFiltroAplicar();
+            if (filtros != null) {
+
+                panelPrincipal.panelConsultas.columnasEliminadas = columnasEliminadas;
+                panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerConsultaFiltrada(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, filtros);
+                panelPrincipal.panelConsultas.elegirPanelConsulta(2);
+            }
         });
         add(botonRealizarConsulta);
         
         // Configuracion del panelContenedor y el Scroll
         panelContenedorFiltros = new JPanel();
         panelContenedorFiltros.setLayout(new BoxLayout(panelContenedorFiltros, BoxLayout.Y_AXIS));
-        
+
         JScrollPane panelScroll = new JScrollPane(panelContenedorFiltros);
         Auxiliar.calcularSize(getSize(), panelScroll, 0.98, 0.90);
         Auxiliar.calcularLocation(getSize(), panelScroll, 0.01, 0.01);
@@ -66,197 +75,253 @@ public class PanelConsultaSimple extends JPanel {
         panelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(panelScroll);
 
-        // Boton para agregar una tabla relacionada
-        JPanel panelAgregarTabla = new JPanel();
-        panelAgregarTabla.setBackground(Color.WHITE);
-        panelAgregarTabla.setLayout(new BoxLayout(panelAgregarTabla, BoxLayout.Y_AXIS));
-        panelAgregarTabla.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
-        panelAgregarTabla.add(Box.createVerticalStrut(0));
-        panelContenedorFiltros.add(panelAgregarTabla);
-        
-        ArrayList<String> nombreTablas = obtenerTablasRelacionadas();
-        JComboBox<String> botonAgregarTabla = new JComboBox<>(nombreTablas.toArray(new String[0]));
-        botonAgregarTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        botonAgregarTabla.setRenderer(new ComboBoxRenderer());
-        botonAgregarTabla.setFont(Auxiliar.fuenteNormal);
-        botonAgregarTabla.setAlignmentX(Component.LEFT_ALIGNMENT);
-        botonAgregarTabla.setPreferredSize(new Dimension((int)(getWidth()*0.65), (int)(getHeight()*0.05)));
-        botonAgregarTabla.setMaximumSize(new Dimension((int)(getWidth()*0.65), (int)(getHeight()*0.05)));
-        botonAgregarTabla.addActionListener(accion -> {
+        // Agrego los filtros de la tabla seleccionada
+        JLabel labelNombreTabla = new JLabel(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.toUpperCase() + ESPACIO_LABEL);
+        labelNombreTabla.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
+        labelNombreTabla.setFont(Auxiliar.fuenteNormal.deriveFont(Font.BOLD));
+        panelContenedorFiltros.add(labelNombreTabla);
+
+        ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
+
+        for (String[] campo : campos) {
+
+            JPanel panelFila = new JPanel();
+            panelFila.setBackground(null);
+            panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
+            panelFila.setAlignmentX(Component.LEFT_ALIGNMENT);
+            panelFila.setBorder(BorderFactory.createEmptyBorder(4, 5, 4, 0));
+            panelFila.setPreferredSize(new Dimension(getWidth(),(int)(getHeight()*0.05)));
+            panelFila.setMaximumSize(new Dimension(getWidth(),(int)(getHeight()*0.05)));
+            panelContenedorFiltros.add(panelFila);
+
+            // Check para decidir si se muestra el campo o no
+            JCheckBox seleccionarFilaEstaSeleccionado = new JCheckBox();
+            seleccionarFilaEstaSeleccionado.setSelected(true);
+            seleccionarFilaEstaSeleccionado.setVisible(false);
+            panelFila.add(seleccionarFilaEstaSeleccionado);
+            JButton seleccionarFila = new JButton();
+            seleccionarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            seleccionarFila.setIcon(checkSI);
+            seleccionarFila.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
+            seleccionarFila.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
+            seleccionarFila.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
+            seleccionarFila.addActionListener(accion -> {
+
+                seleccionarFilaEstaSeleccionado.setSelected(!seleccionarFilaEstaSeleccionado.isSelected());
+                seleccionarFila.setIcon((seleccionarFilaEstaSeleccionado.isSelected())? checkSI : checkNO);
+            });
+            panelFila.add(campo[0].equals("id_" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada)? Box.createHorizontalStrut((int)(getWidth()*0.04)) : seleccionarFila);
+            panelFila.add(Box.createHorizontalStrut(8));
             
-            String tablaSeleccionada = (String)botonAgregarTabla.getSelectedItem();
-            agregarPanelTabla(tablaSeleccionada);
+            // Nombre del campo
+            JLabel labelNombreCampo = new JLabel(campo[0]);
+            labelNombreCampo.setPreferredSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
+            labelNombreCampo.setMinimumSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
+            labelNombreCampo.setMaximumSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
+            labelNombreCampo.setFont(Auxiliar.fuenteNormal);
+            panelFila.add(labelNombreCampo);
 
-            nombreTablas.remove(tablaSeleccionada);
-            if (nombreTablas.size() > 1) {
+            // Tipo de filtro a aplicar
+            JComboBox<String> comboTipoFiltro = new JComboBox<>(campo[1].equals("Texto")? OPCIONES_TEXTOS : OPCIONES_ENTEROS_REALES_FECHAS);
+            comboTipoFiltro.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            comboTipoFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
+            comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
+            comboTipoFiltro.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
+            comboTipoFiltro.setFont(Auxiliar.fuenteNormal);
+            panelFila.add(comboTipoFiltro);
+            panelFila.add(Box.createHorizontalStrut(8));
 
-                DefaultComboBoxModel<String> nuevasOpciones = new DefaultComboBoxModel<>(nombreTablas.toArray(new String[0]));
-                botonAgregarTabla.setModel(nuevasOpciones);
+            if (campo[1].equals("Texto")) {
+
+                comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.225), (int)(getSize().getHeight()*0.05)));
+
+                // Texto a filtrar
+                JTextField valorDelFiltro = new JTextField();
+                valorDelFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro.setFont(Auxiliar.fuenteNormal);
+                panelFila.add(valorDelFiltro);
 
             } else {
 
-                panelContenedorFiltros.remove(panelAgregarTabla);
-                revalidate();
-                repaint();
+                // Primer valor a filtrar
+                JTextField valorDelFiltro1 = new JTextField();
+                valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro1.setFont(Auxiliar.fuenteNormal);
+                panelFila.add(valorDelFiltro1);
+
+                // Segundo valor a filtrar si el tipo de filtro es 'rango'
+                JTextField valorDelFiltro2 = new JTextField();
+                valorDelFiltro2.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro2.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro2.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                valorDelFiltro2.setFont(Auxiliar.fuenteNormal);
+
+                comboTipoFiltro.addActionListener(accion -> {
+
+                    if (((String)comboTipoFiltro.getSelectedItem()).equals("rango")) {
+
+                        valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                        valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                        valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+                        panelFila.add(valorDelFiltro2);
+
+                    } else {
+
+                        valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                        valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                        valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
+                        panelFila.remove(valorDelFiltro2);
+                    }
+                    revalidate();
+                    repaint();
+                });
             }
-            botonAgregarTabla.setSelectedIndex(0);
-        });
-        panelAgregarTabla.add(botonAgregarTabla);
-        if (nombreTablas.size() == 1) panelContenedorFiltros.remove(panelAgregarTabla);
-
-        // Agrego el filtro de la tabla seleccionada
-        agregarPanelTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
-
+        }
         revalidate();
         repaint();
     }
 
-    private void agregarPanelTabla(String nombreTabla) {
+    @SuppressWarnings("rawtypes")
+    private ArrayList<String[]> obtenerFiltroAplicar() {
 
-        JPanel panelTabla = new JPanel();
-        panelTabla.setLayout(new BoxLayout(panelTabla, BoxLayout.Y_AXIS));
-        panelTabla.setBackground((panelContenedorFiltros.getComponentCount() % 2 == 0)? Color.WHITE : Color.LIGHT_GRAY); 
-        JLabel labelNombreTabla = new JLabel(nombreTabla.toUpperCase() + ESPACIO_LABEL);
-        labelNombreTabla.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
-        labelNombreTabla.setFont(Auxiliar.fuenteNormal.deriveFont(Font.BOLD));
-        panelTabla.add(labelNombreTabla);
-        panelContenedorFiltros.add(panelTabla);
+        ArrayList<String[]> resultado = new ArrayList<>();
 
-        ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTabla);
+        boolean resultadoValido = true;
+        ArrayList<String[]> camposTabla = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
 
-        for (String[] campo : campos) {
+        for (int f = 1; f < panelContenedorFiltros.getComponentCount(); f++) {
 
-            if (!campo[1].equals("Imagen")) {
+            JPanel panelFila = (JPanel)panelContenedorFiltros.getComponent(f);
+            if (((JCheckBox)panelFila.getComponent(0)).isSelected()) {
 
-                JPanel panelFila = new JPanel();
-                panelFila.setBackground(null);
-                panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
-                panelFila.setAlignmentX(Component.LEFT_ALIGNMENT);
-                panelFila.setBorder(BorderFactory.createEmptyBorder(4, 5, 4, 0));
-                panelFila.setPreferredSize(new Dimension(getWidth(),(int)(getHeight()*0.05)));
-                panelFila.setMaximumSize(new Dimension(getWidth(),(int)(getHeight()*0.05)));
-                panelTabla.add(panelFila);
+                String[] filtroFila = new String[5];
+                resultado.add(filtroFila);
+                filtroFila[0] = ((JLabel)panelFila.getComponent(3)).getText();
+                filtroFila[1] = (String)((JComboBox)panelFila.getComponent(4)).getSelectedItem();
+                filtroFila[2] = camposTabla.get(f-1)[1];
+                if (!filtroFila[1].equals("-")) {
 
-                // Check para decidir si se muestra el campo o no
-                JCheckBox seleccionarFilaEstaSeleccionado = new JCheckBox();
-                seleccionarFilaEstaSeleccionado.setSelected(true);
-                seleccionarFilaEstaSeleccionado.setVisible(false);
-                panelFila.add(seleccionarFilaEstaSeleccionado);
-                JButton seleccionarFila = new JButton();
-                seleccionarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                seleccionarFila.setIcon(checkSI);
-                seleccionarFila.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
-                seleccionarFila.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
-                seleccionarFila.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.04), (int)(getSize().getWidth()*0.04)));
-                seleccionarFila.addActionListener(accion -> {
-    
-                    seleccionarFilaEstaSeleccionado.setSelected(!seleccionarFilaEstaSeleccionado.isSelected());
-                    seleccionarFila.setIcon((seleccionarFilaEstaSeleccionado.isSelected())? checkSI : checkNO);
-                });
-                panelFila.add(seleccionarFila);
-                panelFila.add(Box.createHorizontalStrut(8));
-                
-                // Nombre del campo
-                JLabel labelNombreCampo = new JLabel("<html>&#8203;" + campo[0] + "</html>");
-                labelNombreCampo.setPreferredSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
-                labelNombreCampo.setMinimumSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
-                labelNombreCampo.setMaximumSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
-                labelNombreCampo.setFont(Auxiliar.fuenteNormal);
-                panelFila.add(labelNombreCampo);
+                    filtroFila[3] = ((JTextField)(panelFila.getComponent(6))).getText();
+                    if (filtroFila[1].equals("rango")) filtroFila[4] = ((JTextField)(panelFila.getComponent(7))).getText();
+                    if (!camposTabla.get(f-1)[1].equals("Texto")) {
 
-                // Tipo de filtro a aplicar
-                JComboBox<String> comboTipoFiltro = new JComboBox<>(campo[1].equals("Texto")? OPCIONES_TEXTOS : OPCIONES_ENTEROS_REALES_FECHAS);
-                comboTipoFiltro.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                comboTipoFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
-                comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
-                comboTipoFiltro.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
-                comboTipoFiltro.setFont(Auxiliar.fuenteNormal);
-                panelFila.add(comboTipoFiltro);
-                panelFila.add(Box.createHorizontalStrut(8));
+                        switch (camposTabla.get(f-1)[1]) {
 
-                if (campo[1].equals("Texto")) {
+                            case "Entero":
 
-                    comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.225), (int)(getSize().getHeight()*0.05)));
+                                try {
 
-                    // Texto a filtrar
-                    JTextField valorDelFiltro = new JTextField();
-                    valorDelFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro.setFont(Auxiliar.fuenteNormal);
-                    panelFila.add(valorDelFiltro);
+                                    Integer.parseInt(filtroFila[3]);
+                                    if (filtroFila[1].equals("rango")) Integer.parseInt(filtroFila[4]);
 
-                } else {
+                                } catch (NumberFormatException e) {
 
-                    // Primer valor a filtrar
-                    JTextField valorDelFiltro1 = new JTextField();
-                    valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro1.setFont(Auxiliar.fuenteNormal);
-                    panelFila.add(valorDelFiltro1);
+                                    resultadoValido = false;
+                                    JOptionPane.showMessageDialog(null, "El filtro '" + filtroFila[0] + "' no es válido.");
+                                }
+                                break;
 
-                    // Segundo valor a filtrar si el tipo de filtro es 'rango'
-                    JTextField valorDelFiltro2 = new JTextField();
-                    valorDelFiltro2.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro2.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro2.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
-                    valorDelFiltro2.setFont(Auxiliar.fuenteNormal);
+                            case "Decimal":
 
-                    comboTipoFiltro.addActionListener(accion -> {
+                                try {
 
-                        if (((String)comboTipoFiltro.getSelectedItem()).equals("rango")) {
+                                    Double.parseDouble(filtroFila[3].replace(",", "."));
+                                    if (filtroFila[1].equals("rango")) Double.parseDouble(filtroFila[4].replace(",", "."));
 
-                            valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
-                            valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
-                            valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
-                            panelFila.add(valorDelFiltro2);
+                                } catch (NumberFormatException e) {
 
-                        } else {
+                                    resultadoValido = false;
+                                    JOptionPane.showMessageDialog(null, "El filtro '" + filtroFila[0] + "' no es válido.");
+                                }
+                                break;
 
-                            valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
-                            valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
-                            valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
-                            panelFila.remove(valorDelFiltro2);
+                            case "Fecha":
+                                
+                                boolean fecha1Valida = Auxiliar.comprobarFechaNumeros(filtroFila[3]) && comprobarFechaValida(filtroFila[3]);
+                                boolean fecha2Valida = !filtroFila[1].equals("rango") || (Auxiliar.comprobarFechaNumeros(filtroFila[4]) && comprobarFechaValida(filtroFila[4]));
+                                if (!fecha1Valida || !fecha2Valida) {
+
+                                    resultadoValido = false;
+                                    JOptionPane.showMessageDialog(null, "El filtro '" + filtroFila[0] + "' no es válido.");
+
+                                }
+
+                                filtroFila[3] = convertirFechaAFormatoCorrecto(filtroFila[3]);
+                                if (filtroFila[1].equals("rango")) filtroFila[4] = convertirFechaAFormatoCorrecto(filtroFila[4]);
+
+                                break;
+
                         }
-                        revalidate();
-                        repaint();
-                    });
+                    }
                 }
-            }
+            } else columnasEliminadas.add(((JLabel)panelFila.getComponent(3)).getText());
         }
+        return (resultadoValido)? resultado : null;
     }
 
-    private ArrayList<String> obtenerTablasRelacionadas () {
+    private String convertirFechaAFormatoCorrecto (String fecha) {
 
-        ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
-        ArrayList<String> resultado = new ArrayList<>();
-        resultado.add(" + Agregar tabla relacionada");
-        
-        for (String[] campo : campos) {
+        String resultado = "";
 
-            if (!campo[2].equals("")) resultado.add(campo[2]);
-        }
+        SimpleDateFormat formato;
+        if (fecha.contains("/")) {
+
+            if (fecha.indexOf('/') == 4) {
+
+                formato = new SimpleDateFormat("yyyy/MM/dd");
+
+            } else formato = new SimpleDateFormat("dd/MM/yyyy");
+
+        } else if (fecha.contains("-")) {
+
+            if (fecha.indexOf('-') == 4) {
+
+                formato = new SimpleDateFormat("yyyy-MM-dd");
+
+            } else formato = new SimpleDateFormat("dd-MM-yyyy");
+
+        } else return "";
+
+        try {
+
+            resultado = "" + formato.parse(fecha).getTime();
+
+        } catch (ParseException e) { return ""; }
+
         return resultado;
     }
 
-    private Map<String,String[]> obtenerFiltroAplicar() {
+    private boolean comprobarFechaValida(String fecha) {
 
-        Map<String,String[]> resultado = new HashMap<>();
+        SimpleDateFormat formato;
+        if (fecha.contains("/")) {
 
+            if (fecha.indexOf('/') == 4) {
 
+                formato = new SimpleDateFormat("yyyy/MM/dd");
 
-        return resultado;
-    }
+            } else formato = new SimpleDateFormat("dd/MM/yyyy");
 
-    static class ComboBoxRenderer extends DefaultListCellRenderer {
-    
-        @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        } else if (fecha.contains("-")) {
 
-            Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (value.equals(" + Agregar tabla relacionada") && index != -1) setText("");
-            return component;
-        }
+            if (fecha.indexOf('-') == 4) {
+
+                formato = new SimpleDateFormat("yyyy-MM-dd");
+
+            } else formato = new SimpleDateFormat("dd-MM-yyyy");
+
+        } else return false;
+
+        try {
+
+            new Date(formato.parse(fecha).getTime());
+
+        } catch (ParseException e) { return false; }
+
+        return true;
     }
 }
