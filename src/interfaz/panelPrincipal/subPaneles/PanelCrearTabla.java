@@ -207,7 +207,9 @@ public class PanelCrearTabla extends JPanel {
         nombreDelCampo.setForeground(Auxiliar.colorLetra);
         nombreDelCampo.setBackground(Auxiliar.colorGrisOscuro);
         nombreDelCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
-        nombreDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.5), (int)(getSize().getHeight()*0.05)));
+        nombreDelCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.33), (int)(getSize().getHeight()*0.05)));
+        nombreDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.33), (int)(getSize().getHeight()*0.05)));
+        nombreDelCampo.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.33), (int)(getSize().getHeight()*0.05)));
         nombreDelCampo.setFont(Auxiliar.fuenteNormal);
         ((PlainDocument)nombreDelCampo.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
@@ -231,7 +233,9 @@ public class PanelCrearTabla extends JPanel {
         String[] tiposDeDatos = {"Entero", "Decimal", "Texto", "Fecha"};
         JComboBox<String> comboElegirTipoDeDato = new JComboBox<>(tiposDeDatos);
         comboElegirTipoDeDato.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        comboElegirTipoDeDato.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
         comboElegirTipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+        comboElegirTipoDeDato.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
         comboElegirTipoDeDato.setForeground(Auxiliar.colorLetra);
         comboElegirTipoDeDato.setBackground(Auxiliar.colorGrisOscuro);
         comboElegirTipoDeDato.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
@@ -251,7 +255,9 @@ public class PanelCrearTabla extends JPanel {
         comboClavesForaneas.setBackground(Auxiliar.colorGrisOscuro);
         comboClavesForaneas.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
         comboClavesForaneas.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        comboClavesForaneas.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.3), (int)(getSize().getHeight()*0.05)));
+        comboClavesForaneas.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+        comboClavesForaneas.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
+        comboClavesForaneas.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
         comboClavesForaneas.setFont(Auxiliar.fuenteNormal);
         panelCampo.add(comboClavesForaneas);
 
@@ -274,6 +280,12 @@ public class PanelCrearTabla extends JPanel {
             repaint();
         });
         panelCampo.add(botonEliminarCampo);
+
+        Component espacioHorizontal3 = Box.createHorizontalStrut(20);
+        espacioHorizontal3.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.03), (int)(getSize().getHeight()*0.05)));
+        espacioHorizontal3.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.03), (int)(getSize().getHeight()*0.05)));
+        espacioHorizontal3.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.03), (int)(getSize().getHeight()*0.05)));
+        panelCampo.add(espacioHorizontal3);
 
         panelContenedorCampos.add(panelCampo);
         campos.add(panelCampo);
