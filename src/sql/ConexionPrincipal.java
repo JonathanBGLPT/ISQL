@@ -110,19 +110,14 @@ public class ConexionPrincipal {
         return gestionDatos.insertarFila(sentenciaSQL, valores, tipos);
     }
 
-    public void eliminarTodosLosDatos(String nombreTabla) {
-
-        gestionDatos.eliminarTodosLosDatos(nombreTabla);
-    }
-
     public void eliminarListaDeDatos(String nombreTabla, ArrayList<Integer> listaIds) {
 
         gestionDatos.eliminarListaDeDatos(nombreTabla, listaIds);
     }
 
-    public void actualizarListaDeDatos(String nombreTabla, Map<Integer,JPanel> filasCambiadas) {
+    public void actualizarListaDeDatos(String nombreTabla, Map<Integer,JPanel> filasCambiadas, ArrayList<String> cabecera) {
 
-        gestionDatos.actualizarListaDeDatos(nombreTabla, filasCambiadas);
+        gestionDatos.actualizarListaDeDatos(nombreTabla, filasCambiadas, cabecera);
     }
      /********************
      * GESTION CONSULTAS *

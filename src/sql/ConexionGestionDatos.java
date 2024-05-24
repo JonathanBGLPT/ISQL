@@ -101,16 +101,6 @@ public class ConexionGestionDatos {
         return resultado;
     }
 
-    public void eliminarTodosLosDatos(String nombreTabla) {
-
-        try (Statement sentencia = conector.createStatement()) {
-
-            sentencia.execute("DELETE FROM " + nombreTabla + ";");
-            sentencia.close();
-
-        } catch (SQLException e) { e.printStackTrace(); }
-    }
-
     public void eliminarListaDeDatos(String nombreTabla, ArrayList<Integer> listaIds) {
 
         String sentenciaSQL = "DELETE FROM " + nombreTabla + " WHERE id_" + nombreTabla + " = ?;";
@@ -127,15 +117,17 @@ public class ConexionGestionDatos {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public void actualizarListaDeDatos(String nombreTabla, Map<Integer,JPanel> filasCambiadas) {
+    public void actualizarListaDeDatos(String nombreTabla, Map<Integer,JPanel> filasCambiadas, ArrayList<String> cabecera) {
 
         ArrayList<Integer> idsConErrores = new ArrayList<>();
         ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(nombreTabla);
+        Map<String,String> mapaTipos = new HashMap<>();
+        for (String[] campo : campos) mapaTipos.put(campo[0], campo[1]);
 
         String sentenciaSQL = "UPDATE " + nombreTabla + " SET ";
-        for (int c = 1; c < campos.size(); c++) sentenciaSQL += campos.get(c)[0] + " = ?, ";
+        for (int c = 1; c < cabecera.size(); c++) sentenciaSQL += cabecera.get(c) + " = ?, ";
         sentenciaSQL = sentenciaSQL.substring(0, sentenciaSQL.length()-2) + " WHERE id_" + nombreTabla + " = ?;";
-        
+
         try (PreparedStatement sentenciaPreparada = conector.prepareStatement(sentenciaSQL)) {
 
             for (int id : filasCambiadas.keySet()) {
@@ -151,7 +143,7 @@ public class ConexionGestionDatos {
 
         
                             String dato = ((JTextField)panelFila.getComponent(c)).getText().trim();
-                            switch (campos.get(c-4)[1]) {
+                            switch (mapaTipos.get(cabecera.get(c-4))) {
     
                                 case "Entero":
             

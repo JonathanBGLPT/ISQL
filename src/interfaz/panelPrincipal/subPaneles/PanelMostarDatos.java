@@ -12,6 +12,7 @@ public class PanelMostarDatos extends JPanel {
     
     private PanelPrincipal panelPrincipal;
     private ArrayList<String[]> datosTabla;
+    private ArrayList<String> columnasEliminadas;
     private Map<Integer,JPanel> mapaFilasCambiadas;
     private JPanel panelContenedorDatos;
     private JPanel panelCabecera;
@@ -19,7 +20,7 @@ public class PanelMostarDatos extends JPanel {
     private ImageIcon checkSI;
     private ImageIcon checkNO;
 
-    public PanelMostarDatos (PanelPrincipal panelPrin, ArrayList<String[]> datos, ArrayList<String> columnasEliminadas) {
+    public PanelMostarDatos (PanelPrincipal panelPrin, ArrayList<String[]> datos, ArrayList<String> columnasBorradas) {
 
         Auxiliar.calcularSize(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 1, 1);
         Auxiliar.calcularLocation(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 0, 0);
@@ -31,6 +32,7 @@ public class PanelMostarDatos extends JPanel {
 
         panelPrincipal = panelPrin;
         datosTabla = datos;
+        columnasEliminadas = columnasBorradas;
         mapaFilasCambiadas = new HashMap<>();
 
         Set<String> setColumnasEliminadas = new HashSet<>();
@@ -197,44 +199,52 @@ public class PanelMostarDatos extends JPanel {
 
     public void eliminarDatos () {
 
-        if (((JCheckBox)panelCabecera.getComponent(1)).isSelected()) {
+        int numeroDeEliminados = 0;
+        String idsAEliminar = "";
+        ArrayList<Integer> listaIds = new ArrayList<>();
+        ArrayList<JPanel> panelesEliminar = new ArrayList<>();
+        for (int f = 1; f < panelContenedorDatos.getComponentCount(); f++) {
 
-            int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar todos los datos de la tabla '" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + "'?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            JPanel panelFila = (JPanel)panelContenedorDatos.getComponent(f);
+            if (((JCheckBox)panelFila.getComponent(1)).isSelected()) {
+
+                numeroDeEliminados++;
+                panelesEliminar.add(panelFila);
+                String idText = ((JLabel)panelFila.getComponent(4)).getText().trim();
+                int id = Integer.parseInt(idText.substring(13, idText.length()-7));
+                listaIds.add(id);
+                idsAEliminar += id + ((numeroDeEliminados % 10 == 0)? ", \n" : ", ");
+            }
+        }
+        if (idsAEliminar.length() > 0) {
+
+            int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar los datos de la tabla '" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + "' con ids:\n" + idsAEliminar.substring(0, idsAEliminar.length()-2) + "?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (respuesta == JOptionPane.YES_OPTION) {
 
-                Auxiliar.conexionSQL.eliminarTodosLosDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
+                Auxiliar.conexionSQL.eliminarListaDeDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, listaIds);
                 panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
-                panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
-            };
+                for (JPanel panelEliminado : panelesEliminar) panelContenedorDatos.remove(panelEliminado);
+                for (int f = 1; f < panelContenedorDatos.getComponentCount(); f++) {
 
-        } else {
+                    Color colorFondo = (f % 2 == 0)? Color.LIGHT_GRAY : Color.WHITE;
+                    JPanel panelFila = (JPanel)panelContenedorDatos.getComponent(f);
+                    panelFila.setBackground(colorFondo);
+                    for (int c = 5; c < panelFila.getComponentCount(); c++) {
 
-            int numeroDeEliminados = 0;
-            String idsAEliminar = "";
-            ArrayList<Integer> listaIds = new ArrayList<>();
-            for (int f = 1; f < panelContenedorDatos.getComponentCount(); f++) {
+                        JTextField campo = (JTextField)panelFila.getComponent(c);
+                        campo.setBackground(colorFondo);
+                        if (campo.getText().trim().equals("")) {
 
-                JPanel panelFila = (JPanel)panelContenedorDatos.getComponent(f);
-                if (((JCheckBox)panelFila.getComponent(1)).isSelected()) {
-
-                    numeroDeEliminados++;
-                    String idText = ((JLabel)panelFila.getComponent(4)).getText().trim();
-                    int id = Integer.parseInt(idText.substring(13, idText.length()-7));
-                    listaIds.add(id);
-                    idsAEliminar += id + ((numeroDeEliminados % 10 == 0)? ", \n" : ", ");
-                }
+                            campo.setOpaque(true);
+                            campo.setBackground(Color.RED);
+                        }
+                    }
+                };
+                mapaFilasCambiadas = new HashMap<>();
+                revalidate();
+                repaint();
             }
-            if (idsAEliminar.length() > 0) {
-
-                int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar los datos de la tabla '" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + "' con ids:\n" + idsAEliminar.substring(0, idsAEliminar.length()-2) + "?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (respuesta == JOptionPane.YES_OPTION) {
-
-                    Auxiliar.conexionSQL.eliminarListaDeDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, listaIds);
-                    panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
-                    panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
-                }
-            } else JOptionPane.showMessageDialog(null, "No se ha marcado ningún dato para eliminar.");
-        }
+        } else JOptionPane.showMessageDialog(null, "No se ha marcado ningún dato para eliminar.");
     }
 
     public void actualizarDatos () {
@@ -249,9 +259,33 @@ public class PanelMostarDatos extends JPanel {
             int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea modificar los datos de la tabla '" + panelPrincipal.panelGestionTabla.nombreTablaSeleccionada + "' con ids:\n" + filasCambiadas.substring(0, filasCambiadas.length()-2) + "?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (respuesta == JOptionPane.YES_OPTION) {
 
-                Auxiliar.conexionSQL.actualizarListaDeDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, mapaFilasCambiadas);
-                panelPrincipal.panelGestionTabla.datosMostrarTabla = Auxiliar.conexionSQL.obtenerTodosLosDatosTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
-                panelPrincipal.panelGestionTabla.elegirPanelDeGestiones(0);
+                ArrayList<String> cabecera = new ArrayList<>();
+                for (int l = 4; l < panelCabecera.getComponentCount(); l++) {
+
+                    String campo = ((JLabel)panelCabecera.getComponent(l)).getText();
+                    cabecera.add(campo.substring(6, campo.length()-7));
+                }
+                Auxiliar.conexionSQL.actualizarListaDeDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, mapaFilasCambiadas, cabecera);
+                for (int f = 1; f < panelContenedorDatos.getComponentCount(); f++) {
+
+                    Color colorFondo = (f % 2 == 0)? Color.LIGHT_GRAY : Color.WHITE;
+
+                    JPanel panelFila = (JPanel)panelContenedorDatos.getComponent(f);
+                    panelFila.setBackground(colorFondo);
+                    ((JCheckBox)panelFila.getComponent(1)).setSelected(false);
+                    ((JButton)panelFila.getComponent(2)).setIcon(checkNO);
+                    for (int c = 5; c < panelFila.getComponentCount(); c++) {
+
+                        JTextField campo = (JTextField)panelFila.getComponent(c);
+                        campo.setBackground(colorFondo);
+                        if (campo.getText().trim().equals("")) {
+
+                            campo.setOpaque(true);
+                            campo.setBackground(Color.RED);
+                        }
+                    }
+                }
+                mapaFilasCambiadas = new HashMap<>();
             }
 
         } else JOptionPane.showMessageDialog(null, "No se ha modificado ningún dato.");
