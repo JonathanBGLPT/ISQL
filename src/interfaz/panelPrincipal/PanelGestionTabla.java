@@ -27,9 +27,10 @@ public class PanelGestionTabla extends JPanel {
 
         // Panel de gestiones
         panelDeGestiones = new JPanel();
+        panelDeGestiones.setBackground(Auxiliar.colorGrisFondo);
         Auxiliar.calcularSize(getSize(), panelDeGestiones, 0.98, 0.76);
         Auxiliar.calcularLocation(getSize(), panelDeGestiones, 0.01, 0.07);
-        panelDeGestiones.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
+        panelDeGestiones.setBorder(BorderFactory.createLineBorder(Auxiliar.colorGrisFondo, 2));
         panelDeGestiones.setLayout(null);
 
         nombreTablaSeleccionada = "";
@@ -46,6 +47,9 @@ public class PanelGestionTabla extends JPanel {
 
         // Boton editar nombre de la tabla
         JButton botonCambiarNombreTabla = new JButton();
+        botonCambiarNombreTabla.setForeground(Auxiliar.colorLetra);
+        botonCambiarNombreTabla.setBackground(Auxiliar.colorGrisOscuro);
+        botonCambiarNombreTabla.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonCambiarNombreTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCambiarNombreTabla.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/editPencil.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()* 0.04), (int)(Auxiliar.dimensionVentana.getHeight()* 0.04), Image.SCALE_SMOOTH)));
         botonCambiarNombreTabla.setSize((int)(getSize().getWidth()*0.05), (int)(getSize().getWidth()*0.05));
@@ -82,6 +86,7 @@ public class PanelGestionTabla extends JPanel {
 
         // Texto tabla seleccionada
         JLabel textoTablas = new JLabel("Tabla seleccionada: " + nombreTablaSeleccionada);
+        textoTablas.setForeground(Auxiliar.colorLetra);
         textoTablas.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), textoTablas, 0.95, 0.03);
         Auxiliar.calcularLocation(getSize(), textoTablas, 0.025, 0.04);
@@ -134,13 +139,16 @@ class PanelGestionTablaBotones extends JPanel {
     public PanelGestionTablaBotones (PanelPrincipal panelPrincipal) {
 
         nombreTablaSeleccionada = "";
-        setBackground(null);
+        setBackground(Auxiliar.colorGrisFondo);
         Auxiliar.calcularSize(Auxiliar.dimensionVentana, this, 0.4, 0.15);
         Auxiliar.calcularLocation(Auxiliar.dimensionVentana, this, 0, 0.8);
         setLayout(null);
 
         // Boton para modificar la tabla
         JButton botonModificarTabla = new JButton("Modificar tabla");
+        botonModificarTabla.setForeground(Auxiliar.colorLetra);
+        botonModificarTabla.setBackground(Auxiliar.colorGrisOscuro);
+        botonModificarTabla.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonModificarTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonModificarTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonModificarTabla, 0.325, 0.325);
@@ -158,6 +166,9 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para eliminar la tabla
         JButton botonEliminarTabla = new JButton("Eliminar tabla");
+        botonEliminarTabla.setForeground(Auxiliar.colorLetra);
+        botonEliminarTabla.setBackground(Auxiliar.colorGrisOscuro);
+        botonEliminarTabla.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonEliminarTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonEliminarTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonEliminarTabla, 0.315, 0.325);
@@ -184,6 +195,9 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para agregar datos de forma manual
         JButton botonAgregarDatosManual = new JButton("<html>Agregar datos<br><center>manualmente</center></html>");
+        botonAgregarDatosManual.setForeground(Auxiliar.colorLetra);
+        botonAgregarDatosManual.setBackground(Auxiliar.colorGrisOscuro);
+        botonAgregarDatosManual.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonAgregarDatosManual.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAgregarDatosManual.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAgregarDatosManual, 0.325, 0.64);
@@ -201,6 +215,9 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para agregar datos desde un CSV
         JButton botonAgregarDatosDesdeCSV = new JButton("<html>Agregar datos<br><center>desde CSV</center></html>");
+        botonAgregarDatosDesdeCSV.setForeground(Auxiliar.colorLetra);
+        botonAgregarDatosDesdeCSV.setBackground(Auxiliar.colorGrisOscuro);
+        botonAgregarDatosDesdeCSV.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonAgregarDatosDesdeCSV.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAgregarDatosDesdeCSV.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAgregarDatosDesdeCSV, 0.315, 0.64);
@@ -288,6 +305,9 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para modificar datos existentes
         JButton botonModificarDatos = new JButton("Modificar datos");
+        botonModificarDatos.setForeground(Auxiliar.colorLetra);
+        botonModificarDatos.setBackground(Auxiliar.colorGrisOscuro);
+        botonModificarDatos.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonModificarDatos.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonModificarDatos.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonModificarDatos, 0.335, 0.315);
@@ -305,6 +325,9 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para eliminar datos
         JButton botonEliminarDatos = new JButton("Eliminar datos");
+        botonEliminarDatos.setForeground(Auxiliar.colorLetra);
+        botonEliminarDatos.setBackground(Auxiliar.colorGrisOscuro);
+        botonEliminarDatos.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonEliminarDatos.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonEliminarDatos.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonEliminarDatos, 0.335, 0.315);
@@ -322,6 +345,9 @@ class PanelGestionTablaBotones extends JPanel {
 
         // Boton para generar CSV
         JButton botonGenerarCSV = new JButton("Generar CSV");
+        botonGenerarCSV.setForeground(Auxiliar.colorLetra);
+        botonGenerarCSV.setBackground(Auxiliar.colorGrisOscuro);
+        botonGenerarCSV.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonGenerarCSV.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonGenerarCSV.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonGenerarCSV, 0.335, 0.315);

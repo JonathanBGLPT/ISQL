@@ -32,6 +32,7 @@ public class PanelConsultas extends JPanel {
 
         // Texto consultas
         JLabel textoConsultas = new JLabel("Consultas:");
+        textoConsultas.setForeground(Auxiliar.colorLetra);
         textoConsultas.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), textoConsultas, 0.9, 0.03);
         Auxiliar.calcularLocation(getSize(), textoConsultas, 0.025, 0.04);
@@ -41,12 +42,16 @@ public class PanelConsultas extends JPanel {
         panelDeConsultas = new JPanel();
         Auxiliar.calcularSize(getSize(), panelDeConsultas, 0.98, 0.82);
         Auxiliar.calcularLocation(getSize(), panelDeConsultas, 0.01, 0.07);
-        panelDeConsultas.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
+        panelDeConsultas.setBackground(Auxiliar.colorGrisFondo);
+        panelDeConsultas.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         panelDeConsultas.setLayout(null);
         add(panelDeConsultas);
 
         // Realizar consulta simple
         JButton botonAConsultaSimple = new JButton("Realizar consulta simple");
+        botonAConsultaSimple.setForeground(Auxiliar.colorLetra);
+        botonAConsultaSimple.setBackground(Auxiliar.colorGrisOscuro);
+        botonAConsultaSimple.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonAConsultaSimple.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAConsultaSimple.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAConsultaSimple, 0.735, 0.1);

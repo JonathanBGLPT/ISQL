@@ -13,7 +13,7 @@ public class PanelPrincipal extends JPanel {
     public PanelPrincipal (GestorVentanaPrincipal ventanaPrincipal) {
 
         setSize(Auxiliar.dimensionVentana);
-        setBackground(Auxiliar.colorAzulPalido);
+        setBackground(Auxiliar.colorGrisFondo);
         setLayout(null);
 
         panelResumenTablas = new PanelResumenTablas(this);

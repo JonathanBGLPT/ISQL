@@ -1,2 +1,0 @@
-No puedo actualizar datos de una consulta
-Al borrar/actualizar datos de una consulta el mapenl se cambia por el de mostrarTodosLosDatos

@@ -2,6 +2,8 @@ package interfaz;
 
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
+
 import interfaz.panelPrincipal.PanelPrincipal;
 
 public class GestorVentanaPrincipal extends JFrame {
@@ -96,5 +98,10 @@ public class GestorVentanaPrincipal extends JFrame {
         Auxiliar.inicializarAjustes();
         GestorVentanaPrincipal ventanaPrincipal = new GestorVentanaPrincipal();
         ventanaPrincipal.setVisible(true);
+
+        UIManager.put("ComboBox.selectionBackground", new ColorUIResource(Auxiliar.colorSeleccionado));
+        UIManager.put("ComboBox.selectionForeground", new ColorUIResource(Auxiliar.colorLetra));
+        UIManager.put("ComboBox.disabledBackground", new ColorUIResource(Auxiliar.colorGrisClaro));
+        UIManager.put("ComboBox.disabledForeground", new ColorUIResource(Auxiliar.colorGrisOscuro));
     }
 }

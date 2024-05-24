@@ -13,7 +13,7 @@ public class PanelGestionBBDD extends JPanel {
     public PanelGestionBBDD (GestorVentanaPrincipal ventanaPrincipal) {
 
         setSize(Auxiliar.dimensionVentana);
-        setBackground(Auxiliar.coloAzulOscuro);
+        setBackground(Auxiliar.colorGrisFondo);
         setLayout(null);
 
         carpetaBBDD = new File(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "ISQL");
@@ -28,6 +28,9 @@ public class PanelGestionBBDD extends JPanel {
 
         // Boton para crear una nueva BBDD
         JButton botonCrearBBDD = new JButton("Crear una Base de Datos");
+        botonCrearBBDD.setForeground(Auxiliar.colorLetra);
+        botonCrearBBDD.setBackground(Auxiliar.colorGrisOscuro);
+        botonCrearBBDD.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonCrearBBDD.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCrearBBDD.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonCrearBBDD, 0.3, 0.1);
@@ -54,6 +57,9 @@ public class PanelGestionBBDD extends JPanel {
 
         // Boton para abrir una BBDD existente
         JButton botonAbrirBBDD = new JButton("Abrir una Base de Datos");
+        botonAbrirBBDD.setForeground(Auxiliar.colorLetra);
+        botonAbrirBBDD.setBackground(Auxiliar.colorGrisOscuro);
+        botonAbrirBBDD.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonAbrirBBDD.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAbrirBBDD.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonAbrirBBDD, 0.3, 0.1);
@@ -81,6 +87,9 @@ public class PanelGestionBBDD extends JPanel {
 
         // Boton para borrar una BBDD existente
         JButton botonBorrarBBDD = new JButton("Borrar una Base de Datos");
+        botonBorrarBBDD.setForeground(Auxiliar.colorLetra);
+        botonBorrarBBDD.setBackground(Auxiliar.colorGrisOscuro);
+        botonBorrarBBDD.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonBorrarBBDD.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonBorrarBBDD.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonBorrarBBDD, 0.3, 0.1);

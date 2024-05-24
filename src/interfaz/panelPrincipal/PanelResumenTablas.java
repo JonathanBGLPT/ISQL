@@ -26,6 +26,7 @@ public class PanelResumenTablas extends JPanel {
 
         // Texto tablas
         JLabel textoTablas = new JLabel("Tablas:");
+        textoTablas.setForeground(Auxiliar.colorLetra);
         textoTablas.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), textoTablas, 0.3, 0.03);
         Auxiliar.calcularLocation(getSize(), textoTablas, 0.025, 0.04);
@@ -33,6 +34,9 @@ public class PanelResumenTablas extends JPanel {
 
         // Boton para crear una nueva tabla
         JButton botonCrearTabla = new JButton("Crear tabla");
+        botonCrearTabla.setForeground(Auxiliar.colorLetra);
+        botonCrearTabla.setBackground(Auxiliar.colorGrisOscuro);
+        botonCrearTabla.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonCrearTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCrearTabla.setFont(Auxiliar.fuenteGrande);
         Auxiliar.calcularSize(getSize(), botonCrearTabla, 0.55, 0.05);
@@ -70,6 +74,7 @@ public class PanelResumenTablas extends JPanel {
 
         // Scroll donde aparecen todas las tablas
         JPanel panelContenedor = new JPanel();
+        panelContenedor.setBackground(Auxiliar.colorGrisClaro);
         panelContenedor.setLayout(new BoxLayout(panelContenedor, BoxLayout.Y_AXIS));
         ArrayList<String> nombreTablas = Auxiliar.conexionSQL.obtenerNombreTablas();
         
@@ -78,10 +83,12 @@ public class PanelResumenTablas extends JPanel {
             
             String nombreTabla = nombreTablas.get(t);
             JPanel panelTabla = new JPanel();
+            panelTabla.setBorder(BorderFactory.createEmptyBorder(10, 3, 10, 0));
             panelTabla.setCursor(new Cursor(Cursor.HAND_CURSOR));
             panelTabla.setLayout(new BoxLayout(panelTabla, BoxLayout.Y_AXIS));
-            panelTabla.setBackground((cambio)? Color.WHITE : Color.LIGHT_GRAY); 
+            panelTabla.setBackground((cambio)? Auxiliar.colorGrisClaro : Auxiliar.colorGrisOscuro); 
             JLabel labelNombreTabla = new JLabel("  " + nombreTabla.toUpperCase() + ESPACIO_LABEL);
+            labelNombreTabla.setForeground(Auxiliar.colorLetra);
             labelNombreTabla.setFont(Auxiliar.fuenteNormal.deriveFont(Font.BOLD));
             panelTabla.add(labelNombreTabla);
 
@@ -90,6 +97,7 @@ public class PanelResumenTablas extends JPanel {
             for (String[] campoDesglosado : listaCampos) {
 
                 JLabel campo = new JLabel("   - " + campoDesglosado[0] + ": " + campoDesglosado[1] + (campoDesglosado[2].equals("")? "" : "(" + campoDesglosado[2] + ")"));
+                campo.setForeground(Auxiliar.colorLetra);
                 campo.setFont(Auxiliar.fuentePequenia);
                 panelTabla.add(campo);
             }
@@ -111,12 +119,13 @@ public class PanelResumenTablas extends JPanel {
             cambio = !cambio;
         }
         JScrollPane panelScroll = new JScrollPane(panelContenedor);
+        panelScroll.setBackground(Auxiliar.colorGrisFondo);
         Auxiliar.calcularSize(getSize(), panelScroll, 0.95, 0.925);
         Auxiliar.calcularLocation(getSize(), panelScroll, 0.025, 0.075);
-        panelScroll.getVerticalScrollBar().setUnitIncrement(20);
+        Auxiliar.ajustarScrollBar(panelScroll.getVerticalScrollBar());
         panelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         panelScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        panelScroll.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
+        panelScroll.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         add(panelScroll);
 
         revalidate();

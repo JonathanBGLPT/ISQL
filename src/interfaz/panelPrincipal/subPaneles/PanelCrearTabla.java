@@ -17,7 +17,8 @@ public class PanelCrearTabla extends JPanel {
 
         Auxiliar.calcularSize(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 1, 1);
         Auxiliar.calcularLocation(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 0, 0);
-        setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
+        setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2));
+        setBackground(Auxiliar.colorGrisFondo);
         setLayout(null);
 
         panelPrincipal = panelPrin;
@@ -25,6 +26,9 @@ public class PanelCrearTabla extends JPanel {
 
         // Boton cancelar
         JButton botonCancelar = new JButton("Cancelar");
+        botonCancelar.setForeground(Auxiliar.colorLetra);
+        botonCancelar.setBackground(Auxiliar.colorGrisOscuro);
+        botonCancelar.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCancelar.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonCancelar, 0.275, 0.07);
@@ -44,6 +48,9 @@ public class PanelCrearTabla extends JPanel {
 
         // Boton finalizar 
         JButton botonFinalizar = new JButton("Finalizar creación");
+        botonFinalizar.setForeground(Auxiliar.colorLetra);
+        botonFinalizar.setBackground(Auxiliar.colorGrisOscuro);
+        botonFinalizar.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonFinalizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonFinalizar.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonFinalizar, 0.35, 0.07);
@@ -62,41 +69,41 @@ public class PanelCrearTabla extends JPanel {
 
         // Cabecera con el numero, nombre del campo, tipo de dato, clave foranea y borrar
         JLabel cabeceraNumero = new JLabel("Nº");
+        cabeceraNumero.setForeground(Auxiliar.colorLetra);
         cabeceraNumero.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraNumero.setFont(Auxiliar.fuentePequenia);
-        cabeceraNumero.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
         Auxiliar.calcularSize(getSize(), cabeceraNumero, 0.06, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraNumero, 0.01, 0.01);
         add(cabeceraNumero);
         
         JLabel cabeceraNombre = new JLabel("Nombre del campo");
+        cabeceraNombre.setForeground(Auxiliar.colorLetra);
         cabeceraNombre.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraNombre.setFont(Auxiliar.fuentePequenia);
-        cabeceraNombre.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
         Auxiliar.calcularSize(getSize(), cabeceraNombre, 0.355, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraNombre, 0.07, 0.01);
         add(cabeceraNombre);
 
         JLabel cabeceraTipoDato = new JLabel("Tipo de dato");
+        cabeceraTipoDato.setForeground(Auxiliar.colorLetra);
         cabeceraTipoDato.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraTipoDato.setFont(Auxiliar.fuentePequenia);
-        cabeceraTipoDato.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
         Auxiliar.calcularSize(getSize(), cabeceraTipoDato, 0.17, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraTipoDato, 0.425, 0.01);
         add(cabeceraTipoDato);
 
         JLabel cabeceraClaveForanea = new JLabel("Clave foránea");
+        cabeceraClaveForanea.setForeground(Auxiliar.colorLetra);
         cabeceraClaveForanea.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraClaveForanea.setFont(Auxiliar.fuentePequenia);
-        cabeceraClaveForanea.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
         Auxiliar.calcularSize(getSize(), cabeceraClaveForanea, 0.27, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraClaveForanea, 0.595, 0.01);
         add(cabeceraClaveForanea);
 
         JLabel cabeceraBorrar = new JLabel("Borrar");
+        cabeceraBorrar.setForeground(Auxiliar.colorLetra);
         cabeceraBorrar.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraBorrar.setFont(Auxiliar.fuentePequenia);
-        cabeceraBorrar.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
         Auxiliar.calcularSize(getSize(), cabeceraBorrar, 0.11, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraBorrar, 0.865, 0.01);
         add(cabeceraBorrar);
@@ -107,9 +114,13 @@ public class PanelCrearTabla extends JPanel {
         JPanel panelContenedorCampos = new JPanel();
         Auxiliar.calcularSize(getSize(), panelContenedorCampos, 0.98, 0.85);
         panelContenedorCampos.setLayout(new BoxLayout(panelContenedorCampos, BoxLayout.Y_AXIS));
+        panelContenedorCampos.setBackground(Auxiliar.colorGrisClaro);
 
         // Boton crear nuevo campo
         JButton botonCrearCampo = new JButton("Crear campo");
+        botonCrearCampo.setForeground(Auxiliar.colorLetra);
+        botonCrearCampo.setBackground(Auxiliar.colorGrisOscuro);
+        botonCrearCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonCrearCampo.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCrearCampo.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonCrearCampo, 0.325, 0.07);
@@ -121,6 +132,9 @@ public class PanelCrearTabla extends JPanel {
         add(botonCrearCampo);
 
         JScrollPane panelAgregarCampos = new JScrollPane(panelContenedorCampos);
+        panelAgregarCampos.setBackground(Auxiliar.colorGrisFondo);
+        panelAgregarCampos.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
+        Auxiliar.ajustarScrollBar(panelAgregarCampos.getVerticalScrollBar());
         Auxiliar.calcularSize(getSize(), panelAgregarCampos, 0.98, 0.85);
         Auxiliar.calcularLocation(getSize(), panelAgregarCampos, 0.01, 0.06);
         panelAgregarCampos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -179,15 +193,20 @@ public class PanelCrearTabla extends JPanel {
         panelCampo.setLayout(new BoxLayout(panelCampo, BoxLayout.X_AXIS));
         panelCampo.setAlignmentX(Component.LEFT_ALIGNMENT);
         panelCampo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelCampo.setBackground((campos.size() % 2 == 0)? Color.WHITE : Color.LIGHT_GRAY);
+        panelCampo.setBackground((campos.size() % 2 == 0)? Auxiliar.colorGrisClaro : Auxiliar.colorGrisOscuro);
 
         // Numero del campo
         JLabel numeroDelCampo = new JLabel((campos.size()+1) + ((campos.size() > 8)? " " : "   "));
+        numeroDelCampo.setForeground(Auxiliar.colorLetra);
         numeroDelCampo.setFont(Auxiliar.fuenteNormal);
         panelCampo.add(numeroDelCampo);
 
         // Nombre 
         JTextField nombreDelCampo = new JTextField();
+        nombreDelCampo.setCaretColor(Auxiliar.colorLetra);
+        nombreDelCampo.setForeground(Auxiliar.colorLetra);
+        nombreDelCampo.setBackground(Auxiliar.colorGrisOscuro);
+        nombreDelCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
         nombreDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.5), (int)(getSize().getHeight()*0.05)));
         nombreDelCampo.setFont(Auxiliar.fuenteNormal);
         ((PlainDocument)nombreDelCampo.getDocument()).setDocumentFilter(new DocumentFilter() {
@@ -207,13 +226,15 @@ public class PanelCrearTabla extends JPanel {
         ArrayList<String> clavesForaneas = Auxiliar.conexionSQL.obtenerNombreTablas();
         clavesForaneas.add(0, "-");
         JComboBox<String> comboClavesForaneas = new JComboBox<>(clavesForaneas.toArray(new String[0]));
-        comboClavesForaneas.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         // Tipo de dato
         String[] tiposDeDatos = {"Entero", "Decimal", "Texto", "Fecha"};
         JComboBox<String> comboElegirTipoDeDato = new JComboBox<>(tiposDeDatos);
         comboElegirTipoDeDato.setCursor(new Cursor(Cursor.HAND_CURSOR));
         comboElegirTipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
+        comboElegirTipoDeDato.setForeground(Auxiliar.colorLetra);
+        comboElegirTipoDeDato.setBackground(Auxiliar.colorGrisOscuro);
+        comboElegirTipoDeDato.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
         comboElegirTipoDeDato.setFont(Auxiliar.fuenteNormal);
         comboElegirTipoDeDato.addActionListener(accion2 -> {
 
@@ -226,6 +247,10 @@ public class PanelCrearTabla extends JPanel {
         panelCampo.add(espacioHorizontal2);
         
         // Configuracion de clave foranea
+        comboClavesForaneas.setForeground(Auxiliar.colorLetra);
+        comboClavesForaneas.setBackground(Auxiliar.colorGrisOscuro);
+        comboClavesForaneas.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
+        comboClavesForaneas.setCursor(new Cursor(Cursor.HAND_CURSOR));
         comboClavesForaneas.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.3), (int)(getSize().getHeight()*0.05)));
         comboClavesForaneas.setFont(Auxiliar.fuenteNormal);
         panelCampo.add(comboClavesForaneas);
@@ -241,7 +266,7 @@ public class PanelCrearTabla extends JPanel {
             for (int c = campos.size()-1; c >= Integer.parseInt(numeroDelCampo.getText().trim()); c--) {
 
                 ((JLabel)campos.get(c).getComponent(0)).setText(((JLabel)campos.get(c-1).getComponent(0)).getText());
-                campos.get(c).setBackground((campos.get(c).getBackground() == Color.LIGHT_GRAY)? Color.WHITE : Color.LIGHT_GRAY);
+                campos.get(c).setBackground((campos.get(c).getBackground() == Auxiliar.colorGrisOscuro)? Auxiliar.colorGrisClaro : Auxiliar.colorGrisOscuro);
             }
             campos.remove(panelCampo);
             panelContenedorCampos.remove(panelCampo);

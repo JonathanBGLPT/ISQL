@@ -25,7 +25,8 @@ public class PanelConsultaSimple extends JPanel {
 
         Auxiliar.calcularSize(panelPrin.panelConsultas.panelDeConsultas.getSize(), this, 1, 1);
         Auxiliar.calcularLocation(panelPrin.panelConsultas.panelDeConsultas.getSize(), this, 0, 0);
-        setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
+        setBackground(Auxiliar.colorGrisFondo);
+        setBorder(BorderFactory.createLineBorder(Auxiliar.colorGrisFondo, 2));
         setLayout(null);
 
         panelPrincipal = panelPrin;
@@ -35,6 +36,9 @@ public class PanelConsultaSimple extends JPanel {
 
         // Boton para cancelar la consulta
         JButton botonCancelarConsulta = new JButton("Cancelar");
+        botonCancelarConsulta.setForeground(Auxiliar.colorLetra);
+        botonCancelarConsulta.setBackground(Auxiliar.colorGrisOscuro);
+        botonCancelarConsulta.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonCancelarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCancelarConsulta.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonCancelarConsulta, 0.485, 0.07);
@@ -47,6 +51,9 @@ public class PanelConsultaSimple extends JPanel {
 
         // Boton para realizar la consulta
         JButton botonRealizarConsulta = new JButton("Consultar");
+        botonRealizarConsulta.setForeground(Auxiliar.colorLetra);
+        botonRealizarConsulta.setBackground(Auxiliar.colorGrisOscuro);
+        botonRealizarConsulta.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonRealizarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonRealizarConsulta.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonRealizarConsulta, 0.485, 0.07);
@@ -66,17 +73,21 @@ public class PanelConsultaSimple extends JPanel {
         // Configuracion del panelContenedor y el Scroll
         panelContenedorFiltros = new JPanel();
         panelContenedorFiltros.setLayout(new BoxLayout(panelContenedorFiltros, BoxLayout.Y_AXIS));
+        panelContenedorFiltros.setBackground(Auxiliar.colorGrisClaro);
 
         JScrollPane panelScroll = new JScrollPane(panelContenedorFiltros);
         Auxiliar.calcularSize(getSize(), panelScroll, 0.98, 0.90);
         Auxiliar.calcularLocation(getSize(), panelScroll, 0.01, 0.01);
-        panelScroll.getVerticalScrollBar().setUnitIncrement(20);
+        Auxiliar.ajustarScrollBar(panelScroll.getVerticalScrollBar());
+        panelScroll.setBackground(Auxiliar.colorGrisFondo);
+        panelScroll.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         panelScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(panelScroll);
 
         // Agrego los filtros de la tabla seleccionada
         JLabel labelNombreTabla = new JLabel(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.toUpperCase() + ESPACIO_LABEL);
+        labelNombreTabla.setForeground(Auxiliar.colorLetra);
         labelNombreTabla.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
         labelNombreTabla.setFont(Auxiliar.fuenteNormal.deriveFont(Font.BOLD));
         panelContenedorFiltros.add(labelNombreTabla);
@@ -115,6 +126,7 @@ public class PanelConsultaSimple extends JPanel {
             
             // Nombre del campo
             JLabel labelNombreCampo = new JLabel(campo[0]);
+            labelNombreCampo.setForeground(Auxiliar.colorLetra);
             labelNombreCampo.setPreferredSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
             labelNombreCampo.setMinimumSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
             labelNombreCampo.setMaximumSize(new Dimension((int)(getWidth()*0.35), (int)(getHeight()*0.05)));
@@ -123,6 +135,9 @@ public class PanelConsultaSimple extends JPanel {
 
             // Tipo de filtro a aplicar
             JComboBox<String> comboTipoFiltro = new JComboBox<>(campo[1].equals("Texto")? OPCIONES_TEXTOS : OPCIONES_ENTEROS_REALES_FECHAS);
+            comboTipoFiltro.setForeground(Auxiliar.colorLetra);
+            comboTipoFiltro.setBackground(Auxiliar.colorGrisOscuro);
+            comboTipoFiltro.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
             comboTipoFiltro.setCursor(new Cursor(Cursor.HAND_CURSOR));
             comboTipoFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
             comboTipoFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.15), (int)(getSize().getHeight()*0.05)));
@@ -137,6 +152,10 @@ public class PanelConsultaSimple extends JPanel {
 
                 // Texto a filtrar
                 JTextField valorDelFiltro = new JTextField();
+                valorDelFiltro.setCaretColor(Auxiliar.colorLetra);
+                valorDelFiltro.setForeground(Auxiliar.colorLetra);
+                valorDelFiltro.setBackground(Auxiliar.colorGrisOscuro);
+                valorDelFiltro.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
                 valorDelFiltro.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
                 valorDelFiltro.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
                 valorDelFiltro.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.275), (int)(getSize().getHeight()*0.05)));
@@ -147,6 +166,10 @@ public class PanelConsultaSimple extends JPanel {
 
                 // Primer valor a filtrar
                 JTextField valorDelFiltro1 = new JTextField();
+                valorDelFiltro1.setCaretColor(Auxiliar.colorLetra);
+                valorDelFiltro1.setForeground(Auxiliar.colorLetra);
+                valorDelFiltro1.setBackground(Auxiliar.colorGrisOscuro);
+                valorDelFiltro1.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
                 valorDelFiltro1.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
                 valorDelFiltro1.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
                 valorDelFiltro1.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.35), (int)(getSize().getHeight()*0.05)));
@@ -155,6 +178,10 @@ public class PanelConsultaSimple extends JPanel {
 
                 // Segundo valor a filtrar si el tipo de filtro es 'rango'
                 JTextField valorDelFiltro2 = new JTextField();
+                valorDelFiltro2.setCaretColor(Auxiliar.colorLetra);
+                valorDelFiltro2.setForeground(Auxiliar.colorLetra);
+                valorDelFiltro2.setBackground(Auxiliar.colorGrisOscuro);
+                valorDelFiltro2.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
                 valorDelFiltro2.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
                 valorDelFiltro2.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));
                 valorDelFiltro2.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.175), (int)(getSize().getHeight()*0.05)));

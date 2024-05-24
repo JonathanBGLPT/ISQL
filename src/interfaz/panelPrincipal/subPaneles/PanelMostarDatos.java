@@ -24,7 +24,8 @@ public class PanelMostarDatos extends JPanel {
 
         Auxiliar.calcularSize(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 1, 1);
         Auxiliar.calcularLocation(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 0, 0);
-        setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
+        setBorder(BorderFactory.createLineBorder(Auxiliar.colorGrisFondo, 2));
+        setBackground(Auxiliar.colorGrisFondo);
         setLayout(null);
 
         checkSI = new ImageIcon(new ImageIcon(getClass().getResource("/checkSI.png")).getImage().getScaledInstance((int)(Auxiliar.dimensionVentana.getHeight()*0.03), (int)(Auxiliar.dimensionVentana.getHeight()*0.03), Image.SCALE_SMOOTH));
@@ -44,12 +45,12 @@ public class PanelMostarDatos extends JPanel {
         // Declaracion del contenedor de datos
         panelContenedorDatos = new JPanel();
         panelContenedorDatos.setLayout(new BoxLayout(panelContenedorDatos, BoxLayout.Y_AXIS));
+        panelContenedorDatos.setBackground(Auxiliar.colorGrisClaro);
 
         // Scroll con los campos de la tabla
-        JPanel panelContenedorCampos = new JPanel();
-        panelContenedorCampos.setLayout(new BoxLayout(panelContenedorCampos, BoxLayout.Y_AXIS));
         ArrayList<String[]> campos = Auxiliar.conexionSQL.obtenerCamposTabla(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada);
         panelCabecera = new JPanel();
+        panelCabecera.setBackground(Auxiliar.colorGrisClaro);
         panelCabecera.setPreferredSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*(campos.size()-setColumnasEliminadas.size()) + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
         panelCabecera.setMaximumSize(new Dimension(16 + (int)(getSize().getWidth()*0.25*(campos.size()-setColumnasEliminadas.size()) + getSize().getWidth()*0.025), (int)(getSize().getHeight()*0.03)));
         panelCabecera.setLayout(new BoxLayout(panelCabecera, BoxLayout.X_AXIS));
@@ -84,15 +85,18 @@ public class PanelMostarDatos extends JPanel {
             for (String[] campo : campos) {
 
                 JLabel nombreCampo = new JLabel("<html>"+ campo[0] + "</html>");
+                nombreCampo.setForeground(Auxiliar.colorLetra);
                 nombreCampo.setHorizontalAlignment(JLabel.CENTER);
                 nombreCampo.setFont(Auxiliar.fuentePequenia);
                 nombreCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 nombreCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
-                nombreCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+                nombreCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
                 if (!setColumnasEliminadas.contains(campo[0])) panelCabecera.add(nombreCampo);
             }
         }
         JScrollPane panelMostarCampos = new JScrollPane(panelCabecera);
+        panelMostarCampos.setBackground(Auxiliar.colorGrisFondo);
+        panelMostarCampos.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         Auxiliar.calcularSize(getSize(), panelMostarCampos, 0.978, 0.05);
         Auxiliar.calcularLocation(getSize(), panelMostarCampos, 0.005, 0.005);
         panelMostarCampos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -111,7 +115,7 @@ public class PanelMostarDatos extends JPanel {
         boolean datosValidos = !panelPrincipal.panelGestionTabla.nombreTablaSeleccionada.equals("") && datosTabla != null;
         for (int f = 0; datosValidos && f < datosTabla.size(); f++) {
 
-            Color colorFondo = (f % 2 == 0)? Color.WHITE : Color.LIGHT_GRAY;
+            Color colorFondo = (f % 2 == 0)? Auxiliar.colorGrisClaro : Auxiliar.colorGrisOscuro;
             String[] fila = datosTabla.get(f);
             JPanel panelFila = new JPanel();
             panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
@@ -144,28 +148,30 @@ public class PanelMostarDatos extends JPanel {
             panelFila.add(Box.createHorizontalStrut(8));
 
             JLabel campoId = new JLabel("<html>&#8203;" + fila[0] + "</html>");
+            campoId.setForeground(Auxiliar.colorLetra);
             campoId.setFont(Auxiliar.fuentePequenia);
             campoId.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
             campoId.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
             campoId.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
-            campoId.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+            campoId.setBorder(BorderFactory.createLineBorder(Auxiliar.colorGrisFondo, 1));
             panelFila.add(campoId);
 
             for (int d = 1; d < fila.length; d++) {
 
                 String dato = fila[d];
                 JTextField campo = new JTextField(dato);
+                campo.setForeground(Auxiliar.colorLetra);
                 campo.setFont(Auxiliar.fuentePequenia);
                 campo.setBackground(colorFondo);
                 if (dato.equals("")) {
                     
                     campo.setOpaque(true);
-                    campo.setBackground(Color.RED);
+                    campo.setBackground(Auxiliar.colorFaltaDato);
                 }
                 campo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 campo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
                 campo.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.25), (int)(getSize().getHeight()*0.05)));
-                campo.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
+                campo.setBorder(BorderFactory.createLineBorder(Auxiliar.colorGrisFondo, 1));
                 campo.getDocument().addDocumentListener(new DocumentListener() {
 
                 public void insertUpdate(DocumentEvent e) { agregarACambios(); }
@@ -184,12 +190,14 @@ public class PanelMostarDatos extends JPanel {
             panelContenedorDatos.add(panelFila);
         }
         JScrollPane panelMostarDatos = new JScrollPane(panelContenedorDatos);
+        panelMostarDatos.setBackground(Auxiliar.colorGrisFondo);
+        panelMostarDatos.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
+        Auxiliar.ajustarScrollBar(panelMostarDatos.getHorizontalScrollBar());
+        Auxiliar.ajustarScrollBar(panelMostarDatos.getVerticalScrollBar());
         Auxiliar.calcularSize(getSize(), panelMostarDatos, 0.993, 0.943);
         Auxiliar.calcularLocation(getSize(), panelMostarDatos, 0.005, 0.055);
         panelMostarDatos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         panelMostarDatos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        panelMostarDatos.getHorizontalScrollBar().setUnitIncrement(20);
-        panelMostarDatos.getVerticalScrollBar().setUnitIncrement(20);
         panelMostarDatos.getHorizontalScrollBar().addAdjustmentListener(accion -> {
 
             panelMostarCampos.getHorizontalScrollBar().setValue(panelMostarDatos.getHorizontalScrollBar().getValue());
@@ -226,7 +234,7 @@ public class PanelMostarDatos extends JPanel {
                 for (JPanel panelEliminado : panelesEliminar) panelContenedorDatos.remove(panelEliminado);
                 for (int f = 1; f < panelContenedorDatos.getComponentCount(); f++) {
 
-                    Color colorFondo = (f % 2 == 0)? Color.LIGHT_GRAY : Color.WHITE;
+                    Color colorFondo = (f % 2 == 0)? Auxiliar.colorGrisOscuro : Auxiliar.colorGrisClaro;
                     JPanel panelFila = (JPanel)panelContenedorDatos.getComponent(f);
                     panelFila.setBackground(colorFondo);
                     for (int c = 5; c < panelFila.getComponentCount(); c++) {
@@ -236,7 +244,7 @@ public class PanelMostarDatos extends JPanel {
                         if (campo.getText().trim().equals("")) {
 
                             campo.setOpaque(true);
-                            campo.setBackground(Color.RED);
+                            campo.setBackground(Auxiliar.colorFaltaDato);
                         }
                     }
                 };
@@ -268,7 +276,7 @@ public class PanelMostarDatos extends JPanel {
                 Auxiliar.conexionSQL.actualizarListaDeDatos(panelPrincipal.panelGestionTabla.nombreTablaSeleccionada, mapaFilasCambiadas, cabecera);
                 for (int f = 1; f < panelContenedorDatos.getComponentCount(); f++) {
 
-                    Color colorFondo = (f % 2 == 0)? Color.LIGHT_GRAY : Color.WHITE;
+                    Color colorFondo = (f % 2 == 0)? Auxiliar.colorGrisOscuro : Auxiliar.colorGrisClaro;
 
                     JPanel panelFila = (JPanel)panelContenedorDatos.getComponent(f);
                     panelFila.setBackground(colorFondo);
@@ -281,7 +289,7 @@ public class PanelMostarDatos extends JPanel {
                         if (campo.getText().trim().equals("")) {
 
                             campo.setOpaque(true);
-                            campo.setBackground(Color.RED);
+                            campo.setBackground(Auxiliar.colorFaltaDato);
                         }
                     }
                 }

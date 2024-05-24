@@ -2,15 +2,21 @@ package interfaz;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import sql.ConexionPrincipal;
 
 public class Auxiliar {
     
-    public static ConexionPrincipal conexionSQL;
-
-  public static Color colorAzulPalido = new Color(150, 200, 220);
-  public static Color coloAzulOscuro = new Color(11, 38, 57);
+  public static ConexionPrincipal conexionSQL;
+    
+  public static Color colorFaltaDato = new Color(12, 12, 12);
+  public static Color colorGrisFondo = new Color(24, 24, 24);
+  public static Color colorGrisOscuro = new Color(31, 31, 31);
+  public static Color colorGrisClaro = new Color(40, 40, 40);
+  public static Color colorSeleccionado = new Color(96, 96, 96);
+  public static Color colorBordes = new Color(192, 192, 192);
+  public static Color colorLetra = new Color(255, 255, 255);
 
   public static Dimension dimensionVentana;
   public static Font fuenteGrande;
@@ -22,10 +28,7 @@ public class Auxiliar {
   public static void inicializarAjustes () {
 
     conexionSQL = new ConexionPrincipal();
-    /// CAMBIAR, SOLAMENTE ESTA PARA PROBAR AJUSTES
-    int option = 1;
-    if (option == 1) dimensionVentana = new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.9), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.9));
-    if (option == 2) dimensionVentana = new Dimension((int)(1920*0.9), (int)(1080*0.9)); // FULL HD
+    dimensionVentana = new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.9), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.9));
 
     fuenteGrande = new Font("Arial", Font.PLAIN, (int)(dimensionVentana.getHeight()*0.03));
     fuenteNormal = new Font("Arial", Font.PLAIN, (int)(dimensionVentana.getHeight()*0.025));
@@ -68,4 +71,39 @@ public class Auxiliar {
 
     return resultado;
   }
+
+  public static void ajustarScrollBar (JScrollBar scrollBar) {
+
+        scrollBar.setUnitIncrement(20);
+        scrollBar.setUI(new BasicScrollBarUI() {
+
+            @Override
+            protected void configureScrollBarColors() {
+
+              this.thumbColor = colorGrisFondo;
+              this.trackColor = colorBordes;
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+
+              return createZeroButton();
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+
+              return createZeroButton();
+            }
+
+            private JButton createZeroButton() {
+
+              JButton button = new JButton();
+              button.setPreferredSize(new Dimension(0, 0));
+              button.setMinimumSize(new Dimension(0, 0));
+              button.setMaximumSize(new Dimension(0, 0));
+              return button;
+            }
+        });
+    }
 }

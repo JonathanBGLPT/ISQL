@@ -21,7 +21,8 @@ public class PanelAgregarDatos extends JPanel {
 
         Auxiliar.calcularSize(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 1, 1);
         Auxiliar.calcularLocation(panelPrin.panelGestionTabla.panelDeGestiones.getSize(), this, 0, 0);
-        setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 2));
+        setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2));
+        setBackground(Auxiliar.colorGrisFondo);
         setLayout(null);
 
         panelPrincipal = panelPrin;
@@ -41,31 +42,34 @@ public class PanelAgregarDatos extends JPanel {
 
         // Cabecera con el nombre del campo, tipo de dato y campo para introducir el valor
         JLabel cabeceraNombre = new JLabel("Nombre del campo");
+        cabeceraNombre.setForeground(Auxiliar.colorLetra);
         cabeceraNombre.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraNombre.setFont(Auxiliar.fuentePequenia);
-        cabeceraNombre.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
         Auxiliar.calcularSize(getSize(), cabeceraNombre, 0.355, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraNombre, 0.01, 0.01);
         add(cabeceraNombre);
 
         JLabel cabeceraTipoDato = new JLabel("Tipo de dato");
+        cabeceraTipoDato.setForeground(Auxiliar.colorLetra);
         cabeceraTipoDato.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraTipoDato.setFont(Auxiliar.fuentePequenia);
-        cabeceraTipoDato.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
         Auxiliar.calcularSize(getSize(), cabeceraTipoDato, 0.17, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraTipoDato, 0.365, 0.01);
         add(cabeceraTipoDato);
 
         JLabel cabeceraValorIntroducir = new JLabel("Valor a introducir");
+        cabeceraValorIntroducir.setForeground(Auxiliar.colorLetra);
         cabeceraValorIntroducir.setHorizontalAlignment(SwingConstants.CENTER);
         cabeceraValorIntroducir.setFont(Auxiliar.fuentePequenia);
-        cabeceraValorIntroducir.setBorder(BorderFactory.createLineBorder(Auxiliar.coloAzulOscuro, 1));
         Auxiliar.calcularSize(getSize(), cabeceraValorIntroducir, 0.44, 0.05);
         Auxiliar.calcularLocation(getSize(), cabeceraValorIntroducir, 0.535, 0.01);
         add(cabeceraValorIntroducir);
 
         // Boton salir
         JButton botonSalir = new JButton("Salir");
+        botonSalir.setForeground(Auxiliar.colorLetra);
+        botonSalir.setBackground(Auxiliar.colorGrisOscuro);
+        botonSalir.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonSalir.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonSalir, 0.485, 0.07);
@@ -82,9 +86,13 @@ public class PanelAgregarDatos extends JPanel {
         JPanel panelContenedorCampos = new JPanel();
         Auxiliar.calcularSize(getSize(), panelContenedorCampos, 0.98, 0.85);
         panelContenedorCampos.setLayout(new BoxLayout(panelContenedorCampos, BoxLayout.Y_AXIS));
-
+        panelContenedorCampos.setBackground(Auxiliar.colorGrisClaro);
+        
         // Boton agregar fila 
         JButton botonAgregarFila = new JButton("Agregar datos");
+        botonAgregarFila.setForeground(Auxiliar.colorLetra);
+        botonAgregarFila.setBackground(Auxiliar.colorGrisOscuro);
+        botonAgregarFila.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
         botonAgregarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonAgregarFila.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonAgregarFila, 0.485, 0.07);
@@ -108,6 +116,9 @@ public class PanelAgregarDatos extends JPanel {
         // Scroll donde se introducen los datos
         resetearCamposIntroducirDatos(panelContenedorCampos);
         JScrollPane panelAgregarCampos = new JScrollPane(panelContenedorCampos);
+        panelAgregarCampos.setBackground(Auxiliar.colorGrisFondo);
+        panelAgregarCampos.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 2, true));
+        Auxiliar.ajustarScrollBar(panelAgregarCampos.getVerticalScrollBar());
         Auxiliar.calcularSize(getSize(), panelAgregarCampos, 0.98, 0.85);
         Auxiliar.calcularLocation(getSize(), panelAgregarCampos, 0.01, 0.06);
         panelAgregarCampos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -130,24 +141,36 @@ public class PanelAgregarDatos extends JPanel {
             panelCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.97), (int)(getSize().getHeight()*0.07)));
             panelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.97), (int)(getSize().getHeight()*0.07)));
             panelCampo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            panelCampo.setBackground((datos.size() % 2 == 0)? java.awt.Color.WHITE : java.awt.Color.LIGHT_GRAY);
+            panelCampo.setBackground((datos.size() % 2 == 0)? Auxiliar.colorGrisClaro : Auxiliar.colorGrisOscuro);
 
             // Nombre 
             JLabel nombreDelCampo = new JLabel("<html>" + campo[0] + "</html>");
+            nombreDelCampo.setForeground(Auxiliar.colorLetra);
             nombreDelCampo.setFont(Auxiliar.fuenteNormal);
             nombreDelCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.355), (int)(getSize().getHeight()*0.05)));
+            nombreDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.355), (int)(getSize().getHeight()*0.05)));
+            nombreDelCampo.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.355), (int)(getSize().getHeight()*0.05)));
             nombreDelCampo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             panelCampo.add(nombreDelCampo);
 
             // Tipo de dato
             JLabel tipoDeDato = new JLabel("<html>: " + campo[1] + "</html>");
+            tipoDeDato.setForeground(Auxiliar.colorLetra);
             tipoDeDato.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.17), (int)(getSize().getHeight()*0.05)));
+            tipoDeDato.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.17), (int)(getSize().getHeight()*0.05)));
+            tipoDeDato.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.17), (int)(getSize().getHeight()*0.05)));
             tipoDeDato.setFont(Auxiliar.fuenteNormal);
             panelCampo.add(tipoDeDato);
 
             // Campo para introducir el valor
             JTextField valorDelCampo = new JTextField();
-            valorDelCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.44), (int)(getSize().getHeight()*0.05)));
+            valorDelCampo.setCaretColor(Auxiliar.colorLetra);
+            valorDelCampo.setForeground(Auxiliar.colorLetra);
+            valorDelCampo.setBackground(Auxiliar.colorGrisOscuro);
+            valorDelCampo.setBorder(BorderFactory.createLineBorder(Auxiliar.colorBordes, 1));
+            valorDelCampo.setPreferredSize(new Dimension((int)(getSize().getWidth()*0.4), (int)(getSize().getHeight()*0.05)));
+            valorDelCampo.setMaximumSize(new Dimension((int)(getSize().getWidth()*0.4), (int)(getSize().getHeight()*0.05)));
+            valorDelCampo.setMinimumSize(new Dimension((int)(getSize().getWidth()*0.4), (int)(getSize().getHeight()*0.05)));
             valorDelCampo.setFont(Auxiliar.fuenteNormal);
             panelCampo.add(valorDelCampo);
             datos.add(valorDelCampo);
