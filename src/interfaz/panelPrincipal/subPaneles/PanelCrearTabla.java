@@ -151,7 +151,6 @@ public class PanelCrearTabla extends JPanel {
 
         String nombresVacios = "";
         String nombresRepetidos = "";
-        String clavesForaneasRepetidas = "";
 
         String[] clavesForaneasElegidas = new String[campos.size()];
         String[] nombresCampos = new String[campos.size()];
@@ -173,17 +172,10 @@ public class PanelCrearTabla extends JPanel {
                     nombresRepetidos += "campos " + (c1+1) + " y " + (c2+1) + ", "; 
                     resultado = false;
                 }
-                if (((String)((JComboBox)campos.get(c1).getComponent(3)).getSelectedItem()).equals("Entero") && ((String)((JComboBox)campos.get(c2).getComponent(3)).getSelectedItem()).equals("Entero")
-                    && !clavesForaneasElegidas[c1].equals("-") && clavesForaneasElegidas[c1].equals(clavesForaneasElegidas[c2])) {
-
-                    clavesForaneasRepetidas += "campos " + (c1+1) + " y " + (c2+1) + ", "; 
-                    resultado = false;
-                }
             }
         }
         if (!resultado && nombresVacios.length() != 0) JOptionPane.showMessageDialog(null, "Los siguientes campos estan vacíos: " + nombresVacios.substring(0, nombresVacios.length()-2) + ".");
         if (!resultado && nombresRepetidos.length() != 0) JOptionPane.showMessageDialog(null, "Los siguientes campos estan repetidos: " + nombresRepetidos.substring(0, nombresRepetidos.length()-2) + ".");
-        if (!resultado && clavesForaneasRepetidas.length() != 0) JOptionPane.showMessageDialog(null, "Los siguientes campos comparten clave foránea: " + clavesForaneasRepetidas.substring(0, clavesForaneasRepetidas.length()-2) + ".");
         return resultado;
     }
 
