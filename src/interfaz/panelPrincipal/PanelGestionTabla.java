@@ -178,7 +178,8 @@ class PanelGestionTablaBotones extends JPanel {
             if (nombreTablaSeleccionada != null && !nombreTablaSeleccionada.equals("")) {
 
                 String nombreTablaSeguridad = JOptionPane.showInputDialog(null, "¿Está seguro de que desea eliminar: "+ nombreTablaSeleccionada +"?\nPara ello ingrese el nombre de la tabla:");
-                    
+                nombreTablaSeguridad = nombreTablaSeguridad.trim().replaceAll("\\s+", "_");
+
                 if (nombreTablaSeguridad.equals(nombreTablaSeleccionada)) {
                     
                     Auxiliar.conexionSQL.eliminarTabla(nombreTablaSeleccionada);
