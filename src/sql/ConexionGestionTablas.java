@@ -16,7 +16,7 @@ public class ConexionGestionTablas {
     @SuppressWarnings("rawtypes")
     public void crearTabla(String nombreTabla, ArrayList<JPanel> campos) {
 
-        String sentenciaSQLite = "CREATE TABLE " + nombreTabla.trim().replaceAll("\\s+", "_") + " ( id_" + nombreTabla.trim().replaceAll("\\s+", "_") + " INTEGER PRIMARY KEY AUTOINCREMENT,";
+        String sentenciaSQLite = "CREATE TABLE " + nombreTabla + " ( id_" + nombreTabla + " INTEGER PRIMARY KEY AUTOINCREMENT,";
         String sentenciaClavesForaneas = "";
         Map<String, String> diccionario = getMapaConvertirTiposNaturalASQL();
 
@@ -26,7 +26,7 @@ public class ConexionGestionTablas {
             String tipoDeDato = (String)(((JComboBox)campos.get(c).getComponent(3)).getSelectedItem());
             String claveForanea = (String)(((JComboBox)campos.get(c).getComponent(5)).getSelectedItem());
 
-            if (!nombre.equals("id_" + nombreTabla.trim().replaceAll("\\s+", "_"))) {
+            if (!nombre.equals("id_" + nombreTabla)) {
 
                 sentenciaSQLite += nombre + " " + diccionario.get(tipoDeDato) + ",";
                 if (tipoDeDato.equals("Entero") && !claveForanea.equals("-")) sentenciaClavesForaneas += "FOREIGN KEY (" + nombre + ") REFERENCES " + claveForanea + "(id_" + claveForanea + ") ON DELETE CASCADE,";
