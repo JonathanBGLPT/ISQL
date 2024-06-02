@@ -79,7 +79,9 @@ public class PanelGestionTabla extends JPanel {
                     elegirPanelDeGestiones(0);
 
 				} else JOptionPane.showMessageDialog(null, "La tabla introducida ya existe.");
-            }
+
+            } else if (nombreTablaSeleccionada.equals("")) JOptionPane.showMessageDialog(null, "Debes seleccionar una tabla para cambiarle el nombre.");
+
             actualizarPanelGestionTabla();
         });
         add(botonCambiarNombreTabla);

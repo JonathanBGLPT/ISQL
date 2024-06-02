@@ -51,7 +51,7 @@ public class PanelResumenTablas extends JPanel {
             while (!nombreNoRepetido || !nombreValidoLogitud) {
 
                 nombreTabla = JOptionPane.showInputDialog(null, "Ingrese el nombre de la nueva tabla:");
-                nombreTabla = nombreTabla.trim().replaceAll("\\s+", "_");
+                if (nombreTabla != null) nombreTabla = nombreTabla.trim().replaceAll("\\s+", "_");
                 
                 if (nombreTabla != null && !nombreTabla.equals("")) {
 
@@ -62,7 +62,7 @@ public class PanelResumenTablas extends JPanel {
                     for (int t = 0; t < nombreTablas.size() && nombreNoRepetido; t++) nombreNoRepetido = !nombreTablas.get(t).equals(nombreTabla);
                     if (!nombreNoRepetido) JOptionPane.showMessageDialog(null, "La tabla introducida ya existe.");
 
-                } else if (nombreTabla.equals("")) {
+                } else if (nombreTabla != null && nombreTabla.equals("")) {
                     
                     JOptionPane.showMessageDialog(null, "El nombre de la tabla no puede estar vacio.");
 
