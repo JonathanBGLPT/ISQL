@@ -37,13 +37,17 @@ public class PanelGestionBBDD extends JPanel {
         Auxiliar.calcularLocation(getSize(), botonCrearBBDD, 0.35, 0.5);
         botonCrearBBDD.addActionListener(accion -> {
 
+            // Pido el nombre de la nueva BBDD
 			nombreBD = JOptionPane.showInputDialog(null, "Ingrese el nombre de la nueva base de datos:");
 			if (nombreBD != null) {
 
 				File[] archivos = carpetaBBDD.listFiles();
 				boolean valido = true;
+
+                // Compruebo que la base de datos no exista
 				for (int f = 0; f < archivos.length && valido; f++) valido = !(archivos[f].getName().equals(nombreBD + ".db"));
 
+                // Si no existe procedo a crearla
 				if (valido) {
 
 					Auxiliar.conexionSQL.cerrarConexion();
