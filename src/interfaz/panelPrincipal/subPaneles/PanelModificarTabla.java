@@ -41,7 +41,7 @@ public class PanelModificarTabla extends JPanel {
         botonCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonCancelar.setFont(Auxiliar.fuenteNormal);
         Auxiliar.calcularSize(getSize(), botonCancelar, 0.245, 0.07);
-        Auxiliar.calcularLocation(getSize(), botonCancelar, 0.35, 0.92);
+        Auxiliar.calcularLocation(getSize(), botonCancelar, 0.3425, 0.92);
         botonCancelar.addActionListener(accion -> {
 
             int respuesta = JOptionPane.showConfirmDialog(null, "¿Deseas cancelar la modificación de la tabla?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
